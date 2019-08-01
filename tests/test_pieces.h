@@ -6,8 +6,8 @@
 #include "piece.h"
 
 inline void test_pieces() {
-  { // is_valid_piece
-    { // is_valid_piece true positives
+  { /* is_valid_piece */
+    { /* is_valid_piece true positives */
       ASSERT(is_valid_piece(WK));
       ASSERT(is_valid_piece(WQ));
       ASSERT(is_valid_piece(WR));
@@ -21,7 +21,7 @@ inline void test_pieces() {
       ASSERT(is_valid_piece(BN));
       ASSERT(is_valid_piece(BP));
     }
-    { // is_valid_piece true negatives
+    { /* is_valid_piece true negatives */
       ASSERT(!is_valid_piece(3));
       ASSERT(!is_valid_piece(7));
       ASSERT(!is_valid_piece(11));
@@ -31,11 +31,11 @@ inline void test_pieces() {
   }
 
   {
-    { // is_king true positives
+    { /* is_king true positives */
       ASSERT(is_king(WK));
       ASSERT(is_king(BK));
     }
-    { // is_king true negatives
+    { /* is_king true negatives */
       ASSERT(!is_king(WQ));
       ASSERT(!is_king(WR));
       ASSERT(!is_king(WB));
@@ -49,14 +49,14 @@ inline void test_pieces() {
     }
   }
 
-  { // is_major
-    { // is_major true positives
+  { /* is_major */
+    { /* is_major true positives */
       ASSERT(is_major(WQ));
       ASSERT(is_major(WR));
       ASSERT(is_major(BQ));
       ASSERT(is_major(BR));
     }
-    { // is_major true negatives
+    { /* is_major true negatives */
       ASSERT(!is_major(WK));
       ASSERT(!is_major(WB));
       ASSERT(!is_major(WN));
@@ -68,14 +68,14 @@ inline void test_pieces() {
     }
   }
 
-  { // is_minor
-    { // is_minor true positives
+  { /* is_minor */
+    { /* is_minor true positives */
       ASSERT(is_minor(WB));
       ASSERT(is_minor(WN));
       ASSERT(is_minor(BB));
       ASSERT(is_minor(BN));
     }
-    { // is_minor true negatives
+    { /* is_minor true negatives */
       ASSERT(!is_minor(WK));
       ASSERT(!is_minor(WQ));
       ASSERT(!is_minor(WR));
@@ -87,12 +87,12 @@ inline void test_pieces() {
     }
   }
 
-  { // is_pawn
-    { // is_pawn true positives
+  { /* is_pawn */
+    { /* is_pawn true positives */
       ASSERT(is_pawn(WP));
       ASSERT(is_pawn(BP));
     }
-    { // is_pawn true negatives
+    { /* is_pawn true negatives */
       ASSERT(!is_pawn(WK));
       ASSERT(!is_pawn(WQ));
       ASSERT(!is_pawn(WR));
@@ -106,7 +106,7 @@ inline void test_pieces() {
     }
   }
 
-  { // get_side
+  { /* get_side */
     ASSERT(get_side(WK) == 0);
     ASSERT(get_side(WQ) == 0);
     ASSERT(get_side(WR) == 0);
