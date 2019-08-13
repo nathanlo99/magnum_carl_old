@@ -10,8 +10,10 @@ using piece_t = uint8_t;
 
 // Organized (hopefully) to optimize bit variance
 enum Piece {
-  WK =  6, WQ =  0, WR =  1, WB =  4, WN =  5, WP =  2,
-  BK = 14, BQ =  8, BR =  9, BB = 12, BN = 13, BP = 10,
+  WHITE_KING = 6, WHITE_QUEEN =  0, WHITE_ROOK = 1,
+  WHITE_BISHOP = 4, WHITE_KNIGHT =  5, WHITE_PAWN = 2,
+  BLACK_KING = 14, BLACK_QUEEN =  8, BLACK_ROOK =  9,
+  BLACK_BISHOP = 12, BLACK_KNIGHT = 13, BLACK_PAWN = 10,
   INVALID_PIECE = 15,
 };
 
@@ -20,7 +22,7 @@ const static bool _is_valid_piece[16] = {
   1, 1, 1, 0, 1, 1, 1, 0,
   1, 1, 1, 0, 1, 1, 1, 0,
 };
-constexpr inline bool is_valid_piece(piece_t piece) {
+constexpr inline bool is_valid_piece(const piece_t piece) {
   ASSERT(0 <= piece && piece <= 16);
   return _is_valid_piece[piece];
 }
@@ -28,7 +30,7 @@ const static bool _is_king[16] = {
   0, 0, 0, 0, 0, 0, 1, 0,
   0, 0, 0, 0, 0, 0, 1, 0,
 };
-constexpr inline bool is_king(piece_t piece) {
+constexpr inline bool is_king(const piece_t piece) {
   ASSERT(0 <= piece && piece < 16);
   ASSERT(is_valid_piece(piece));
   return _is_king[piece];
@@ -37,7 +39,7 @@ const static bool _is_major[16] = {
   1, 1, 0, 0, 0, 0, 0, 0,
   1, 1, 0, 0, 0, 0, 0, 0,
 };
-constexpr inline bool is_major(piece_t piece) {
+constexpr inline bool is_major(const piece_t piece) {
   ASSERT(0 <= piece && piece < 16);
   ASSERT(is_valid_piece(piece));
   return _is_major[piece];
@@ -46,7 +48,7 @@ const static bool _is_minor[16] = {
   0, 0, 0, 0, 1, 1, 0, 0,
   0, 0, 0, 0, 1, 1, 0, 0,
 };
-constexpr inline bool is_minor(piece_t piece) {
+constexpr inline bool is_minor(const piece_t piece) {
   ASSERT(0 <= piece && piece < 16);
   ASSERT(is_valid_piece(piece));
   return _is_minor[piece];
@@ -55,7 +57,7 @@ const static bool _is_pawn[16] = {
   0, 0, 1, 0, 0, 0, 0, 0,
   0, 0, 1, 0, 0, 0, 0, 0,
 };
-constexpr inline bool is_pawn(piece_t piece) {
+constexpr inline bool is_pawn(const piece_t piece) {
   ASSERT(0 <= piece && piece < 16);
   ASSERT(is_valid_piece(piece));
   return _is_pawn[piece];
@@ -64,42 +66,56 @@ const static bool _get_side[16] = {
   0, 0, 0, 0, 0, 0, 0, 0,
   1, 1, 1, 1, 1, 1, 1, 1,
 };
-constexpr inline bool get_side(piece_t piece) {
+constexpr inline bool get_side(const piece_t piece) {
   ASSERT(0 <= piece && piece < 16);
   ASSERT(is_valid_piece(piece));
   return _get_side[piece];
 }
 #else
-constexpr inline bool is_valid_piece(piece_t piece) {
+constexpr inline bool is_valid_piece(const piece_t piece) {
   ASSERT(0 <= piece && piece < 16);
   return (piece & 3) != 3;
 }
-constexpr inline bool is_king(piece_t piece) {
+constexpr inline bool is_king(const piece_t piece) {
   ASSERT(0 <= piece && piece < 16);
   ASSERT(is_valid_piece(piece));
-  return piece == WK || piece == BK;
+  return piece == WHITE_KING || piece == BLACK_KING;
 }
-constexpr inline bool is_major(piece_t piece) {
+constexpr inline bool is_major(const piece_t piece) {
   ASSERT(0 <= piece && piece < 16);
   ASSERT(is_valid_piece(piece));
-  return piece == WQ || piece == WR || piece == BQ || piece == BR;
+  return piece == WHITE_QUEEN || piece == WHITE_ROOK
+      || piece == BLACK_QUEEN || piece == BLACK_ROOK;
 }
-constexpr inline bool is_minor(piece_t piece) {
+constexpr inline bool is_minor(const piece_t piece) {
   ASSERT(0 <= piece && piece < 16);
   ASSERT(is_valid_piece(piece));
-  return piece == WB || piece == WN || piece == BB || piece == BN;
+  return piece == WHITE_BISHOP || piece == WHITE_KNIGHT
+      || piece == BLACK_BISHOP || piece == BLACK_KNIGHT;
 }
-constexpr inline bool is_pawn(piece_t piece) {
+constexpr inline bool is_pawn(const piece_t piece) {
   ASSERT(0 <= piece && piece < 16);
   ASSERT(is_valid_piece(piece));
-  return piece == WP || piece == BP;
+  return piece == WHITE_PAWN || piece == BLACK_PAWN;
 }
-constexpr inline bool get_side(piece_t piece) {
+constexpr inline bool get_side(const piece_t piece) {
   ASSERT(0 <= piece && piece < 16);
   ASSERT(is_valid_piece(piece));
   return piece / 8;
 }
 #endif /* #if LUT_PIECE */
 
+constexpr inline piece_t piece_from_char(const char chr) {
+  const char* PIECE_CHAR = "QRP.BNK.qrp.bnk.";
+  for (int i = 0; i < 16; ++i)
+    if (PIECE_CHAR[i] == chr)
+      return i;
+  return INVALID_PIECE;
+}
+constexpr inline char char_from_piece(const piece_t piece) {
+  const char* PIECE_CHAR = "QRP.BNK.qrp.bnk.";
+  ASSERT(0 <= piece && piece < 16);
+  return PIECE_CHAR[piece];
+}
 
 #endif /* end of include guard: PIECE_H */

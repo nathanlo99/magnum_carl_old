@@ -5,11 +5,11 @@
 #include <cstdio>
 #include <cstdlib>
 
-#if !defined(NDEBUG) || defined(DEBUG)
+#if defined(DEBUG)
 #define ASSERT(expr) \
-  ((expr) || (printf("[ERROR] Test failed: %s (%s:%d)\n", #expr, __FILE__, __LINE__), exit(1), true))
+  do { if (!(expr)) { printf("[ERROR] Test failed: %s (%s:%d)\n", #expr, __FILE__, __LINE__); exit(1); } } while (0)
 #else
-#define ASSERT(expr) do { if ((expr)) __builtin_unreachable(); } while (0)
+#define ASSERT(expr) do { if ((!(expr))) __builtin_unreachable(); } while (0)
 #endif
 
 #endif /* end of include guard: ASSERT_H */

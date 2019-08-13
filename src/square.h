@@ -17,8 +17,8 @@
  *   070 071 072 073 074 075 076 077 078 079
  *   080 081 082 083 084 085 086 087 088 089
  *   090 091 092 093 094 095 096 097 098 099
- *   100 102 103 104 105 106 107 108 109 109
- *   110 112 113 114 115 116 117 117 118 119
+ *   100 101 102 103 104 105 106 107 108 109
+ *   110 111 112 113 114 115 116 117 118 119
  */
 
 using square_t = uint16_t;
@@ -34,6 +34,17 @@ enum Square {
   A8 = 91, B8, C8, D8, E8, F8, G8, H8,
   INVALID_SQUARE = 99,
 };
+
+constexpr inline square_t get_square_64_rc(const int row, const int col) {
+  ASSERT(0 <= row && row < 8);
+  ASSERT(0 <= col && col < 8);
+  return 8 * row + col;
+}
+constexpr inline square_t get_square_120_rc(const int row, const int col) {
+  ASSERT(0 <= row && row < 8);
+  ASSERT(0 <= col && col < 8);
+  return (row + 2) * 10 + (col + 1);
+}
 
 #ifdef LUT_SQUARE
 const static bool _valid_square[120] = {
@@ -121,7 +132,7 @@ const static int _get_square_120[64] = {
   81, 82, 83, 84, 85, 86, 87, 88,
   91, 92, 93, 94, 95, 96, 97, 98,
 };
-constexpr inline int get_square_120(const square_t square) {
+constexpr inline square_t get_square_120(const square_t square) {
   ASSERT(0 <= square && square < 64);
   return _get_square_120[square];
 }
@@ -131,26 +142,27 @@ constexpr inline bool valid_square(const square_t square) {
   const int row = square / 10, col = square % 10;
   return 2 <= row && row <= 9 && 1 <= col && col <= 8;
 }
-constexpr inline int get_square_row(const square_t square) {
+constexpr inline square_t get_square_row(const square_t square) {
   ASSERT(0 <= square && square < 120);
   ASSERT(valid_square(square));
   return square / 10 - 2;
 }
-constexpr inline int get_square_col(const square_t square) {
+constexpr inline square_t get_square_col(const square_t square) {
   ASSERT(0 <= square && square < 120);
   ASSERT(valid_square(square));
   return square % 10 - 1;
 }
-constexpr inline int get_square_64(const square_t square) {
+constexpr inline square_t get_square_64(const square_t square) {
   ASSERT(0 <= square && square < 120);
   ASSERT(valid_square(square));
-  return 8 * get_square_row(square) + get_square_col(square);
+  return get_square_64_rc(get_square_row(square), get_square_col(square));
 }
-constexpr inline int get_square_120(const square_t square) {
+constexpr inline square_t get_square_120(const square_t square) {
   ASSERT(0 <= square && square < 64);
   const int row = square / 8, col = square % 8;
-  return (row + 2) * 10 + (col + 1);
+  return get_square_120_rc(row, col);
 }
+
 #endif /* ifdef LUT_SQUARE */
 
 #endif /* end of include guard: SQUARE_H */
