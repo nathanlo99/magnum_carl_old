@@ -27,11 +27,12 @@ class Board {
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 public:
-  Board(const std::string &fen = Board::startFEN);
+  Board(const std::string &fen = Board::startFEN) noexcept;
 
-  std::string to_string() const;
+  std::string fen() const noexcept;
+  std::string to_string() const noexcept;
 };
 
-std::ostream& operator<<(std::ostream &os, const Board& board);
+std::ostream& operator<<(std::ostream &os, const Board& board) noexcept;
 
 #endif /* end of include guard: BOARD_H */

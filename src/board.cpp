@@ -5,17 +5,11 @@
 #include <string>
 #include <sstream>
 
-/*
-Halfmove clock: This is the number of halfmoves since the last capture or pawn advance. This is used to determine if a draw can be claimed under the fifty-move rule.
-Fullmove number: The number of the full move. It starts at 1, and is incremented after Black's move.
-
-*/
-Board::Board(const std::string &fen) {
-
+Board::Board(const std::string &fen) noexcept {
   // Part 1: The board state
   size_t square_idx = A8; // 91
-  const size_t next_space = fen.find(' ');
-  for (size_t fen_idx = 0; fen_idx < next_space; ++fen_idx) {
+  size_t fen_idx = 0;
+  while (fen[fen_idx] != ' ') {
     const char chr = fen[fen_idx];
     if (chr == '/') {
       ASSERT(square_idx % 10 == 9);
@@ -27,18 +21,19 @@ Board::Board(const std::string &fen) {
       square_idx += num_spaces;
       ASSERT(square_idx % 10 == 9 || valid_square(square_idx));
     } else {
-      piece_t piece_idx = piece_from_char(chr);
+      const piece_t piece_idx = piece_from_char(chr);
       ASSERT(valid_square(square_idx));
       ASSERT(is_valid_piece(piece_idx));
       m_pieces[square_idx] = piece_idx;
       square_idx++;
       ASSERT(square_idx % 10 == 9 || valid_square(square_idx));
     }
+    ++fen_idx;
   }
   ASSERT(square_idx == 29);
 
   // Part 2: Side to move
-  const size_t side_idx = next_space + 1;
+  const size_t side_idx = fen_idx + 1;
   ASSERT(fen[side_idx] == 'w' || fen[side_idx] == 'b');
   m_next_move_colour = fen[side_idx] == 'b';
 
@@ -96,7 +91,66 @@ Board::Board(const std::string &fen) {
   ASSERT(full_move_idx == fen.size());
 }
 
-std::string Board::to_string() const {
+std::string Board::fen() const noexcept {
+  std::stringstream result;
+
+  // Part 1. The board state
+  size_t square_idx = A8;
+  size_t blank_count = 0;
+  while (square_idx != 29) {
+    if (square_idx % 10 == 9) {
+      if (blank_count != 0) {
+        result << (char)('0' + blank_count);
+        blank_count = 0;
+      }
+      result << '/';
+      square_idx -= 18;
+    }
+    const piece_t piece = m_pieces[square_idx];
+    if (piece == INVALID_PIECE) {
+      ++blank_count;
+    } else {
+      if (blank_count != 0) {
+        result << (char)('0' + blank_count);
+        blank_count = 0;
+      }
+      result << char_from_piece(piece);
+    }
+    ++square_idx;
+  }
+  result << ' ';
+
+  // Part 2: Side to move
+  result << (m_next_move_colour ? 'b' : 'w') << ' ';
+
+  // Part 3: Castle state
+  if (m_castle_state == 0) {
+    result << '-';
+  } else {
+    if (m_castle_state & WHITE_SHORT)
+      result << 'K';
+    if (m_castle_state & WHITE_LONG)
+      result << 'Q';
+    if (m_castle_state & BLACK_SHORT)
+      result << 'k';
+    if (m_castle_state & BLACK_LONG)
+      result << 'q';
+  }
+  result << ' ';
+
+  // Part 4: En passant square
+  result << string_from_square(m_en_passant) << ' ';
+
+  // Part 5: Half move counter
+  result << m_fifty_move << ' ';
+
+  // Part 6: Full move counter
+  result << m_full_move;
+
+  return result.str();
+}
+
+std::string Board::to_string() const noexcept {
   std::stringstream result;
   result << "+---- BOARD ----+" << '\n';
   for (int row = 7; row >= 0; --row) {
@@ -112,6 +166,6 @@ std::string Board::to_string() const {
   return result.str();
 }
 
-std::ostream& operator<<(std::ostream &os, const Board& board) {
+std::ostream& operator<<(std::ostream &os, const Board& board) noexcept {
   return os << board.to_string();
 }

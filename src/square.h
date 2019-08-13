@@ -163,6 +163,13 @@ constexpr inline square_t get_square_120(const square_t square) {
   return get_square_120_rc(row, col);
 }
 
+inline std::string string_from_square(const square_t square) {
+  if (square == INVALID_SQUARE)
+    return "-";
+  const size_t row = get_square_row(square), col = get_square_col(square);
+  return {(char)(row + 'a'), (char)(col + '1')};
+}
+
 #endif /* ifdef LUT_SQUARE */
 
 #endif /* end of include guard: SQUARE_H */
