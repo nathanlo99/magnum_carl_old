@@ -5,8 +5,11 @@
 #include "../tests/runtests.h"
 
 #include "board.h"
+#include "hash.h"
 
 int main() {
+  init_hash();
+
   ASSERT_MSG(!run_tests(), "Tests did not complete successfully");
   printf("Done testing!\n");
 
@@ -24,4 +27,8 @@ int main() {
   std::cout << board1.fen() << std::endl;
   std::cout << board2.fen() << std::endl;
   std::cout << board3.fen() << std::endl;
+
+  std::cout << sizeof(Board) << std::endl;
+
+  std::cout << starting_board.hash() << std::endl;
 }

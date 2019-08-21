@@ -1,12 +1,16 @@
 
 #include "board.h"
 #include "piece.h"
+#include "hash.h"
 
 #include <string>
 #include <sstream>
 
 Board::Board(const std::string &fen) noexcept {
   // Part 1: The board state
+  for (unsigned sq = 0; sq < 120; ++sq)
+    m_pieces[sq] = INVALID_PIECE;
+  
   size_t square_idx = A8; // 91
   size_t fen_idx = 0;
   while (fen[fen_idx] != ' ') {
@@ -34,7 +38,8 @@ Board::Board(const std::string &fen) noexcept {
 
   // Part 2: Side to move
   const size_t side_idx = fen_idx + 1;
-  ASSERT_MSG(fen[side_idx] == 'w' || fen[side_idx] == 'b', "Invalid FEN side");
+  ASSERT_MSG(fen[side_idx] == 'w' || fen[side_idx] == 'b',
+    "Invalid FEN side (%c)", fen[side_idx]);
   m_next_move_colour = fen[side_idx] == 'b';
 
   // Part 3: Castle state
@@ -53,7 +58,8 @@ Board::Board(const std::string &fen) noexcept {
       else if (fen[castle_idx] == 'q')
         m_castle_state |= BLACK_LONG;
       else
-        ASSERT_MSG(0, "Invalid character in castling permission specifications");
+        ASSERT_MSG(0,
+          "Invalid character in castling permission specifications");
 
       ++castle_idx;
     }
@@ -66,7 +72,8 @@ Board::Board(const std::string &fen) noexcept {
     m_en_passant = INVALID_SQUARE;
     en_passant_idx += 1;
   } else {
-    const size_t row = fen[en_passant_idx] - 'a', col = fen[en_passant_idx + 1] - '1';
+    const size_t row = fen[en_passant_idx    ] - 'a',
+                 col = fen[en_passant_idx + 1] - '1';
     m_en_passant = get_square_120_rc(row, col);
     en_passant_idx += 2;
   }
@@ -89,6 +96,8 @@ Board::Board(const std::string &fen) noexcept {
     full_move_idx++;
   }
   ASSERT_MSG(full_move_idx == fen.size(), "FEN string too long");
+
+  m_hash = compute_hash();
 }
 
 std::string Board::fen() const noexcept {
@@ -148,6 +157,18 @@ std::string Board::fen() const noexcept {
   result << m_full_move;
 
   return result.str();
+}
+
+hash_t Board::compute_hash() const noexcept {
+  hash_t res = 0;
+  for (unsigned sq = 0; sq < 120; ++sq) {
+    const piece_t piece = m_pieces[sq];
+    ASSERT(0 <= piece && piece < 16);
+    res ^= piece_hash[sq][piece];
+  }
+  res ^= castle_hash[m_castle_state];
+  res ^= enpas_hash[m_en_passant];
+  return res;
 }
 
 std::string Board::to_string() const noexcept {
