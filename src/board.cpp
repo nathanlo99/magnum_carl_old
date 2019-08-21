@@ -34,7 +34,7 @@ Board::Board(const std::string &fen) noexcept {
 
   // Part 2: Side to move
   const size_t side_idx = fen_idx + 1;
-  ASSERT(fen[side_idx] == 'w' || fen[side_idx] == 'b');
+  ASSERT_MSG(fen[side_idx] == 'w' || fen[side_idx] == 'b', "Invalid FEN side");
   m_next_move_colour = fen[side_idx] == 'b';
 
   // Part 3: Castle state
@@ -53,7 +53,7 @@ Board::Board(const std::string &fen) noexcept {
       else if (fen[castle_idx] == 'q')
         m_castle_state |= BLACK_LONG;
       else
-        ASSERT(!"Invalid character in castling permission specifications");
+        ASSERT_MSG(0, "Invalid character in castling permission specifications");
 
       ++castle_idx;
     }
@@ -88,7 +88,7 @@ Board::Board(const std::string &fen) noexcept {
     m_full_move = 10 * m_full_move + (fen[full_move_idx] - '0');
     full_move_idx++;
   }
-  ASSERT(full_move_idx == fen.size());
+  ASSERT_MSG(full_move_idx == fen.size(), "FEN string too long");
 }
 
 std::string Board::fen() const noexcept {

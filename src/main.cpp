@@ -2,14 +2,12 @@
 #include <cstdio>
 #include <iostream>
 
-#include "../tests/test_pieces.h"
-#include "../tests/test_squares.h"
+#include "../tests/runtests.h"
 
 #include "board.h"
 
 int main() {
-  test_pieces();
-  test_squares();
+  ASSERT_MSG(!run_tests(), "Tests did not complete successfully");
   printf("Done testing!\n");
 
   Board starting_board;

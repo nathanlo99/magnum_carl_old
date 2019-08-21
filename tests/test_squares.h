@@ -5,7 +5,7 @@
 #include "assert.h"
 #include "square.h"
 
-inline void test_squares() {
+inline constexpr int test_squares() {
   { /* valid_square */
     { /* valid_square true positives */
       ASSERT(valid_square(A1));
@@ -353,6 +353,7 @@ inline void test_squares() {
     ASSERT(get_square_120(62) == G8);
     ASSERT(get_square_120(63) == H8);
   }
+  return 0;
 }
 
 #endif /* end of include guard: TEST_SQUARES_H */

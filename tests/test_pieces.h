@@ -5,7 +5,7 @@
 #include "assert.h"
 #include "piece.h"
 
-inline void test_pieces() {
+inline constexpr int test_pieces() {
   { /* is_valid_piece */
     { /* is_valid_piece true positives */
       ASSERT(is_valid_piece(WHITE_KING));
@@ -120,6 +120,7 @@ inline void test_pieces() {
     ASSERT(get_side(BLACK_KNIGHT) == 1);
     ASSERT(get_side(BLACK_PAWN) == 1);
   }
+  return 0;
 }
 
 #endif /* end of include guard: TEST_PIECES_H */
