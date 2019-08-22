@@ -112,18 +112,24 @@ Board::Board(const std::string &fen) noexcept {
 }
 
 void Board::validate_board() const noexcept {
+  std::array<unsigned, 16> piece_count;
+  piece_count.fill(0);
   for (unsigned sq = 0; sq < 120; ++sq) {
     ASSERT_MSG(is_valid_piece(m_pieces[sq]) || m_pieces[sq] == INVALID_PIECE,
-      "Invalid piece %u at %u", m_pieces[sq], sq);
+      "Piece %u at %u is neither valid nor INVALID_PIECE", m_pieces[sq], sq);
+    piece_count[m_pieces[sq]]++;
   }
   for (unsigned piece = 0; piece < 16; ++piece) {
-    if (!is_valid_piece(piece)) {
-      ASSERT_MSG(m_num_pieces[piece] == 0,
-        "Invalid piece %u has non-zero count %u", piece, m_num_pieces[piece]);
-    }
-    for (unsigned num = 0, end = m_num_pieces[piece]; num < end; ++num) {
-      ASSERT_MSG(end <= MAX_NUM_PIECES,
-        "Too many (%u) pieces of type %u", end, piece);
+    ASSERT_MSG(is_valid_piece(piece) || m_num_pieces[piece] == 0,
+      "Invalid piece %u has non-zero count %u", piece, m_num_pieces[piece]);
+    const unsigned end = m_num_pieces[piece];
+    ASSERT_MSG(!is_valid_piece(piece)
+            || m_num_pieces[piece] == piece_count[piece],
+      "Too few/many (%u) pieces of type %u, expected %u",
+        m_num_pieces[piece], piece, piece_count[piece]);
+    ASSERT_MSG(end <= MAX_NUM_PIECES,
+      "Too many (%u) pieces of type %u", end, piece);
+    for (unsigned num = 0; num < end; ++num) {
       const square_t sq = m_positions[piece][num];
       ASSERT_MSG(m_pieces[sq] == piece,
         "m_positions[%u][%u] inconsistent with m_pieces[%u]", piece, num, sq);
@@ -162,6 +168,7 @@ std::string Board::fen() const noexcept {
     if (piece == INVALID_PIECE) {
       blank_count++;
     } else {
+      // Piece will be valid as board was validated
       if (blank_count != 0) {
         result << (char)('0' + blank_count);
         blank_count = 0;
@@ -173,7 +180,7 @@ std::string Board::fen() const noexcept {
   result << ' ';
 
   // Part 2: Side to move
-  result << (m_next_move_colour ? 'b' : 'w') << ' ';
+  result << (m_next_move_colour == WHITE ? 'w' : 'b') << ' ';
 
   // Part 3: Castle state
   if (m_castle_state == 0) {

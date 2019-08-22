@@ -24,4 +24,10 @@ int main() {
   std::cout << board1 << std::endl;
   std::cout << board2 << std::endl;
   std::cout << board3 << std::endl;
+
+  std::string startFEN = starting_board.fen();
+  Board copy{startFEN};
+  std::string startFEN2 = copy.fen();
+  ASSERT(startFEN == startFEN2);
+  ASSERT(starting_board.hash() == copy.hash());
 }
