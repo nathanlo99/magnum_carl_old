@@ -8,27 +8,24 @@
 #include <sstream>
 
 Board::Board(const std::string &fen) noexcept {
-  // Part 1: The board state
-  for (unsigned sq = 0; sq < 120; ++sq) {
-    m_pieces[sq] = INVALID_PIECE;
-  }
+  m_pieces.fill(INVALID_PIECE);
+  m_num_pieces.fill(0);
   for (unsigned piece = 0; piece < 16; ++piece) {
-    m_num_pieces[piece] = 0;
-    for (unsigned num = 0; num < MAX_NUM_PIECES; ++num) {
-      m_positions[piece][num] = INVALID_SQUARE;
-    }
+    m_positions[piece].fill(INVALID_SQUARE);
   }
 
-  size_t square_idx = A8; // 91
-  size_t fen_idx = 0;
-  while (fen[fen_idx] != ' ') {
-    const char chr = fen[fen_idx];
+  // Part 1: The board state
+  unsigned square_idx = A8; // 91
+  const char* next_chr = fen.data();
+  const char * const end_ptr = fen.data() + fen.size();
+  while (*next_chr != ' ') {
+    const char chr = *next_chr;
     if (chr == '/') {
       ASSERT(square_idx % 10 == 9);
       square_idx -= 18;
     } else if ('1' <= chr && chr <= '8') {
-      const size_t num_spaces = chr - '0';
-      for (size_t i = 0; i < num_spaces; ++i)
+      const unsigned num_spaces = chr - '0';
+      for (unsigned i = 0; i < num_spaces; ++i)
         m_pieces[square_idx + i] = INVALID_PIECE;
       square_idx += num_spaces;
       ASSERT(square_idx % 10 == 9 || valid_square(square_idx));
@@ -44,70 +41,72 @@ Board::Board(const std::string &fen) noexcept {
       square_idx++;
       ASSERT(square_idx % 10 == 9 || valid_square(square_idx));
     }
-    fen_idx++;
+    next_chr++;
   }
-  ASSERT(square_idx == 29);
+  ASSERT_MSG(square_idx == 29,
+    "Unexpected last square (%u) after parsing FEN board", square_idx);
 
   // Part 2: Side to move
-  const size_t side_idx = fen_idx + 1;
-  ASSERT_MSG(fen[side_idx] == 'w' || fen[side_idx] == 'b',
-    "Invalid FEN side (%c)", fen[side_idx]);
-  m_next_move_colour = (fen[side_idx] == 'w') ? WHITE : BLACK;
+  next_chr++;
+  ASSERT_MSG(*next_chr == 'w' || *next_chr == 'b',
+    "Invalid FEN side (%c)", *next_chr);
+  m_next_move_colour = (*next_chr == 'w') ? WHITE : BLACK;
 
   // Part 3: Castle state
-  size_t castle_idx = side_idx + 2;
+  next_chr += 2;
   m_castle_state = 0;
-  if (fen[castle_idx] == '-') {
-    castle_idx++;
+  if (*next_chr == '-') {
+    next_chr++;
   } else {
-    while (fen[castle_idx] != ' ') {
-      if (fen[castle_idx] == 'K')
-        m_castle_state |= WHITE_SHORT;
-      else if (fen[castle_idx] == 'Q')
-        m_castle_state |= WHITE_LONG;
-      else if (fen[castle_idx] == 'k')
-        m_castle_state |= BLACK_SHORT;
-      else if (fen[castle_idx] == 'q')
-        m_castle_state |= BLACK_LONG;
-      else
-        ASSERT_MSG(0,
+    while (*next_chr != ' ') {
+      switch (*next_chr) {
+        case 'K':
+          m_castle_state |= WHITE_SHORT; break;
+        case 'Q':
+          m_castle_state |= WHITE_LONG; break;
+        case 'k':
+          m_castle_state |= BLACK_SHORT; break;
+        case 'q':
+          m_castle_state |= BLACK_LONG; break;
+        default:
+          ASSERT_MSG(0,
           "Invalid character in castling permission specifications");
-
-      castle_idx++;
+      }
+      next_chr++;
     }
   }
-  ASSERT(fen[castle_idx] == ' ');
+  ASSERT(*next_chr == ' ');
 
   // Part 4: En passant square
-  size_t en_passant_idx = castle_idx + 1;
-  if (fen[en_passant_idx] == '-') {
+  next_chr += 1;
+  if (*next_chr == '-') {
     m_en_passant = INVALID_SQUARE;
-    en_passant_idx += 1;
+    next_chr += 1;
   } else {
-    const size_t row = fen[en_passant_idx    ] - 'a',
-                 col = fen[en_passant_idx + 1] - '1';
+    const unsigned row = *next_chr - 'a',
+                 col = *(next_chr + 1)- '1';
     m_en_passant = get_square_120_rc(row, col);
-    en_passant_idx += 2;
+    next_chr += 2;
   }
-  ASSERT(fen[en_passant_idx] == ' ');
+  ASSERT(*next_chr == ' ');
 
   // Part 5: Half move counter
   m_fifty_move = 0;
-  size_t fifty_move_idx = en_passant_idx + 1;
-  while (fen[fifty_move_idx] != ' ') {
-    m_fifty_move = 10 * m_fifty_move + (fen[fifty_move_idx] - '0');
-    fifty_move_idx++;
+  next_chr += 1;
+  while (*next_chr != ' ') {
+    m_fifty_move = 10 * m_fifty_move + (*next_chr - '0');
+    next_chr++;
   }
-  ASSERT(fen[fifty_move_idx] == ' ');
+  ASSERT(*next_chr == ' ');
 
   // Part 6: Full move counter
   m_full_move = 0;
-  size_t full_move_idx = fifty_move_idx + 1;
-  while (fen[full_move_idx] != ' ' && full_move_idx < fen.size()) {
-    m_full_move = 10 * m_full_move + (fen[full_move_idx] - '0');
-    full_move_idx++;
+  next_chr += 1;
+  while (*next_chr != ' ' && next_chr != end_ptr) {
+    m_full_move = 10 * m_full_move + (*next_chr - '0');
+    next_chr++;
   }
-  ASSERT_MSG(full_move_idx == fen.size(), "FEN string too long");
+  ASSERT_MSG(next_chr == end_ptr, "FEN string too long");
 
   m_hash = compute_hash();
 }
@@ -146,13 +145,13 @@ std::string Board::fen() const noexcept {
   validate_board();
 
   // Part 1. The board state
-  size_t square_idx = A8;
-  size_t blank_count = 0;
+  unsigned square_idx = A8;
+  unsigned blank_count = 0;
   while (square_idx != 29) {
     if (square_idx % 10 == 9) {
       if (blank_count != 0) {
         ASSERT_MSG(blank_count <= 8,
-          "Too many (%zu) blank squares in a row", blank_count);
+          "Too many (%u) blank squares in a row", blank_count);
         result << (char)('0' + blank_count);
         blank_count = 0;
       }
@@ -211,13 +210,13 @@ hash_t Board::compute_hash() const noexcept {
     ASSERT_MSG(0 <= piece && piece < 16,
       "Out of range piece (%u) in square", piece);
     ASSERT_MSG(is_valid_piece(piece) || piece_hash[sq][piece] == 0,
-      "Invalid piece (%u) had non-zero hash (%llu)",
+      "Invalid piece (%u) had non-zero hash (%lu)",
         piece, piece_hash[sq][piece]);
     res ^= piece_hash[sq][piece];
   }
   res ^= castle_hash[m_castle_state];
   ASSERT_MSG(enpas_hash[INVALID_SQUARE] == 0,
-    "Invalid square had non-zero hash (%llu)", enpas_hash[INVALID_SQUARE]);
+    "Invalid square had non-zero hash (%lu)", enpas_hash[INVALID_SQUARE]);
   res ^= enpas_hash[m_en_passant];
   return res;
 }
