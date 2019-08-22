@@ -3,14 +3,22 @@
 #include "piece.h"
 #include "hash.h"
 
+#include <iomanip>
 #include <string>
 #include <sstream>
 
 Board::Board(const std::string &fen) noexcept {
   // Part 1: The board state
-  for (unsigned sq = 0; sq < 120; ++sq)
+  for (unsigned sq = 0; sq < 120; ++sq) {
     m_pieces[sq] = INVALID_PIECE;
-  
+  }
+  for (unsigned piece = 0; piece < 16; ++piece) {
+    m_num_pieces[piece] = 0;
+    for (unsigned num = 0; num < 64; ++num) {
+      m_positions[piece][num] = INVALID_SQUARE;
+    }
+  }
+
   size_t square_idx = A8; // 91
   size_t fen_idx = 0;
   while (fen[fen_idx] != ' ') {
@@ -29,10 +37,14 @@ Board::Board(const std::string &fen) noexcept {
       ASSERT(valid_square(square_idx));
       ASSERT(is_valid_piece(piece_idx));
       m_pieces[square_idx] = piece_idx;
+      ASSERT_MSG(m_num_pieces[piece_idx] < 64,
+        "Too many (%u) pieces of type %u", m_num_pieces[piece_idx], piece_idx);
+      m_positions[piece_idx][m_num_pieces[piece_idx]] = square_idx;
+      m_num_pieces[piece_idx]++;
       square_idx++;
       ASSERT(square_idx % 10 == 9 || valid_square(square_idx));
     }
-    ++fen_idx;
+    fen_idx++;
   }
   ASSERT(square_idx == 29);
 
@@ -46,7 +58,7 @@ Board::Board(const std::string &fen) noexcept {
   size_t castle_idx = side_idx + 2;
   m_castle_state = 0;
   if (fen[castle_idx] == '-') {
-    ++castle_idx;
+    castle_idx++;
   } else {
     while (fen[castle_idx] != ' ') {
       if (fen[castle_idx] == 'K')
@@ -61,7 +73,7 @@ Board::Board(const std::string &fen) noexcept {
         ASSERT_MSG(0,
           "Invalid character in castling permission specifications");
 
-      ++castle_idx;
+      castle_idx++;
     }
   }
   ASSERT(fen[castle_idx] == ' ');
@@ -100,7 +112,32 @@ Board::Board(const std::string &fen) noexcept {
   m_hash = compute_hash();
 }
 
+void Board::validate_board() const noexcept {
+  for (unsigned sq = 0; sq < 120; ++sq) {
+    ASSERT_MSG(is_valid_piece(m_pieces[sq]) || m_pieces[sq] == INVALID_PIECE,
+      "Invalid piece %u at %u", m_pieces[sq], sq);
+  }
+  for (unsigned piece = 0; piece < 16; ++piece) {
+    if (!is_valid_piece(piece)) {
+      ASSERT_MSG(m_num_pieces[piece] == 0,
+        "Invalid piece %u has non-zero count %u", piece, m_num_pieces[piece]);
+    }
+    for (unsigned num = 0, end = m_num_pieces[piece]; num < end; ++num) {
+      ASSERT_MSG(end <= 64, "Too many (%u) pieces of type %u", end, piece);
+      const square_t sq = m_positions[piece][num];
+      ASSERT_MSG(m_pieces[sq] == piece,
+        "m_positions[%u][%u] inconsistent with m_pieces[%u]", piece, num, sq);
+      for (unsigned compare_idx = num + 1; compare_idx < end; ++compare_idx) {
+        ASSERT_MSG(m_positions[piece][num] != m_positions[piece][compare_idx],
+          "Repeated position of piece %u at indices %u and %u",
+            piece, num, compare_idx);
+      }
+    }
+  }
+}
+
 std::string Board::fen() const noexcept {
+  validate_board();
   std::stringstream result;
 
   // Part 1. The board state
@@ -125,7 +162,7 @@ std::string Board::fen() const noexcept {
       }
       result << char_from_piece(piece);
     }
-    ++square_idx;
+    square_idx++;
   }
   result << ' ';
 
@@ -160,20 +197,30 @@ std::string Board::fen() const noexcept {
 }
 
 hash_t Board::compute_hash() const noexcept {
+  validate_board();
   hash_t res = 0;
   for (unsigned sq = 0; sq < 120; ++sq) {
     const piece_t piece = m_pieces[sq];
-    ASSERT(0 <= piece && piece < 16);
+    ASSERT_MSG(0 <= piece && piece < 16,
+      "Out of range piece (%u) in square", piece);
+    ASSERT_MSG(is_valid_piece(piece) || piece_hash[sq][piece] == 0,
+      "Invalid piece (%u) had non-zero hash (%llu)",
+        piece, piece_hash[sq][piece]);
     res ^= piece_hash[sq][piece];
   }
   res ^= castle_hash[m_castle_state];
+  ASSERT_MSG(enpas_hash[INVALID_SQUARE] == 0,
+    "Invalid square had non-zero hash (%llu)", enpas_hash[INVALID_SQUARE]);
   res ^= enpas_hash[m_en_passant];
   return res;
 }
 
 std::string Board::to_string() const noexcept {
+  validate_board();
   std::stringstream result;
   result << "+---- BOARD ----+" << '\n';
+  // TODO: Optimize this loop by refactoring out the square index instead of
+  //   calling get_square_120_rc every iteration (can we trust the compiler?)
   for (int row = 7; row >= 0; --row) {
     result << '|';
     for (int col = 0; col < 8; ++col) {
@@ -183,7 +230,10 @@ std::string Board::to_string() const noexcept {
     }
     result << '\n';
   }
-  result << "+---------------+";
+  result << "+---------------+\n";
+  ASSERT_MSG(compute_hash() == m_hash, "Hash invariant broken");
+  result << "HASH: ";
+  result << std::setw(16) << std::setfill('0') << std::hex << m_hash << '\n';
   return result.str();
 }
 

@@ -16,7 +16,8 @@
 
 class Board {
   std::array<piece_t, 120> m_pieces;
-  std::array<std::vector<square_t>, 16> m_positions;
+  std::array<std::array<square_t, 64>, 16> m_positions;
+  std::array<unsigned, 16> m_num_pieces;
   bool m_next_move_colour;
   castle_t m_castle_state;
   square_t m_en_passant;
@@ -30,7 +31,8 @@ class Board {
       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
   hash_t compute_hash() const noexcept;
-
+  void validate_board() const noexcept;
+  
 public:
   Board(const std::string &fen = Board::startFEN) noexcept;
 

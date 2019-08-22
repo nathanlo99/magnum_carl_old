@@ -1,6 +1,7 @@
 
 #include <cstdio>
 #include <iostream>
+#include <iomanip>
 
 #include "../tests/runtests.h"
 
@@ -28,7 +29,8 @@ int main() {
   std::cout << board2.fen() << std::endl;
   std::cout << board3.fen() << std::endl;
 
-  std::cout << sizeof(Board) << std::endl;
-
   std::cout << starting_board.hash() << std::endl;
+  std::cout << board1.hash() << std::endl;
+  std::cout << board2.hash() << std::endl;
+  std::cout << board3.hash() << std::endl;
 }

@@ -1,10 +1,16 @@
 
 #include "hash.h"
 
+#include <iostream>
+
 static bool hash_flag = 0;
 static inline hash_t random_hash() noexcept {
-  static std::random_device rd;
-  static std::mt19937_64 gen(rd());
+#ifdef DEBUG
+  const static auto seed = 42069; // Constant seed for debugging
+#else
+  const static auto seed = std::random_device{}();
+#endif
+  static std::mt19937_64 gen(seed);
   return gen();
 }
 

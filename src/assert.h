@@ -9,16 +9,16 @@
   #define ASSERT(expr) \
     do { \
       if (!(expr)) { \
-        printf("[ERROR] Test failed: %s (%s:%d)\n", \
-          #expr, __FILE__, __LINE__); \
+        printf("[ERROR] Test failed: %s (%s:%s:%d)\n", \
+          #expr, __FILE__, __func__, __LINE__); \
         exit(1); \
       } \
     } while (0)
   #define ASSERT_MSG(expr, ...) \
     do { \
       if (!(expr)) { \
-        printf("[ERROR] Test failed: %s (%s:%d)\n", \
-          #expr, __FILE__, __LINE__); \
+        printf("[ERROR] Test failed: %s (%s:%s:%d)\n", \
+          #expr, __FILE__, __func__, __LINE__); \
         printf(__VA_ARGS__); \
         printf("\n"); \
         exit(1); \
