@@ -14,7 +14,7 @@ Board::Board(const std::string &fen) noexcept {
   }
   for (unsigned piece = 0; piece < 16; ++piece) {
     m_num_pieces[piece] = 0;
-    for (unsigned num = 0; num < 64; ++num) {
+    for (unsigned num = 0; num < MAX_NUM_PIECES; ++num) {
       m_positions[piece][num] = INVALID_SQUARE;
     }
   }
@@ -37,7 +37,7 @@ Board::Board(const std::string &fen) noexcept {
       ASSERT(valid_square(square_idx));
       ASSERT(is_valid_piece(piece_idx));
       m_pieces[square_idx] = piece_idx;
-      ASSERT_MSG(m_num_pieces[piece_idx] < 64,
+      ASSERT_MSG(m_num_pieces[piece_idx] < MAX_NUM_PIECES,
         "Too many (%u) pieces of type %u", m_num_pieces[piece_idx], piece_idx);
       m_positions[piece_idx][m_num_pieces[piece_idx]] = square_idx;
       m_num_pieces[piece_idx]++;
@@ -52,7 +52,7 @@ Board::Board(const std::string &fen) noexcept {
   const size_t side_idx = fen_idx + 1;
   ASSERT_MSG(fen[side_idx] == 'w' || fen[side_idx] == 'b',
     "Invalid FEN side (%c)", fen[side_idx]);
-  m_next_move_colour = fen[side_idx] == 'b';
+  m_next_move_colour = (fen[side_idx] == 'w') ? WHITE : BLACK;
 
   // Part 3: Castle state
   size_t castle_idx = side_idx + 2;
@@ -123,7 +123,8 @@ void Board::validate_board() const noexcept {
         "Invalid piece %u has non-zero count %u", piece, m_num_pieces[piece]);
     }
     for (unsigned num = 0, end = m_num_pieces[piece]; num < end; ++num) {
-      ASSERT_MSG(end <= 64, "Too many (%u) pieces of type %u", end, piece);
+      ASSERT_MSG(end <= MAX_NUM_PIECES,
+        "Too many (%u) pieces of type %u", end, piece);
       const square_t sq = m_positions[piece][num];
       ASSERT_MSG(m_pieces[sq] == piece,
         "m_positions[%u][%u] inconsistent with m_pieces[%u]", piece, num, sq);
@@ -134,11 +135,15 @@ void Board::validate_board() const noexcept {
       }
     }
   }
+  ASSERT_MSG(0 <= m_castle_state && m_castle_state < 16,
+    "Castle state (%u) out of range", m_castle_state);
+  ASSERT_MSG(valid_square(m_en_passant) || m_en_passant == INVALID_SQUARE,
+    "En passant square (%u) not valid nor INVALID_SQUARE", m_en_passant);
 }
 
 std::string Board::fen() const noexcept {
-  validate_board();
   std::stringstream result;
+  validate_board();
 
   // Part 1. The board state
   size_t square_idx = A8;
@@ -146,6 +151,8 @@ std::string Board::fen() const noexcept {
   while (square_idx != 29) {
     if (square_idx % 10 == 9) {
       if (blank_count != 0) {
+        ASSERT_MSG(blank_count <= 8,
+          "Too many (%zu) blank squares in a row", blank_count);
         result << (char)('0' + blank_count);
         blank_count = 0;
       }
@@ -154,7 +161,7 @@ std::string Board::fen() const noexcept {
     }
     const piece_t piece = m_pieces[square_idx];
     if (piece == INVALID_PIECE) {
-      ++blank_count;
+      blank_count++;
     } else {
       if (blank_count != 0) {
         result << (char)('0' + blank_count);
@@ -231,8 +238,14 @@ std::string Board::to_string() const noexcept {
     result << '\n';
   }
   result << "+---------------+\n";
+  result << "TO MOVE: ";
+  result << ((m_next_move_colour == WHITE) ? "WHITE" : "BLACK") << '\n';
+  result << "EN PASS: ";
+  result << string_from_square(m_en_passant) << '\n';
+  result << "FIFTY  : " << m_fifty_move << '\n';
+  result << "MOVE#  : " << m_full_move << '\n';
   ASSERT_MSG(compute_hash() == m_hash, "Hash invariant broken");
-  result << "HASH: ";
+  result << "HASH   : ";
   result << std::setw(16) << std::setfill('0') << std::hex << m_hash << '\n';
   return result.str();
 }
