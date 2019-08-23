@@ -6,9 +6,9 @@
 static bool hash_flag = 0;
 static inline hash_t random_hash() noexcept {
 #ifdef DEBUG
-  const static auto seed = 42069; // Constant seed for debugging
+  static const auto seed = 42069; // Constant seed for debugging
 #else
-  const static auto seed = std::random_device{}();
+  static const auto seed = std::random_device{}();
 #endif
   static std::mt19937_64 gen(seed);
   return gen();

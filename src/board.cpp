@@ -16,7 +16,7 @@ Board::Board(const std::string &fen) noexcept {
 
   // Part 1: The board state
   unsigned square_idx = A8; // 91
-  const char* next_chr = fen.data();
+  const char * next_chr = fen.data();
   const char * const end_ptr = fen.data() + fen.size();
   while (*next_chr != ' ') {
     const char chr = *next_chr;
@@ -78,7 +78,7 @@ Board::Board(const std::string &fen) noexcept {
   ASSERT(*next_chr == ' ');
 
   // Part 4: En passant square
-  next_chr += 1;
+  next_chr++;
   if (*next_chr == '-') {
     m_en_passant = INVALID_SQUARE;
     next_chr += 1;
@@ -92,7 +92,7 @@ Board::Board(const std::string &fen) noexcept {
 
   // Part 5: Half move counter
   m_fifty_move = 0;
-  next_chr += 1;
+  next_chr++;
   while (*next_chr != ' ') {
     m_fifty_move = 10 * m_fifty_move + (*next_chr - '0');
     next_chr++;
@@ -101,7 +101,7 @@ Board::Board(const std::string &fen) noexcept {
 
   // Part 6: Full move counter
   m_full_move = 0;
-  next_chr += 1;
+  next_chr++;
   while (*next_chr != ' ' && next_chr != end_ptr) {
     m_full_move = 10 * m_full_move + (*next_chr - '0');
     next_chr++;
@@ -112,7 +112,7 @@ Board::Board(const std::string &fen) noexcept {
 }
 
 void Board::validate_board() const noexcept {
-  std::array<unsigned, 16> piece_count;
+  static std::array<unsigned, 16> piece_count;
   piece_count.fill(0);
   for (unsigned sq = 0; sq < 120; ++sq) {
     ASSERT_MSG(is_valid_piece(m_pieces[sq]) || m_pieces[sq] == INVALID_PIECE,
@@ -246,13 +246,11 @@ std::string Board::to_string() const noexcept {
   result << "+---------------+\n";
   result << "TO MOVE: ";
   result << ((m_next_move_colour == WHITE) ? "WHITE" : "BLACK") << '\n';
-  result << "EN PASS: ";
-  result << string_from_square(m_en_passant) << '\n';
+  result << "EN PASS: " << string_from_square(m_en_passant) << '\n';
   result << "FIFTY  : " << m_fifty_move << '\n';
   result << "MOVE#  : " << m_full_move << '\n';
-  ASSERT_MSG(compute_hash() == m_hash, "Hash invariant broken");
   result << "HASH   : ";
-  result << std::setw(16) << std::setfill('0') << std::hex << m_hash << '\n';
+  result << std::setw(16) << std::setfill('0') << std::hex << hash() << '\n';
   return result.str();
 }
 
