@@ -12,11 +12,11 @@ SRC_PATH = src
 # Space-separated pkg-config libraries used by this project
 LIBS =
 # General compiler flags
-COMPILE_FLAGS = -std=c++14 -Wall -Wextra -pedantic -Wno-type-limits -g -march=native
+COMPILE_FLAGS = -std=c++14 -Wall -Wextra -Wrestrict -pedantic -Wno-type-limits -march=native
 # Additional release-specific flags
-RCOMPILE_FLAGS = -Ofast
+RCOMPILE_FLAGS = -Ofast -ffast-math -fwrapv
 # Additional debug-specific flags
-DCOMPILE_FLAGS = -D DEBUG -fsanitize=address,undefined -O2
+DCOMPILE_FLAGS = -D DEBUG -fsanitize=address,undefined -O2 -g
 # Add additional include paths
 INCLUDES = -I $(SRC_PATH)
 # General linker settings

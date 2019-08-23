@@ -200,7 +200,6 @@ std::string Board::fen() const noexcept {
   }
   if (blank_count != 0) {
     result << (char)('0' + blank_count);
-    blank_count = 0;
   }
   result << ' ';
 
