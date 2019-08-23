@@ -17,6 +17,7 @@ static inline hash_t random_hash() noexcept {
 hash_t piece_hash[120][16];
 hash_t castle_hash[16];
 hash_t enpas_hash[120];
+hash_t side_hash;
 
 void init_hash() noexcept {
   if (hash_flag) return;
@@ -37,5 +38,6 @@ void init_hash() noexcept {
   for (unsigned castle = 0; castle < 16; ++castle) {
     castle_hash[castle] = random_hash();
   }
+  side_hash = random_hash();
   hash_flag = 1;
 }

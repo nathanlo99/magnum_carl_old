@@ -3,6 +3,7 @@
 #include "piece.h"
 #include "hash.h"
 
+#include <iostream>
 #include <iomanip>
 #include <string>
 #include <sstream>
@@ -21,15 +22,18 @@ Board::Board(const std::string &fen) noexcept {
   while (*next_chr != ' ') {
     const char chr = *next_chr;
     if (chr == '/') {
+      // To the next row
       ASSERT(square_idx % 10 == 9);
       square_idx -= 18;
     } else if ('1' <= chr && chr <= '8') {
+      // A number indicates that number of empty squares
       const unsigned num_spaces = chr - '0';
       for (unsigned i = 0; i < num_spaces; ++i)
         m_pieces[square_idx + i] = INVALID_PIECE;
       square_idx += num_spaces;
       ASSERT(square_idx % 10 == 9 || valid_square(square_idx));
     } else {
+      // Otherwise, it better be a character corresponding to a valid piece
       const piece_t piece_idx = piece_from_char(chr);
       ASSERT(valid_square(square_idx));
       ASSERT(is_valid_piece(piece_idx));
@@ -78,13 +82,14 @@ Board::Board(const std::string &fen) noexcept {
   ASSERT(*next_chr == ' ');
 
   // Part 4: En passant square
+  // TODO: Check whether an en passant capture is even possible.
+  // If not, zero the en passant square as it is irrelevant.
   next_chr++;
   if (*next_chr == '-') {
     m_en_passant = INVALID_SQUARE;
     next_chr += 1;
   } else {
-    const unsigned row = *next_chr - 'a',
-                 col = *(next_chr + 1)- '1';
+    const unsigned row = *(next_chr + 1) - '1', col = *next_chr - 'a';
     m_en_passant = get_square_120_rc(row, col);
     next_chr += 2;
   }
@@ -94,6 +99,8 @@ Board::Board(const std::string &fen) noexcept {
   m_fifty_move = 0;
   next_chr++;
   while (*next_chr != ' ') {
+    ASSERT_MSG('0' <= *next_chr && *next_chr <= '9',
+      "Invalid digit (%c) in half move counter", *next_chr);
     m_fifty_move = 10 * m_fifty_move + (*next_chr - '0');
     next_chr++;
   }
@@ -102,7 +109,9 @@ Board::Board(const std::string &fen) noexcept {
   // Part 6: Full move counter
   m_full_move = 0;
   next_chr++;
-  while (*next_chr != ' ' && next_chr != end_ptr) {
+  while (next_chr != end_ptr) {
+    ASSERT_MSG('0' <= *next_chr && *next_chr <= '9',
+      "Invalid digit (%c) in full move counter", *next_chr);
     m_full_move = 10 * m_full_move + (*next_chr - '0');
     next_chr++;
   }
@@ -119,6 +128,10 @@ void Board::validate_board() const noexcept {
       "Piece %u at %u is neither valid nor INVALID_PIECE", m_pieces[sq], sq);
     piece_count[m_pieces[sq]]++;
   }
+  ASSERT_MSG(m_num_pieces[WHITE_KING] == 1,
+    "White has too few/many (%u) kings", m_num_pieces[WHITE_KING]);
+  ASSERT_MSG(m_num_pieces[BLACK_KING] == 1,
+    "Black has too few/many (%u) kings", m_num_pieces[BLACK_KING]);
   for (unsigned piece = 0; piece < 16; ++piece) {
     ASSERT_MSG(is_valid_piece(piece) || m_num_pieces[piece] == 0,
       "Invalid piece %u has non-zero count %u", piece, m_num_pieces[piece]);
@@ -144,6 +157,14 @@ void Board::validate_board() const noexcept {
     "Castle state (%u) out of range", m_castle_state);
   ASSERT_MSG(valid_square(m_en_passant) || m_en_passant == INVALID_SQUARE,
     "En passant square (%u) not valid nor INVALID_SQUARE", m_en_passant);
+  ASSERT_MSG(m_next_move_colour != BLACK || m_en_passant == INVALID_SQUARE
+    || get_square_row(m_en_passant) == RANK_3,
+    "En passant square (%s - %u) not on row 3 on black's turn",
+      string_from_square(m_en_passant).c_str(), m_en_passant);
+  ASSERT_MSG(m_next_move_colour != WHITE || m_en_passant == INVALID_SQUARE
+    || get_square_row(m_en_passant) == RANK_6,
+    "En passant square (%s - %u) not on row 6 on white's turn",
+      string_from_square(m_en_passant).c_str(), m_en_passant);
 }
 
 std::string Board::fen() const noexcept {
@@ -176,6 +197,10 @@ std::string Board::fen() const noexcept {
       result << char_from_piece(piece);
     }
     square_idx++;
+  }
+  if (blank_count != 0) {
+    result << (char)('0' + blank_count);
+    blank_count = 0;
   }
   result << ' ';
 
@@ -225,6 +250,7 @@ hash_t Board::compute_hash() const noexcept {
   ASSERT_MSG(enpas_hash[INVALID_SQUARE] == 0,
     "Invalid square had non-zero hash (%lu)", enpas_hash[INVALID_SQUARE]);
   res ^= enpas_hash[m_en_passant];
+  res ^= (m_next_move_colour * side_hash);
   return res;
 }
 

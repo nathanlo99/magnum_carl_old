@@ -35,6 +35,14 @@ enum Square {
   INVALID_SQUARE = 99,
 };
 
+enum SquareRank {
+  RANK_1 = 0, RANK_2, RANK_3, RANK_4, RANK_5, RANK_6, RANK_7, RANK_8,
+};
+
+enum SquareFile {
+  FILE_1 = 0, FILE_2, FILE_3, FILE_4, FILE_5, FILE_6, FILE_7, FILE_8,
+};
+
 constexpr inline square_t get_square_64_rc(const int row, const int col) {
   ASSERT(0 <= row && row < 8);
   ASSERT(0 <= col && col < 8);
@@ -46,8 +54,9 @@ constexpr inline square_t get_square_120_rc(const int row, const int col) {
   return (row + 2) * 10 + (col + 1);
 }
 
+// #define LUT_SQUARE
 #ifdef LUT_SQUARE
-const static bool _valid_square[120] = {
+constexpr static bool _valid_square[120] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 1, 1, 1, 1, 1, 1, 1, 1, 0,
@@ -65,7 +74,7 @@ constexpr inline bool valid_square(const square_t square) {
   ASSERT(0 <= square && square < 120);
   return _valid_square[square];
 }
-const static int _get_square_row[120] = {
+constexpr static int _get_square_row[120] = {
   9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
   9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
   9, 0, 0, 0, 0, 0, 0, 0, 0, 9,
@@ -80,11 +89,10 @@ const static int _get_square_row[120] = {
   9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
 };
 constexpr inline int get_square_row(const square_t square) {
-  ASSERT(0 <= square && square < 120);
   ASSERT(valid_square(square));
   return _get_square_row[square];
 }
-const static int _get_square_col[120] = {
+constexpr static int _get_square_col[120] = {
   9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
   9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
   9, 0, 1, 2, 3, 4, 5, 6, 7, 9,
@@ -99,16 +107,15 @@ const static int _get_square_col[120] = {
   9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
 };
 constexpr inline int get_square_col(const square_t square) {
-  ASSERT(0 <= square && square < 120);
   ASSERT(valid_square(square));
-  return get_square_col(square);
+  return _get_square_col[square];
 }
-const static int _get_square_64[120] = {
+constexpr static int _get_square_64[120] = {
   99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
   99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
   99,  0,  1,  2,  3,  4,  5,  6,  7, 99,
   99,  8,  9, 10, 11, 12, 13, 14, 15, 99,
-  99, 16, 17, 18, 19, 20, 21, 21, 22, 99,
+  99, 16, 17, 18, 19, 20, 21, 22, 23, 99,
   99, 24, 25, 26, 27, 28, 29, 30, 31, 99,
   99, 32, 33, 34, 35, 36, 37, 38, 39, 99,
   99, 40, 41, 42, 43, 44, 45, 46, 47, 99,
@@ -118,11 +125,10 @@ const static int _get_square_64[120] = {
   99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
 };
 constexpr inline int get_square_64(const square_t square) {
-  ASSERT(0 <= square && square < 120);
   ASSERT(valid_square(square));
   return _get_square_64[square];
 }
-const static int _get_square_120[64] = {
+constexpr static int _get_square_120[64] = {
   21, 22, 23, 24, 25, 26, 27, 28,
   31, 32, 33, 34, 35, 36, 37, 38,
   41, 42, 43, 44, 45, 46, 47, 48,
@@ -143,17 +149,14 @@ constexpr inline bool valid_square(const square_t square) {
   return 2 <= row && row <= 9 && 1 <= col && col <= 8;
 }
 constexpr inline square_t get_square_row(const square_t square) {
-  ASSERT(0 <= square && square < 120);
   ASSERT(valid_square(square));
   return square / 10 - 2;
 }
 constexpr inline square_t get_square_col(const square_t square) {
-  ASSERT(0 <= square && square < 120);
   ASSERT(valid_square(square));
   return square % 10 - 1;
 }
 constexpr inline square_t get_square_64(const square_t square) {
-  ASSERT(0 <= square && square < 120);
   ASSERT(valid_square(square));
   return get_square_64_rc(get_square_row(square), get_square_col(square));
 }
@@ -163,13 +166,14 @@ constexpr inline square_t get_square_120(const square_t square) {
   return get_square_120_rc(row, col);
 }
 
+#endif /* ifdef LUT_SQUARE */
+
 inline std::string string_from_square(const square_t square) {
   if (square == INVALID_SQUARE)
     return "-";
+  ASSERT(valid_square(square));
   const size_t row = get_square_row(square), col = get_square_col(square);
-  return {(char)(row + 'a'), (char)(col + '1')};
+  return {(char)(col + 'a'), (char)(row + '1')};
 }
-
-#endif /* ifdef LUT_SQUARE */
 
 #endif /* end of include guard: SQUARE_H */

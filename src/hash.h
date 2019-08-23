@@ -14,6 +14,7 @@ using hash_t = uint64_t;
 extern hash_t piece_hash[120][16];
 extern hash_t castle_hash[16];
 extern hash_t enpas_hash[120];
+extern hash_t side_hash;
 
 void init_hash() noexcept;
 

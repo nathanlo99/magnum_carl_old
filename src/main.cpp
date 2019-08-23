@@ -5,12 +5,12 @@
 
 #include "../tests/runtests.h"
 
+#include "assert.h"
 #include "board.h"
 #include "hash.h"
 
 /*
 TODOS:
-  - Board tests
   - Move generation
   - Play move
   - Check

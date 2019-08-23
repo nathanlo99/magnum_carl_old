@@ -31,9 +31,6 @@ class Board {
 
   // std::vector<Move> m_history;
 
-  constexpr static const char* startFEN =
-      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
   hash_t compute_hash() const noexcept;
   void validate_board() const noexcept;
 
@@ -47,6 +44,9 @@ public:
     ASSERT_MSG(m_hash == compute_hash(), "Hash invariant broken");
     return m_hash;
   }
+
+  constexpr static const char* startFEN =
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 };
 
 std::ostream& operator<<(std::ostream &os, const Board& board) noexcept;

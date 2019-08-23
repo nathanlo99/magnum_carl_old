@@ -5,7 +5,7 @@
 #include "assert.h"
 #include "square.h"
 
-inline constexpr int test_squares() {
+inline int test_squares() {
   { /* valid_square */
     { /* valid_square true positives */
       ASSERT(valid_square(A1));
@@ -352,6 +352,74 @@ inline constexpr int test_squares() {
     ASSERT(get_square_120(61) == F8);
     ASSERT(get_square_120(62) == G8);
     ASSERT(get_square_120(63) == H8);
+  }
+
+  { /* string_from_square */
+    ASSERT(string_from_square(A1) == "a1");
+    ASSERT(string_from_square(A2) == "a2");
+    ASSERT(string_from_square(A3) == "a3");
+    ASSERT(string_from_square(A4) == "a4");
+    ASSERT(string_from_square(A5) == "a5");
+    ASSERT(string_from_square(A6) == "a6");
+    ASSERT(string_from_square(A7) == "a7");
+    ASSERT(string_from_square(A8) == "a8");
+    ASSERT(string_from_square(B1) == "b1");
+    ASSERT(string_from_square(B2) == "b2");
+    ASSERT(string_from_square(B3) == "b3");
+    ASSERT(string_from_square(B4) == "b4");
+    ASSERT(string_from_square(B5) == "b5");
+    ASSERT(string_from_square(B6) == "b6");
+    ASSERT(string_from_square(B7) == "b7");
+    ASSERT(string_from_square(B8) == "b8");
+    ASSERT(string_from_square(C1) == "c1");
+    ASSERT(string_from_square(C2) == "c2");
+    ASSERT(string_from_square(C3) == "c3");
+    ASSERT(string_from_square(C4) == "c4");
+    ASSERT(string_from_square(C5) == "c5");
+    ASSERT(string_from_square(C6) == "c6");
+    ASSERT(string_from_square(C7) == "c7");
+    ASSERT(string_from_square(C8) == "c8");
+    ASSERT(string_from_square(D1) == "d1");
+    ASSERT(string_from_square(D2) == "d2");
+    ASSERT(string_from_square(D3) == "d3");
+    ASSERT(string_from_square(D4) == "d4");
+    ASSERT(string_from_square(D5) == "d5");
+    ASSERT(string_from_square(D6) == "d6");
+    ASSERT(string_from_square(D7) == "d7");
+    ASSERT(string_from_square(D8) == "d8");
+    ASSERT(string_from_square(E1) == "e1");
+    ASSERT(string_from_square(E2) == "e2");
+    ASSERT(string_from_square(E3) == "e3");
+    ASSERT(string_from_square(E4) == "e4");
+    ASSERT(string_from_square(E5) == "e5");
+    ASSERT(string_from_square(E6) == "e6");
+    ASSERT(string_from_square(E7) == "e7");
+    ASSERT(string_from_square(E8) == "e8");
+    ASSERT(string_from_square(F1) == "f1");
+    ASSERT(string_from_square(F2) == "f2");
+    ASSERT(string_from_square(F3) == "f3");
+    ASSERT(string_from_square(F4) == "f4");
+    ASSERT(string_from_square(F5) == "f5");
+    ASSERT(string_from_square(F6) == "f6");
+    ASSERT(string_from_square(F7) == "f7");
+    ASSERT(string_from_square(F8) == "f8");
+    ASSERT(string_from_square(G1) == "g1");
+    ASSERT(string_from_square(G2) == "g2");
+    ASSERT(string_from_square(G3) == "g3");
+    ASSERT(string_from_square(G4) == "g4");
+    ASSERT(string_from_square(G5) == "g5");
+    ASSERT(string_from_square(G6) == "g6");
+    ASSERT(string_from_square(G7) == "g7");
+    ASSERT(string_from_square(G8) == "g8");
+    ASSERT(string_from_square(H1) == "h1");
+    ASSERT(string_from_square(H2) == "h2");
+    ASSERT(string_from_square(H3) == "h3");
+    ASSERT(string_from_square(H4) == "h4");
+    ASSERT(string_from_square(H5) == "h5");
+    ASSERT(string_from_square(H6) == "h6");
+    ASSERT(string_from_square(H7) == "h7");
+    ASSERT(string_from_square(H8) == "h8");
+    ASSERT(string_from_square(INVALID_SQUARE) == "-");
   }
   return 0;
 }
