@@ -36,7 +36,7 @@ Board::Board(const std::string &fen) noexcept {
       // Otherwise, it better be a character corresponding to a valid piece
       const piece_t piece_idx = piece_from_char(chr);
       ASSERT(valid_square(square_idx));
-      ASSERT(is_valid_piece(piece_idx));
+      ASSERT(valid_piece(piece_idx));
       m_pieces[square_idx] = piece_idx;
       ASSERT_MSG(m_num_pieces[piece_idx] < MAX_NUM_PIECES,
         "Too many (%u) pieces of type %u", m_num_pieces[piece_idx], piece_idx);
@@ -124,7 +124,7 @@ void Board::validate_board() const noexcept {
   static std::array<unsigned, 16> piece_count;
   piece_count.fill(0);
   for (unsigned sq = 0; sq < 120; ++sq) {
-    ASSERT_MSG(is_valid_piece(m_pieces[sq]) || m_pieces[sq] == INVALID_PIECE,
+    ASSERT_MSG(valid_piece(m_pieces[sq]) || m_pieces[sq] == INVALID_PIECE,
       "Piece %u at %u is neither valid nor INVALID_PIECE", m_pieces[sq], sq);
     piece_count[m_pieces[sq]]++;
   }
@@ -133,10 +133,10 @@ void Board::validate_board() const noexcept {
   ASSERT_MSG(m_num_pieces[BLACK_KING] == 1,
     "Black has too few/many (%u) kings", m_num_pieces[BLACK_KING]);
   for (unsigned piece = 0; piece < 16; ++piece) {
-    ASSERT_MSG(is_valid_piece(piece) || m_num_pieces[piece] == 0,
+    ASSERT_MSG(valid_piece(piece) || m_num_pieces[piece] == 0,
       "Invalid piece %u has non-zero count %u", piece, m_num_pieces[piece]);
     const unsigned end = m_num_pieces[piece];
-    ASSERT_MSG(!is_valid_piece(piece)
+    ASSERT_MSG(!valid_piece(piece)
             || m_num_pieces[piece] == piece_count[piece],
       "Too few/many (%u) pieces of type %u, expected %u",
         m_num_pieces[piece], piece, piece_count[piece]);
@@ -240,7 +240,7 @@ hash_t Board::compute_hash() const noexcept {
     const piece_t piece = m_pieces[sq];
     ASSERT_MSG(0 <= piece && piece < 16,
       "Out of range piece (%u) in square", piece);
-    ASSERT_MSG(is_valid_piece(piece) || piece_hash[sq][piece] == 0,
+    ASSERT_MSG(valid_piece(piece) || piece_hash[sq][piece] == 0,
       "Invalid piece (%u) had non-zero hash (%lu)",
         piece, piece_hash[sq][piece]);
     res ^= piece_hash[sq][piece];

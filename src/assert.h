@@ -6,19 +6,30 @@
 #include <cstdlib>
 
 #if defined(DEBUG)
+  #define ERROR(s) \
+    printf("[ERROR] Test failed: %s (%s:%s:%d)\n", \
+    s, __FILE__, __func__, __LINE__)
   #define ASSERT(expr) \
     do { \
-      if (!(expr)) { \
-        printf("[ERROR] Test failed: %s (%s:%s:%d)\n", \
-          #expr, __FILE__, __func__, __LINE__); \
-        exit(1); \
-      } \
+      if (!(expr)) { ERROR(#expr); exit(1); } \
     } while (0)
   #define ASSERT_MSG(expr, ...) \
     do { \
       if (!(expr)) { \
-        printf("[ERROR] Test failed: %s (%s:%s:%d)\n", \
-          #expr, __FILE__, __func__, __LINE__); \
+        ERROR(#expr); \
+        printf(__VA_ARGS__); \
+        printf("\n"); \
+        exit(1); \
+      } \
+    } while (0)
+  #define ASSERT_IF(cond, expr) \
+    do { \
+      if (!(cond) || !(expr)) { ERROR(#expr); exit(1); } \
+    } while (0)
+  #define ASSERT_IF_MSG(cond, expr, ...) \
+    do { \
+      if (!(cond) || !(expr)) { \
+        ERROR(#expr); \
         printf(__VA_ARGS__); \
         printf("\n"); \
         exit(1); \

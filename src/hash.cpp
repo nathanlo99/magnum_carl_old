@@ -28,7 +28,7 @@ void init_hash() noexcept {
       enpas_hash[sq] = 0;
     }
     for (unsigned piece = 0; piece < 16; ++piece) {
-      if (valid_square(sq) && is_valid_piece(piece)) {
+      if (valid_square(sq) && valid_piece(piece)) {
         piece_hash[sq][piece] = random_hash();
       } else {
         piece_hash[sq][piece] = 0;

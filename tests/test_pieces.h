@@ -6,27 +6,27 @@
 #include "piece.h"
 
 inline constexpr int test_pieces() {
-  { /* is_valid_piece */
-    { /* is_valid_piece true positives */
-      ASSERT(is_valid_piece(WHITE_KING));
-      ASSERT(is_valid_piece(WHITE_QUEEN));
-      ASSERT(is_valid_piece(WHITE_ROOK));
-      ASSERT(is_valid_piece(WHITE_BISHOP));
-      ASSERT(is_valid_piece(WHITE_KNIGHT));
-      ASSERT(is_valid_piece(WHITE_PAWN));
-      ASSERT(is_valid_piece(BLACK_KING));
-      ASSERT(is_valid_piece(BLACK_QUEEN));
-      ASSERT(is_valid_piece(BLACK_ROOK));
-      ASSERT(is_valid_piece(BLACK_BISHOP));
-      ASSERT(is_valid_piece(BLACK_KNIGHT));
-      ASSERT(is_valid_piece(BLACK_PAWN));
+  { /* valid_piece */
+    { /* valid_piece true positives */
+      ASSERT(valid_piece(WHITE_KING));
+      ASSERT(valid_piece(WHITE_QUEEN));
+      ASSERT(valid_piece(WHITE_ROOK));
+      ASSERT(valid_piece(WHITE_BISHOP));
+      ASSERT(valid_piece(WHITE_KNIGHT));
+      ASSERT(valid_piece(WHITE_PAWN));
+      ASSERT(valid_piece(BLACK_KING));
+      ASSERT(valid_piece(BLACK_QUEEN));
+      ASSERT(valid_piece(BLACK_ROOK));
+      ASSERT(valid_piece(BLACK_BISHOP));
+      ASSERT(valid_piece(BLACK_KNIGHT));
+      ASSERT(valid_piece(BLACK_PAWN));
     }
-    { /* is_valid_piece true negatives */
-      ASSERT(!is_valid_piece(3));
-      ASSERT(!is_valid_piece(7));
-      ASSERT(!is_valid_piece(11));
-      ASSERT(!is_valid_piece(15));
-      ASSERT(!is_valid_piece(INVALID_PIECE));
+    { /* valid_piece true negatives */
+      ASSERT(!valid_piece(3));
+      ASSERT(!valid_piece(7));
+      ASSERT(!valid_piece(11));
+      ASSERT(!valid_piece(15));
+      ASSERT(!valid_piece(INVALID_PIECE));
     }
   }
 
