@@ -18,6 +18,11 @@ TODOS:
   - Undoing moves
   - ...
 */
+
+#ifdef DEBUG
+uint64_t NUM_ASSERTS = 0;
+#endif
+
 int main() {
   init_hash();
 

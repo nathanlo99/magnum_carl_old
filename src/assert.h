@@ -37,13 +37,15 @@
     } while (0)
 #elif !defined(INVISIBLE_ASSERTS)
   #define ASSERT(expr) \
-    do { \
-      if ((!(expr))) __builtin_unreachable(); \
-    } while (0)
+    do { if ((!(expr))) __builtin_unreachable(); } while (0)
   #define ASSERT_MSG(expr, ...) ASSERT(expr)
+  #define ASSERT_IF(cond, expr) ASSERT(!(expr) || (cond))
+  #define ASSERT_IF_MSG(cond, expr, ...) ASSERT(!(expr) || (cond))
 #else
   #define ASSERT(expr) do {} while (0)
   #define ASSERT_MSG(expr, ...) do {} while (0)
+  #define ASSERT_IF(cond, expr) do {} while (0)
+  #define ASSERT_IF_MSG(cond, expr, ...) do {} while (0)
 #endif
 
 #endif /* end of include guard: ASSERT_H */
