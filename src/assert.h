@@ -24,11 +24,11 @@
     } while (0)
   #define ASSERT_IF(cond, expr) \
     do { \
-      if (!(cond) || !(expr)) { ERROR(#expr); exit(1); } \
+      if (cond && !(expr)) { ERROR(#expr); exit(1); } \
     } while (0)
   #define ASSERT_IF_MSG(cond, expr, ...) \
     do { \
-      if (!(cond) || !(expr)) { \
+      if (cond && !(expr)) { \
         ERROR(#expr); \
         printf(__VA_ARGS__); \
         printf("\n"); \
@@ -36,14 +36,15 @@
       } \
     } while (0)
 #elif !defined(INVISIBLE_ASSERTS)
-  #define ASSERT(expr) \
-    do { \
-      if ((!(expr))) __builtin_unreachable(); \
-    } while (0)
+  #define ASSERT(expr) do { if ((!(expr))) __builtin_unreachable(); } while (0)
   #define ASSERT_MSG(expr, ...) ASSERT(expr)
+  #define ASSERT_IF(cond, expr) ASSERT(!(cond) || expr);
+  #define ASSERT_IF_MSG(cond, expr, ...) ASSERT(!(cond) || expr);
 #else
   #define ASSERT(expr) do {} while (0)
   #define ASSERT_MSG(expr, ...) do {} while (0)
+  #define ASSERT_IF(expr) do {} while (0)
+  #define ASSERT_IF_MSG(cond, expr, ...) do {} while (0)
 #endif
 
 #endif /* end of include guard: ASSERT_H */
