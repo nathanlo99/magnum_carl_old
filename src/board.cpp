@@ -74,7 +74,8 @@ Board::Board(const std::string &fen) noexcept {
           m_castle_state |= BLACK_LONG; break;
         default:
           ASSERT_MSG(0,
-          "Invalid character in castling permission specifications");
+            "Invalid character (%c) in castling permission specifications",
+            *next_chr);
       }
       next_chr++;
     }

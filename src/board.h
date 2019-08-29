@@ -35,18 +35,28 @@ class Board {
   void validate_board() const noexcept;
 
 public:
+  constexpr static const char* startFEN =
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
   Board(const std::string &fen = Board::startFEN) noexcept;
 
   std::string fen() const noexcept;
   std::string to_string() const noexcept;
 
-  hash_t hash() const noexcept {
+  inline hash_t hash() const noexcept {
     ASSERT_MSG(m_hash == compute_hash(), "Hash invariant broken");
     return m_hash;
   }
 
-  constexpr static const char* startFEN =
-    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  inline piece_t piece_at(int idx) const noexcept {
+    ASSERT(0 <= idx && idx < 120);
+    return m_pieces[idx];
+  }
+  inline bool can_castle(int castle_flag) const noexcept {
+    ASSERT(castle_flag == WHITE_LONG || castle_flag == WHITE_SHORT
+      || castle_flag == BLACK_LONG || castle_flag == BLACK_SHORT);
+    return (m_castle_state & castle_flag) != 0;
+  }
 };
 
 std::ostream& operator<<(std::ostream &os, const Board& board) noexcept;
