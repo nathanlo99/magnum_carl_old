@@ -5,8 +5,7 @@
 #include <cstdint>
 
 #include "assert.h"
-
-using castle_t = uint8_t;
+#include "defs.h"
 
 enum Castle {
   WHITE_SHORT = 0x1, WHITE_LONG = 0x2,

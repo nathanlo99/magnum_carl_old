@@ -4,6 +4,7 @@
 
 #include <cstdint>
 
+#include "defs.h"
 #include "assert.h"
 #include "board.h"
 
@@ -19,8 +20,6 @@ FLAG:
 promoted | captured | spec1 | spec0
 TOTAL: 28 bits
 */
-
-using move_t = uint32_t;
 
 enum MoveFlag {
   QUIET_MOVE = 0, DOUBLE_PAWN_MOVE = 1,

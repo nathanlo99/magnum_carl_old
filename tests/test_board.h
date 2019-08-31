@@ -8,13 +8,14 @@
 inline int test_fen(const std::string& fen) {
   Board board{fen}, board2{fen};
   // NOTE: If fail due to missing en passant, suspect en passant square elision
-  ASSERT_MSG(board.fen() == fen,
-    "Parsed\n\t(%s)\nand generated\n\t(%s)\nFENs do not match",
+  WASSERT_MSG(board.fen() == fen,
+    "Parsed\n\t(%s)\nand generated\n\t(%s)\ndo not match.\n"
+    "This could be due to en passant elision.",
       fen.c_str(), board.fen().c_str());
 
   ASSERT(board.fen() == board2.fen());
   ASSERT(board.hash() == board2.hash());
-  ASSERT(board.to_string() == board2.to_string()); // to_string consistent
+  ASSERT(board.to_string() == board2.to_string());
   return 0;
 }
 

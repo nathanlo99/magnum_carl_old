@@ -2,6 +2,7 @@
 #include "board.h"
 #include "piece.h"
 #include "hash.h"
+#include "move.h"
 
 #include <iostream>
 #include <iomanip>
@@ -91,9 +92,17 @@ Board::Board(const std::string &fen) noexcept {
     next_chr += 1;
   } else {
     const unsigned row = *(next_chr + 1) - '1', col = *next_chr - 'a';
+    ASSERT_IF(m_next_move_colour == WHITE, row == RANK_6);
+    ASSERT_IF(m_next_move_colour == BLACK, row == RANK_3);
     m_en_passant = get_square_120_rc(row, col);
+    if (m_pieces[m_en_passant - 1] == INVALID_PIECE
+      && m_pieces[m_en_passant + 1] == INVALID_PIECE) {
+      WARN("Elided en passant square");
+      m_en_passant = INVALID_SQUARE;
+    }
     next_chr += 2;
   }
+
   ASSERT(*next_chr == ' ');
 
   // Part 5: Half move counter
@@ -282,4 +291,11 @@ std::string Board::to_string() const noexcept {
 
 std::ostream& operator<<(std::ostream &os, const Board& board) noexcept {
   return os << board.to_string();
+}
+
+std::vector<move_t> Board::legal_moves() const noexcept {
+  std::vector<move_t> result;
+  result.reserve(MAX_MOVES);
+
+  return result;
 }

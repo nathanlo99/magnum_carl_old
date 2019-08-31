@@ -14,8 +14,15 @@
 #include "castle_state.h"
 #include "hash.h"
 
+#define VARIANT_CHESS
+
+#ifdef VARIANT_CHESS
 // NOTE: The max number of any type of piece in play. Keep as small as possible.
 enum { MAX_NUM_PIECES = 16 };
+// NOTE: The max number of possible moves in any position.
+enum { MAX_MOVES = 256 };
+#endif
+
 enum { WHITE = 0, BLACK = 1 };
 
 class Board {
@@ -40,23 +47,24 @@ public:
 
   Board(const std::string &fen = Board::startFEN) noexcept;
 
-  std::string fen() const noexcept;
-  std::string to_string() const noexcept;
-
   inline hash_t hash() const noexcept {
     ASSERT_MSG(m_hash == compute_hash(), "Hash invariant broken");
     return m_hash;
   }
-
-  inline piece_t piece_at(int idx) const noexcept {
-    ASSERT(0 <= idx && idx < 120);
-    return m_pieces[idx];
+  inline piece_t piece_at(const square_t square) const noexcept {
+    ASSERT(0 <= square && square < 120);
+    return m_pieces[square];
   }
-  inline bool can_castle(int castle_flag) const noexcept {
+  inline bool can_castle(const int castle_flag) const noexcept {
     ASSERT(castle_flag == WHITE_LONG || castle_flag == WHITE_SHORT
       || castle_flag == BLACK_LONG || castle_flag == BLACK_SHORT);
     return (m_castle_state & castle_flag) != 0;
   }
+
+  std::string fen() const noexcept;
+  std::string to_string() const noexcept;
+
+  std::vector<move_t> legal_moves() const noexcept;
 };
 
 std::ostream& operator<<(std::ostream &os, const Board& board) noexcept;

@@ -15,7 +15,7 @@
 #if defined(DEBUG)
   #define WASSERT(expr) \
     do { \
-      if (!(expr)) { WARN("Test failed: " #expr); exit(1); } \
+      if (!(expr)) { WARN("Test failed: " #expr); } \
     } while (0)
   #define WASSERT_MSG(expr, ...) \
     do { \
@@ -23,7 +23,6 @@
         WARN("Test failed: " #expr); \
         printf(__VA_ARGS__); \
         printf("\n"); \
-        exit(1); \
       } \
     } while (0)
   #define WASSERT_IF(cond, expr) WASSERT(!(cond) || (expr));
