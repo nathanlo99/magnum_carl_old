@@ -216,8 +216,8 @@ promote_move(const square_t from, const square_t to,
   ASSERT_MSG(valid_square(from), "Invalid from square (%u)", from);
   ASSERT_MSG(valid_square(to), "Invalid to square (%u)", to);
   ASSERT(from != to);
-  ASSERT_MSG((get_square_row(to) == RANK_1 && moving == BLACK)
-    || (get_square_row(to) == RANK_8 && moving == WHITE),
+  ASSERT_MSG((get_square_row(to) == RANK_1 && get_side(moving) == BLACK)
+    || (get_square_row(to) == RANK_8 && get_side(moving) == WHITE),
       "Promoting to square (%u) not on rank 1 or 8", to);
   ASSERT_MSG(is_pawn(moving), "Promote move for non-pawn (%u) piece", moving);
   unsigned flag = 0;
@@ -225,15 +225,19 @@ promote_move(const square_t from, const square_t to,
     case WHITE_KNIGHT:
     case BLACK_KNIGHT:
       flag = PROMOTE_KNIGHT_MOVE;
+      break;
     case WHITE_BISHOP:
     case BLACK_BISHOP:
       flag = PROMOTE_BISHOP_MOVE;
+      break;
     case WHITE_ROOK:
     case BLACK_ROOK:
       flag = PROMOTE_ROOK_MOVE;
+      break;
     case WHITE_QUEEN:
     case BLACK_QUEEN:
       flag = PROMOTE_QUEEN_MOVE;
+      break;
     default:
       ASSERT_MSG(0, "Invalid promote piece (%u)", promote_piece);
   }
@@ -247,8 +251,8 @@ promote_capture_move(const square_t from, const square_t to,
   ASSERT_MSG(valid_square(from), "Invalid from square (%u)", from);
   ASSERT_MSG(valid_square(to), "Invalid to square (%u)", to);
   ASSERT(from != to);
-  ASSERT_MSG((get_square_row(to) == RANK_1 && moving == BLACK)
-   || (get_square_row(to) == RANK_8 && moving == WHITE),
+  ASSERT_MSG((get_square_row(to) == RANK_1 && get_side(moving) == BLACK)
+   || (get_square_row(to) == RANK_8 && get_side(moving) == WHITE),
      "Promoting to square (%u) not on rank 1 or 8", to);
   ASSERT_MSG(is_pawn(moving), "Promote move for non-pawn (%u) piece", moving);
   unsigned flag = 0;
@@ -256,15 +260,19 @@ promote_capture_move(const square_t from, const square_t to,
     case WHITE_KNIGHT:
     case BLACK_KNIGHT:
       flag = PROMOTE_KNIGHT_CAPTURE_MOVE;
+      break;
     case WHITE_BISHOP:
     case BLACK_BISHOP:
       flag = PROMOTE_BISHOP_CAPTURE_MOVE;
+      break;
     case WHITE_ROOK:
     case BLACK_ROOK:
       flag = PROMOTE_ROOK_CAPTURE_MOVE;
+      break;
     case WHITE_QUEEN:
     case BLACK_QUEEN:
       flag = PROMOTE_QUEEN_CAPTURE_MOVE;
+      break;
     default:
       ASSERT_MSG(0, "Invalid promote piece (%u)", promote_piece);
   }

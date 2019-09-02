@@ -54,11 +54,11 @@ constexpr inline square_t get_square_120_rc(const int row, const int col) {
   return (row + 2) * 10 + (col + 1);
 }
 
-// #define LUT_SQUARE
+#define LUT_SQUARE
 #ifdef LUT_SQUARE
 
 constexpr inline bool valid_square(const square_t square) {
-  constexpr static bool _valid_square[120] = {
+  constexpr bool _valid_square[120] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 1, 1, 1, 1, 0,
@@ -77,7 +77,7 @@ constexpr inline bool valid_square(const square_t square) {
 }
 
 constexpr inline int get_square_row(const square_t square) {
-  constexpr static int _get_square_row[120] = {
+  constexpr int _get_square_row[120] = {
     9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
     9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
     9, 0, 0, 0, 0, 0, 0, 0, 0, 9,
@@ -96,7 +96,7 @@ constexpr inline int get_square_row(const square_t square) {
 }
 
 constexpr inline int get_square_col(const square_t square) {
-  constexpr static int _get_square_col[120] = {
+  constexpr int _get_square_col[120] = {
     9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
     9, 9, 9, 9, 9, 9, 9, 9, 9, 9,
     9, 0, 1, 2, 3, 4, 5, 6, 7, 9,
@@ -115,7 +115,7 @@ constexpr inline int get_square_col(const square_t square) {
 }
 
 constexpr inline int get_square_64(const square_t square) {
-  constexpr static int _get_square_64[120] = {
+  constexpr int _get_square_64[120] = {
     99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
     99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
     99,  0,  1,  2,  3,  4,  5,  6,  7, 99,
@@ -134,7 +134,7 @@ constexpr inline int get_square_64(const square_t square) {
 }
 
 constexpr inline square_t get_square_120(const square_t square) {
-  constexpr static int _get_square_120[64] = {
+  constexpr int _get_square_120[64] = {
     21, 22, 23, 24, 25, 26, 27, 28,
     31, 32, 33, 34, 35, 36, 37, 38,
     41, 42, 43, 44, 45, 46, 47, 48,

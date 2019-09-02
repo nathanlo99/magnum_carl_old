@@ -32,7 +32,7 @@ int main() {
   const auto &legal_moves = starting_board.legal_moves();
   std::cout << "Legal moves (" << legal_moves.size() << "): [" << std::endl;
   for (const auto &move: legal_moves) {
-    std::cout << "\tMove: " << string_from_move(move) << std::endl;
+    std::cout << "  " << string_from_move(move) << std::endl;
   }
   std::cout << "]" << std::endl;
 

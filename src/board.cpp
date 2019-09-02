@@ -286,6 +286,7 @@ std::string Board::to_string() const noexcept {
   result << "MOVE#  : " << m_full_move << '\n';
   result << "HASH   : ";
   result << std::setw(16) << std::setfill('0') << std::hex << hash() << '\n';
+  result << "FEN    : " << fen() << '\n';
   return result.str();
 }
 
@@ -404,7 +405,7 @@ std::vector<move_t> Board::legal_moves(int side) const noexcept {
     int offset = (side == WHITE) ? 10 : -10;
     const square_t cur_square = start + offset;
     if (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE) {
-      if (get_square_row(cur_square) == RANK_1 || get_square_row(cur_square) == RANK_7) {
+      if (get_square_row(cur_square) == RANK_1 || get_square_row(cur_square) == RANK_8) {
         for (piece_t promote_piece : promote_pieces) {
           result.push_back(promote_move(start, cur_square, pawn_piece, promote_piece));
         }
@@ -433,6 +434,19 @@ std::vector<move_t> Board::legal_moves(int side) const noexcept {
       }
       if (capture2 == m_en_passant && m_pieces[capture2] == INVALID_PIECE) {
         result.push_back(en_passant_move(start, m_en_passant, pawn_piece));
+      }
+    }
+  }
+
+  // King
+  const square_t start = m_positions[king_piece][0];
+  for (int offset : {-11, -10, -9, -1, 1, 9, 10, 11}) {
+    const square_t cur_square = start + offset;
+    if (valid_square(cur_square)) {
+      if (m_pieces[cur_square] == INVALID_PIECE) {
+        result.push_back(quiet_move(start, cur_square, king_piece));
+      } else if (opposite_colours(king_piece, m_pieces[cur_square])) {
+        result.push_back(capture_move(start, cur_square, king_piece, m_pieces[cur_square]));
       }
     }
   }

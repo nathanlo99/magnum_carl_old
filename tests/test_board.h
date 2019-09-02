@@ -1,4 +1,7 @@
 
+#ifndef TEST_BOARD_H
+#define TEST_BOARD_H
+
 #include <string>
 #include <iostream>
 
@@ -17,13 +20,6 @@ inline int test_fen(const std::string& fen) {
   ASSERT(board.fen() == board2.fen());
   ASSERT(board.hash() == board2.hash());
   ASSERT(board.to_string() == board2.to_string());
-  std::cout << board << std::endl;
-  const auto &legal_moves = board.legal_moves();
-  std::cout << "Legal moves(" << legal_moves.size() << "): [" << std::endl;
-  for (const auto &move: legal_moves) {
-    std::cout << "\tMove: " << string_from_move(move) << std::endl;
-  }
-  std::cout << "]" << std::endl;
   return 0;
 }
 
@@ -48,3 +44,5 @@ inline int test_board() {
   }
   return fail_flag;
 }
+
+#endif /* end of include guard: TEST_BOARD_H */
