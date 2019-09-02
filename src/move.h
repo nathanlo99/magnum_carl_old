@@ -3,6 +3,8 @@
 #define MOVE_H
 
 #include <cstdint>
+#include <string>
+#include <sstream>
 
 #include "defs.h"
 #include "assert.h"
@@ -57,11 +59,42 @@ constexpr inline piece_t moved_piece(const move_t move) {
 constexpr inline piece_t captured_piece(const move_t move) {
   return (move >> 24) & 0xF;
 }
+constexpr inline piece_t promoted_piece(const move_t move) {
+  const bool side = get_side(moved_piece(move));
+  switch (move_flag(move)) {
+    case PROMOTE_KNIGHT_MOVE:
+    case PROMOTE_KNIGHT_CAPTURE_MOVE:
+      return (side == WHITE) ? WHITE_KNIGHT : BLACK_KNIGHT;
+    case PROMOTE_BISHOP_MOVE:
+    case PROMOTE_BISHOP_CAPTURE_MOVE:
+      return (side == WHITE) ? WHITE_BISHOP : BLACK_BISHOP;
+    case PROMOTE_ROOK_MOVE:
+    case PROMOTE_ROOK_CAPTURE_MOVE:
+      return (side == WHITE) ? WHITE_ROOK : BLACK_ROOK;
+    case PROMOTE_QUEEN_MOVE:
+    case PROMOTE_QUEEN_CAPTURE_MOVE:
+      return (side == WHITE) ? WHITE_QUEEN : BLACK_QUEEN;
+    default:
+      return INVALID_PIECE;
+  }
+}
 constexpr inline bool move_captured(const move_t move) {
   return (move >> 18) & 1;
 }
 constexpr inline bool move_promoted(const move_t move) {
   return (move >> 19) & 1;
+}
+
+inline std::string string_from_move(const move_t move) {
+  const square_t from = move_from(move), to = move_to(move);
+  std::stringstream res;
+  res << string_from_square(from);
+  if (move_captured(move))
+    res << "x";
+  res << string_from_square(to);
+  if (move_promoted(move))
+    res << "=" << char_from_piece(promoted_piece(move));
+  return res.str();
 }
 
 inline void validate_move(const move_t move, const Board board) {
@@ -149,8 +182,105 @@ inline void validate_move(const move_t move, const Board board) {
 
 constexpr inline move_t
 quiet_move(const square_t from, const square_t to, const piece_t moving) {
+  ASSERT_MSG(valid_square(from), "Invalid from square (%u)", from);
+  ASSERT_MSG(valid_square(to), "Invalid to square (%u)", to);
+  ASSERT(from != to);
+  ASSERT(moving != INVALID_PIECE);
   return create_move(from, to, QUIET_MOVE, moving, INVALID_PIECE);
 }
 
+constexpr inline move_t
+capture_move(const square_t from, const square_t to, const piece_t moving, const piece_t captured) {
+  ASSERT_MSG(valid_square(from), "Invalid from square (%u)", from);
+  ASSERT_MSG(valid_square(to), "Invalid to square (%u)", to);
+  ASSERT(from != to);
+  ASSERT(moving != INVALID_PIECE);
+  ASSERT(captured != INVALID_PIECE);
+  ASSERT_MSG(opposite_colours(moving, captured),
+    "Moved (%u) and captured (%u) pieces not opposite", moving, captured);
+  return create_move(from, to, CAPTURE_MOVE, moving, captured);
+}
 
+constexpr inline move_t
+double_move(const square_t from, const square_t to, const piece_t moving) {
+  ASSERT_MSG(valid_square(from), "Invalid from square (%u)", from);
+  ASSERT_MSG(valid_square(to), "Invalid to square (%u)", to);
+  ASSERT(from != to);
+  ASSERT_MSG(is_pawn(moving), "Double move for non-pawn (%u) piece", moving);
+  return create_move(from, to, DOUBLE_PAWN_MOVE, moving, INVALID_PIECE);
+}
+
+constexpr inline move_t
+promote_move(const square_t from, const square_t to,
+             const piece_t moving, const piece_t promote_piece) {
+  ASSERT_MSG(valid_square(from), "Invalid from square (%u)", from);
+  ASSERT_MSG(valid_square(to), "Invalid to square (%u)", to);
+  ASSERT(from != to);
+  ASSERT_MSG((get_square_row(to) == RANK_1 && moving == BLACK)
+    || (get_square_row(to) == RANK_8 && moving == WHITE),
+      "Promoting to square (%u) not on rank 1 or 8", to);
+  ASSERT_MSG(is_pawn(moving), "Promote move for non-pawn (%u) piece", moving);
+  unsigned flag = 0;
+  switch (promote_piece) {
+    case WHITE_KNIGHT:
+    case BLACK_KNIGHT:
+      flag = PROMOTE_KNIGHT_MOVE;
+    case WHITE_BISHOP:
+    case BLACK_BISHOP:
+      flag = PROMOTE_BISHOP_MOVE;
+    case WHITE_ROOK:
+    case BLACK_ROOK:
+      flag = PROMOTE_ROOK_MOVE;
+    case WHITE_QUEEN:
+    case BLACK_QUEEN:
+      flag = PROMOTE_QUEEN_MOVE;
+    default:
+      ASSERT_MSG(0, "Invalid promote piece (%u)", promote_piece);
+  }
+  return create_move(from, to, (MoveFlag)flag, moving, INVALID_PIECE);
+}
+
+constexpr inline move_t
+promote_capture_move(const square_t from, const square_t to,
+                     const piece_t moving, const piece_t promote_piece,
+                     const piece_t capture_piece) {
+  ASSERT_MSG(valid_square(from), "Invalid from square (%u)", from);
+  ASSERT_MSG(valid_square(to), "Invalid to square (%u)", to);
+  ASSERT(from != to);
+  ASSERT_MSG((get_square_row(to) == RANK_1 && moving == BLACK)
+   || (get_square_row(to) == RANK_8 && moving == WHITE),
+     "Promoting to square (%u) not on rank 1 or 8", to);
+  ASSERT_MSG(is_pawn(moving), "Promote move for non-pawn (%u) piece", moving);
+  unsigned flag = 0;
+  switch (promote_piece) {
+    case WHITE_KNIGHT:
+    case BLACK_KNIGHT:
+      flag = PROMOTE_KNIGHT_CAPTURE_MOVE;
+    case WHITE_BISHOP:
+    case BLACK_BISHOP:
+      flag = PROMOTE_BISHOP_CAPTURE_MOVE;
+    case WHITE_ROOK:
+    case BLACK_ROOK:
+      flag = PROMOTE_ROOK_CAPTURE_MOVE;
+    case WHITE_QUEEN:
+    case BLACK_QUEEN:
+      flag = PROMOTE_QUEEN_CAPTURE_MOVE;
+    default:
+      ASSERT_MSG(0, "Invalid promote piece (%u)", promote_piece);
+  }
+  return create_move(from, to, (MoveFlag)flag, moving, capture_piece);
+}
+
+constexpr inline move_t
+en_passant_move(const square_t from, const square_t to, const piece_t moving) {
+  ASSERT_MSG(valid_square(from), "Invalid from square (%u)", from);
+  ASSERT_MSG(valid_square(to), "Invalid to square (%u)", to);
+  ASSERT(from != to);
+  return create_move(from, to, EN_PASSANT_MOVE, moving, moving ^ 8u);
+}
+
+constexpr inline move_t
+castle_move(const square_t from, const square_t to, const piece_t moving, const MoveFlag flag) {
+  return create_move(from, to, flag, moving, INVALID_PIECE);
+}
 #endif /* end of include guard: MOVE_H */

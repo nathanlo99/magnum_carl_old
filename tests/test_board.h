@@ -4,6 +4,7 @@
 
 #include "assert.h"
 #include "board.h"
+#include "move.h"
 
 inline int test_fen(const std::string& fen) {
   Board board{fen}, board2{fen};
@@ -16,6 +17,13 @@ inline int test_fen(const std::string& fen) {
   ASSERT(board.fen() == board2.fen());
   ASSERT(board.hash() == board2.hash());
   ASSERT(board.to_string() == board2.to_string());
+  std::cout << board << std::endl;
+  const auto &legal_moves = board.legal_moves();
+  std::cout << "Legal moves(" << legal_moves.size() << "): [" << std::endl;
+  for (const auto &move: legal_moves) {
+    std::cout << "\tMove: " << string_from_move(move) << std::endl;
+  }
+  std::cout << "]" << std::endl;
   return 0;
 }
 
@@ -29,6 +37,8 @@ const static std::string testFENs[] = {
   "1r2r2k/1p1n3R/p1qp2pB/6Pn/P1Pp4/3B4/1P2PQ1K/5R2 b - - 0 1",
   "R6R/3Q4/1Q4Q1/4Q3/2Q4Q/Q4Q2/pp1Q4/kBNN1KB1 w - - 0 1",
   "3Q4/1Q4Q1/4Q3/2Q4R/Q4Q2/3Q4/1Q4Rp/1K1BBNNk w - - 0 1",
+  "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+  "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1",
 };
 
 inline int test_board() {

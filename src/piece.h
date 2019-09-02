@@ -147,8 +147,8 @@ char_from_piece(const piece_t piece) {
 
 constexpr inline bool
 opposite_colours(const piece_t piece1, const piece_t piece2) {
-  ASSERT(valid_piece(piece1));
-  ASSERT(valid_piece(piece2));
+  ASSERT_MSG(valid_piece(piece1), "Invalid piece1 (%u)", piece1);
+  ASSERT_MSG(valid_piece(piece2), "Invalid piece2 (%u)", piece2);
   return (piece1 ^ piece2) >> 3;
 }
 

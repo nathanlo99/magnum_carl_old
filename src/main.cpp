@@ -29,9 +29,10 @@ int main() {
   Board starting_board;
   std::cout << starting_board << std::endl;
 
-  std::cout << "Legal moves: [" << std::endl;
-  for (const auto &move: starting_board.legal_moves()) {
-    std::cout << "\tMove: " << move << std::endl;
+  const auto &legal_moves = starting_board.legal_moves();
+  std::cout << "Legal moves (" << legal_moves.size() << "): [" << std::endl;
+  for (const auto &move: legal_moves) {
+    std::cout << "\tMove: " << string_from_move(move) << std::endl;
   }
   std::cout << "]" << std::endl;
 

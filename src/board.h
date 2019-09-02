@@ -23,7 +23,7 @@ enum { MAX_NUM_PIECES = 16 };
 enum { MAX_MOVES = 256 };
 #endif
 
-enum { WHITE = 0, BLACK = 1 };
+enum { WHITE = 0, BLACK = 1, INVALID_SIDE = -1 };
 
 class Board {
   std::array<piece_t, 120> m_pieces;
@@ -64,7 +64,8 @@ public:
   std::string fen() const noexcept;
   std::string to_string() const noexcept;
 
-  std::vector<move_t> legal_moves() const noexcept;
+  bool square_attacked(const square_t sq, const bool side) const noexcept;
+  std::vector<move_t> legal_moves(int side = INVALID_SIDE) const noexcept;
 };
 
 std::ostream& operator<<(std::ostream &os, const Board& board) noexcept;
