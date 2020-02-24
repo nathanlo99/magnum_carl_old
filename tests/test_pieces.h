@@ -106,6 +106,44 @@ inline constexpr int test_pieces() {
     }
   }
 
+  { /* is_diag */
+    { /* is_diag true positives */
+      ASSERT(is_diag(WHITE_QUEEN));
+      ASSERT(is_diag(WHITE_BISHOP));
+      ASSERT(is_diag(BLACK_QUEEN));
+      ASSERT(is_diag(BLACK_BISHOP));
+    }
+    { /* is_diag true negatives */
+      ASSERT(!is_diag(WHITE_KING));
+      ASSERT(!is_diag(WHITE_ROOK));
+      ASSERT(!is_diag(WHITE_KNIGHT));
+      ASSERT(!is_diag(WHITE_PAWN));
+      ASSERT(!is_diag(BLACK_KING));
+      ASSERT(!is_diag(BLACK_ROOK));
+      ASSERT(!is_diag(BLACK_KNIGHT));
+      ASSERT(!is_diag(BLACK_PAWN));
+    }
+  }
+
+  { /* is_ortho */
+    { /* is_ortho true positives */
+      ASSERT(is_ortho(WHITE_QUEEN));
+      ASSERT(is_ortho(WHITE_ROOK));
+      ASSERT(is_ortho(BLACK_QUEEN));
+      ASSERT(is_ortho(BLACK_ROOK));
+    }
+    { /* is_ortho true negatives */
+      ASSERT(!is_ortho(WHITE_KING));
+      ASSERT(!is_ortho(WHITE_BISHOP));
+      ASSERT(!is_ortho(WHITE_KNIGHT));
+      ASSERT(!is_ortho(WHITE_PAWN));
+      ASSERT(!is_ortho(BLACK_KING));
+      ASSERT(!is_ortho(BLACK_BISHOP));
+      ASSERT(!is_ortho(BLACK_KNIGHT));
+      ASSERT(!is_ortho(BLACK_PAWN));
+    }
+  }
+
   { /* get_side */
     ASSERT(get_side(WHITE_KING) == 0);
     ASSERT(get_side(WHITE_QUEEN) == 0);

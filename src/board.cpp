@@ -18,8 +18,8 @@ Board::Board(const std::string &fen) noexcept {
 
   // Part 1: The board state
   unsigned square_idx = A8; // 91
-  const char * next_chr = fen.data();
-  const char * const end_ptr = fen.data() + fen.size();
+  const char* next_chr = fen.data();
+  const char* const end_ptr = fen.data() + fen.size();
   while (*next_chr != ' ') {
     const char chr = *next_chr;
     if (chr == '/') {
@@ -267,8 +267,6 @@ std::string Board::to_string() const noexcept {
   validate_board();
   std::stringstream result;
   result << "+---- BOARD ----+" << '\n';
-  // TODO: Optimize this loop by refactoring out the square index instead of
-  //   calling get_square_120_rc every iteration (can we trust the compiler?)
   for (int row = 7; row >= 0; --row) {
     result << '|';
     for (int col = 0; col < 8; ++col) {
@@ -295,7 +293,51 @@ std::ostream& operator<<(std::ostream &os, const Board& board) noexcept {
 }
 
 bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
-  // TODO
+  const piece_t king_piece   = (side == WHITE) ? WHITE_KING   : BLACK_KING,
+                knight_piece = (side == WHITE) ? WHITE_KNIGHT : BLACK_KNIGHT,
+                pawn_piece   = (side == WHITE) ? WHITE_PAWN   : BLACK_PAWN;
+
+  if (valid_piece(m_pieces[sq]) && get_side(m_pieces[sq]) == side)
+    return false;
+
+  // Pawns
+  const auto &pawn_offsets = {(side == WHITE) ? -9 : 9, (side == WHITE) ? -11 : 11};
+  for (const int offset : pawn_offsets)
+    if (m_pieces[sq + offset] == pawn_piece)
+      return true;
+
+  // King
+  const auto &king_offsets = {-11, -10, -9, -1, 1, 9, 10, 11};
+  for (const int offset : king_offsets)
+    if (m_pieces[sq + offset] == king_piece)
+      return true;
+
+  // Knights
+  const auto &knight_offsets = {-21, -19, -12, -8, 8, 12, 19, 21};
+  for (const int offset : knight_offsets)
+    if (m_pieces[sq + offset] == knight_piece)
+      return true;
+
+  // Diagonals
+  const auto &diagonal_offsets = {-11, -9, 9, 11};
+  for (const int offset : diagonal_offsets) {
+    square_t cur_square = sq + offset;
+    while (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE)
+      cur_square += offset;
+    if (valid_square(cur_square) && get_side(m_pieces[cur_square]) == side && is_diag(m_pieces[cur_square]))
+      return true;
+  }
+
+  // Orthogonals
+  const auto &orthogonal_offsets = {-10, -1, 1, 10};
+  for (const int offset : orthogonal_offsets) {
+    square_t cur_square = sq + offset;
+    while (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE)
+      cur_square += offset;
+    if (valid_square(cur_square) && get_side(m_pieces[cur_square]) == side && is_ortho(m_pieces[cur_square]))
+      return true;
+  }
+
   return false;
 }
 
@@ -360,7 +402,7 @@ std::vector<move_t> Board::legal_moves(int side) const noexcept {
   // Bishops
   for (unsigned bishop_idx = 0; bishop_idx < m_num_pieces[bishop_piece]; ++bishop_idx) {
     const square_t start = m_positions[bishop_piece][bishop_idx];
-    for (int offset : {-11, -9, 9, 11}) {
+    for (const int offset : {-11, -9, 9, 11}) {
       square_t cur_square = start + offset;
       while (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE) {
         // printf("Quiet move from %s to %s\n",
@@ -379,7 +421,7 @@ std::vector<move_t> Board::legal_moves(int side) const noexcept {
   // Knights
   for (unsigned knight_idx = 0; knight_idx < m_num_pieces[knight_piece]; ++knight_idx) {
     const square_t start = m_positions[knight_piece][knight_idx];
-    for (int offset : {-21, -19, -12, -8, 8, 12, 19, 21}) {
+    for (const int offset : {-21, -19, -12, -8, 8, 12, 19, 21}) {
       const square_t cur_square = start + offset;
       if (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE)
         result.push_back(quiet_move(start, cur_square, knight_piece));
@@ -402,11 +444,11 @@ std::vector<move_t> Board::legal_moves(int side) const noexcept {
     }
 
     // Single pawn moves
-    int offset = (side == WHITE) ? 10 : -10;
+    const int offset = (side == WHITE) ? 10 : -10;
     const square_t cur_square = start + offset;
     if (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE) {
       if (get_square_row(cur_square) == RANK_1 || get_square_row(cur_square) == RANK_8) {
-        for (piece_t promote_piece : promote_pieces) {
+        for (const piece_t promote_piece : promote_pieces) {
           result.push_back(promote_move(start, cur_square, pawn_piece, promote_piece));
         }
       } else {
@@ -440,7 +482,7 @@ std::vector<move_t> Board::legal_moves(int side) const noexcept {
 
   // King
   const square_t start = m_positions[king_piece][0];
-  for (int offset : {-11, -10, -9, -1, 1, 9, 10, 11}) {
+  for (const int offset : {-11, -10, -9, -1, 1, 9, 10, 11}) {
     const square_t cur_square = start + offset;
     if (valid_square(cur_square)) {
       if (m_pieces[cur_square] == INVALID_PIECE) {

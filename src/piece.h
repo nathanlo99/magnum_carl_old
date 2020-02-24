@@ -14,7 +14,7 @@ enum Piece {
   WHITE_BISHOP = 4, WHITE_KNIGHT = 5, WHITE_KING = 6,
   BLACK_QUEEN =  8, BLACK_ROOK = 9, BLACK_PAWN = 10,
   BLACK_BISHOP = 12, BLACK_KNIGHT = 13, BLACK_KING = 14,
-  INVALID_PIECE = 15,
+  INVALID_PIECE = 15, // 3, 7, 11 unused
 };
 
 #ifdef LUT_PIECE
@@ -74,6 +74,28 @@ is_pawn(const piece_t piece) {
 }
 
 constexpr inline bool
+is_diag(const piece_t piece) {
+  constexpr static bool _is_diag[16] = {
+    1, 0, 0, 0, 1, 0, 0, 0,
+    1, 0, 0, 0, 1, 0, 0, 0,
+  };
+  ASSERT(0 <= piece && piece < 16);
+  ASSERT(valid_piece(piece));
+  return _is_diag[piece];
+}
+
+constexpr inline bool
+is_ortho(const piece_t piece) {
+  constexpr static bool _is_ortho[16] = {
+    1, 1, 0, 0, 0, 0, 0, 0,
+    1, 1, 0, 0, 0, 0, 0, 0,
+  };
+  ASSERT(0 <= piece && piece < 16);
+  ASSERT(valid_piece(piece));
+  return _is_ortho[piece];
+}
+
+constexpr inline bool
 get_side(const piece_t piece) {
   constexpr static bool _get_side[16] = {
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -122,11 +144,28 @@ is_pawn(const piece_t piece) {
 }
 
 constexpr inline bool
+is_diag(const piece_t piece) {
+  ASSERT(0 <= piece && piece < 16);
+  ASSERT(valid_piece(piece));
+  return piece == WHITE_QUEEN || piece == WHITE_BISHOP
+      || piece == BLACK_QUEEN || piece == BLACK_BISHOP;
+}
+
+constexpr inline bool
+is_ortho(const piece_t piece) {
+  ASSERT(0 <= piece && piece < 16);
+  ASSERT(valid_piece(piece));
+  return piece == WHITE_QUEEN || piece == WHITE_ROOK
+      || piece == BLACK_QUEEN || piece == BLACK_ROOK;
+}
+
+constexpr inline bool
 get_side(const piece_t piece) {
   ASSERT(0 <= piece && piece < 16);
   ASSERT(valid_piece(piece));
   return piece / 8;
 }
+
 #endif /* #if LUT_PIECE */
 
 constexpr inline piece_t

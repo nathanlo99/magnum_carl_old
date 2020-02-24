@@ -12,7 +12,7 @@ SRC_PATH = src
 # Space-separated pkg-config libraries used by this project
 LIBS =
 # General compiler flags
-COMPILE_FLAGS = -std=c++17 -Wall -Wextra -pedantic -Wno-type-limits -march=native
+COMPILE_FLAGS = -std=c++17 -Wall -Wextra -Werror -pedantic -Wno-type-limits -march=native
 # Additional release-specific flags
 RCOMPILE_FLAGS = -Ofast -ffast-math -fwrapv
 # Additional debug-specific flags
