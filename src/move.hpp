@@ -6,9 +6,9 @@
 #include <string>
 #include <sstream>
 
-#include "defs.h"
-#include "assert.h"
-#include "board.h"
+#include "defs.hpp"
+#include "assert.hpp"
+#include "board.hpp"
 
 /*
 MOVE:

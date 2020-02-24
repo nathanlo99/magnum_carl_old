@@ -6,9 +6,9 @@
 #include <random>
 #include <cmath>
 
-#include "defs.h"
-#include "piece.h"
-#include "square.h"
+#include "defs.hpp"
+#include "piece.hpp"
+#include "square.hpp"
 
 extern hash_t piece_hash[120][16];
 extern hash_t castle_hash[16];

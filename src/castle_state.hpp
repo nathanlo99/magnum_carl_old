@@ -4,8 +4,8 @@
 
 #include <cstdint>
 
-#include "assert.h"
-#include "defs.h"
+#include "assert.hpp"
+#include "defs.hpp"
 
 enum Castle {
   WHITE_SHORT = 0x1, WHITE_LONG = 0x2,

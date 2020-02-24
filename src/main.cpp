@@ -3,12 +3,12 @@
 #include <iostream>
 #include <iomanip>
 
-#include "../tests/runtests.h"
+#include "../tests/runtests.hpp"
 
-#include "assert.h"
-#include "board.h"
-#include "hash.h"
-#include "move.h"
+#include "assert.hpp"
+#include "board.hpp"
+#include "hash.hpp"
+#include "move.hpp"
 
 /*
 TODOS:

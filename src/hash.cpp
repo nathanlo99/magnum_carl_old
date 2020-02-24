@@ -1,5 +1,5 @@
 
-#include "hash.h"
+#include "hash.hpp"
 
 #include <iostream>
 

@@ -1,8 +1,8 @@
 
-#include "board.h"
-#include "piece.h"
-#include "hash.h"
-#include "move.h"
+#include "board.hpp"
+#include "piece.hpp"
+#include "hash.hpp"
+#include "move.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -341,12 +341,12 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
   return false;
 }
 
-std::vector<move_t> Board::legal_moves(int side) const noexcept {
+std::vector<move_t> Board::legal_moves(const int _side) const noexcept {
   validate_board();
   std::vector<move_t> result;
   result.reserve(MAX_MOVES);
 
-  side = (side != INVALID_SIDE) ? side : m_next_move_colour;
+  const int side = (_side != INVALID_SIDE) ? _side : m_next_move_colour;
   ASSERT_MSG(side == WHITE || side == BLACK, "Invalid side (%u)", side);
 
   const piece_t king_piece   = (side == WHITE) ? WHITE_KING   : BLACK_KING,

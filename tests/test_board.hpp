@@ -5,9 +5,9 @@
 #include <string>
 #include <iostream>
 
-#include "assert.h"
-#include "board.h"
-#include "move.h"
+#include "assert.hpp"
+#include "board.hpp"
+#include "move.hpp"
 
 inline int test_fen(const std::string& fen) {
   Board board{fen}, board2{fen};

@@ -1,8 +1,8 @@
 
-#include "test_pieces.h"
-#include "test_squares.h"
-#include "test_board.h"
-#include "test_perft.h"
+#include "test_pieces.hpp"
+#include "test_squares.hpp"
+#include "test_board.hpp"
+#include "test_perft.hpp"
 
 int run_tests() {
   int fail_flag = 0;

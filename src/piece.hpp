@@ -4,8 +4,8 @@
 
 #include <cstdint>  // for uint8_t
 
-#include "defs.h"
-#include "assert.h" // for ASSERT
+#include "defs.hpp"
+#include "assert.hpp" // for ASSERT
 
 // Organized (hopefully) to optimize bit variance
 // colour | major | spec-1 | spec-0

@@ -13,7 +13,7 @@ struct PerftTest {
   std::string fen;
   std::vector<size_t> expected;
 
-  PerftTest(std::string fen, std::vector<size_t> expected) : fen{fen}, expected{expected} {}
+  PerftTest(const std::string &fen, const std::vector<size_t> &expected) : fen{fen}, expected{expected} {}
 
   std::string to_string() const noexcept {
     std::stringstream res;

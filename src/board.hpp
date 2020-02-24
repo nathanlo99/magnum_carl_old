@@ -9,10 +9,10 @@
 #include <string_view>
 #include <ostream>
 
-#include "piece.h"
-#include "square.h"
-#include "castle_state.h"
-#include "hash.h"
+#include "piece.hpp"
+#include "square.hpp"
+#include "castle_state.hpp"
+#include "hash.hpp"
 
 #define VARIANT_CHESS
 
@@ -65,7 +65,7 @@ public:
   std::string to_string() const noexcept;
 
   bool square_attacked(const square_t sq, const bool side) const noexcept;
-  std::vector<move_t> legal_moves(int side = INVALID_SIDE) const noexcept;
+  std::vector<move_t> legal_moves(const int side = INVALID_SIDE) const noexcept;
 };
 
 std::ostream& operator<<(std::ostream &os, const Board& board) noexcept;

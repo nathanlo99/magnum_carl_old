@@ -4,7 +4,7 @@
 
 #include <cstdint>
 
-#include "assert.h"
+#include "assert.hpp"
 
 /* We use the 120-board representation
  *   000 001 002 003 004 005 006 007 008 009
