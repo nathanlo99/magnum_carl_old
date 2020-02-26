@@ -102,6 +102,7 @@ Board::Board(const std::string &fen) noexcept {
     }
     next_chr += 2;
   }
+  m_first_en_passant = m_en_passant;
 
   ASSERT(*next_chr == ' ');
 
@@ -372,7 +373,7 @@ std::vector<move_t> Board::legal_moves(const int _side) const noexcept {
         result.push_back(quiet_move(start, cur_square, queen_piece));
         cur_square += offset;
       }
-      if (valid_square(cur_square) && opposite_colours(queen_piece, m_pieces[cur_square])) {
+      if (valid_square(cur_square) && opposite_colours(queen_piece, m_pieces[cur_square]) && !is_king(m_pieces[cur_square])) {
         // printf("Capture move from %s to %s\n",
         //  string_from_square(start).c_str(), string_from_square(cur_square).c_str());
         result.push_back(capture_move(start, cur_square, queen_piece, m_pieces[cur_square]));
@@ -391,7 +392,7 @@ std::vector<move_t> Board::legal_moves(const int _side) const noexcept {
         result.push_back(quiet_move(start, cur_square, rook_piece));
         cur_square += offset;
       }
-      if (valid_square(cur_square) && opposite_colours(rook_piece, m_pieces[cur_square])) {
+      if (valid_square(cur_square) && opposite_colours(rook_piece, m_pieces[cur_square]) && !is_king(m_pieces[cur_square])) {
         // printf("Capture move from %s to %s\n",
         //  string_from_square(start).c_str(), string_from_square(cur_square).c_str());
         result.push_back(capture_move(start, cur_square, rook_piece, m_pieces[cur_square]));
@@ -410,7 +411,7 @@ std::vector<move_t> Board::legal_moves(const int _side) const noexcept {
         result.push_back(quiet_move(start, cur_square, bishop_piece));
         cur_square += offset;
       }
-      if (valid_square(cur_square) && opposite_colours(bishop_piece, m_pieces[cur_square])) {
+      if (valid_square(cur_square) && opposite_colours(bishop_piece, m_pieces[cur_square]) && !is_king(m_pieces[cur_square])) {
         // printf("Capture move from %s to %s\n",
         //  string_from_square(start).c_str(), string_from_square(cur_square).c_str());
         result.push_back(capture_move(start, cur_square, bishop_piece, m_pieces[cur_square]));
@@ -425,7 +426,7 @@ std::vector<move_t> Board::legal_moves(const int _side) const noexcept {
       const square_t cur_square = start + offset;
       if (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE)
         result.push_back(quiet_move(start, cur_square, knight_piece));
-      else if (valid_square(cur_square) && opposite_colours(knight_piece, m_pieces[cur_square]))
+      else if (valid_square(cur_square) && opposite_colours(knight_piece, m_pieces[cur_square]) && !is_king(m_pieces[cur_square]))
         result.push_back(capture_move(start, cur_square, knight_piece, m_pieces[cur_square]));
     }
   }
@@ -460,13 +461,25 @@ std::vector<move_t> Board::legal_moves(const int _side) const noexcept {
     const square_t capture1 = cur_square - 1, capture2 = cur_square + 1;
     if (valid_square(capture1)
       && m_pieces[capture1] != INVALID_PIECE
-      && opposite_colours(pawn_piece, m_pieces[capture1])) {
-      result.push_back(capture_move(start, capture1, pawn_piece, m_pieces[capture1]));
+      && opposite_colours(pawn_piece, m_pieces[capture1]) && !is_king(m_pieces[capture1])) {
+      if (get_square_row(capture1) == RANK_1 || get_square_row(capture1) == RANK_8) {
+        for (const piece_t promote_piece : promote_pieces) {
+          result.push_back(promote_capture_move(start, capture1, pawn_piece, promote_piece, m_pieces[capture1]));
+        }
+      } else {
+        result.push_back(capture_move(start, capture1, pawn_piece, m_pieces[capture1]));
+      }
     }
     if (valid_square(capture2)
       && m_pieces[capture2] != INVALID_PIECE
-      && opposite_colours(pawn_piece, m_pieces[capture2])) {
-      result.push_back(capture_move(start, capture2, pawn_piece, m_pieces[capture2]));
+      && opposite_colours(pawn_piece, m_pieces[capture2]) && !is_king(m_pieces[capture2])) {
+      if (get_square_row(capture2) == RANK_1 || get_square_row(capture2) == RANK_8) {
+        for (const piece_t promote_piece : promote_pieces) {
+          result.push_back(promote_capture_move(start, capture2, pawn_piece, promote_piece, m_pieces[capture2]));
+        }
+      } else {
+        result.push_back(capture_move(start, capture2, pawn_piece, m_pieces[capture2]));
+      }
     }
 
     // En-pass capture
@@ -484,11 +497,12 @@ std::vector<move_t> Board::legal_moves(const int _side) const noexcept {
   const square_t start = m_positions[king_piece][0];
   for (const int offset : {-11, -10, -9, -1, 1, 9, 10, 11}) {
     const square_t cur_square = start + offset;
+    const piece_t piece = m_pieces[cur_square];
     if (valid_square(cur_square)) {
-      if (m_pieces[cur_square] == INVALID_PIECE) {
+      if (piece == INVALID_PIECE) {
         result.push_back(quiet_move(start, cur_square, king_piece));
-      } else if (opposite_colours(king_piece, m_pieces[cur_square])) {
-        result.push_back(capture_move(start, cur_square, king_piece, m_pieces[cur_square]));
+      } else if (opposite_colours(king_piece, piece) && !is_king(piece)) {
+        result.push_back(capture_move(start, cur_square, king_piece, piece));
       }
     }
   }
@@ -528,4 +542,133 @@ std::vector<move_t> Board::legal_moves(const int _side) const noexcept {
 
   ASSERT(result.size() <= MAX_MOVES);
   return result;
+}
+
+inline void Board::remove_piece(const square_t sq) noexcept {
+  INFO("Removing piece on square %s", string_from_square(sq).c_str());
+  const piece_t piece = m_pieces[sq];
+  ASSERT_MSG(valid_piece(piece), "Removing invalid piece (%d)!", piece);
+  m_pieces[sq] = INVALID_PIECE;
+  auto &piece_list = m_positions[piece];
+  const auto &this_idx = std::find(piece_list.begin(), piece_list.begin() + m_num_pieces[piece], sq);
+  ASSERT_MSG(this_idx != piece_list.begin() + m_num_pieces[piece], "Removed piece (%d) not in piece_list", piece);
+  m_num_pieces[piece]--;
+  const auto &last_idx = piece_list.begin() + m_num_pieces[piece];
+  std::swap(*this_idx, *last_idx);
+  m_hash ^= piece_hash[sq][piece];
+}
+
+inline void Board::add_piece(const square_t sq, const piece_t piece) noexcept {
+  INFO("Adding piece (%c) to square %s", char_from_piece(piece), string_from_square(sq).c_str());
+  ASSERT_MSG(valid_piece(piece), "Adding invalid piece!");
+  ASSERT_MSG(m_pieces[sq] == INVALID_PIECE, "Adding piece would overwrite existing piece (%d)!", m_pieces[sq]);
+  m_pieces[sq] = piece;
+  m_positions[piece][m_num_pieces[piece]] = sq;
+  m_num_pieces[piece]++;
+  m_hash ^= piece_hash[sq][piece];
+}
+
+inline void Board::set_en_passant(const square_t sq) noexcept {
+  INFO("Setting en passant to %s", string_from_square(sq).c_str());
+  m_hash ^= enpas_hash[m_en_passant];
+  m_en_passant = sq;
+  m_hash ^= enpas_hash[m_en_passant];
+}
+
+inline void Board::move_piece(const square_t from, const square_t to) noexcept {
+  INFO("Moving piece from %s to %s", string_from_square(from).c_str(), string_from_square(to).c_str());
+  ASSERT_MSG(m_pieces[to] == INVALID_PIECE, "Attempted to move to occupied square");
+  const piece_t piece = m_pieces[from];
+  m_pieces[from] = INVALID_PIECE;
+  m_pieces[to] = piece;
+  auto &piece_list = m_positions[piece];
+  const auto &this_idx = std::find(piece_list.begin(), piece_list.begin() + m_num_pieces[piece], from);
+  ASSERT_MSG(this_idx != piece_list.begin() + m_num_pieces[piece], "Moved piece not in piece_list");
+  *this_idx = to;
+  m_hash ^= piece_hash[from][piece];
+  m_hash ^= piece_hash[to][piece];
+}
+
+inline void Board::update_castling(const square_t sq) noexcept {
+  INFO("Updating castling with from = %s", string_from_square(sq).c_str());
+  m_hash ^= castle_hash[m_castle_state];
+  if (sq == E1 || sq == A1)
+    m_castle_state &= ~WHITE_LONG;
+  if (sq == E1 || sq == H1)
+    m_castle_state &= ~WHITE_SHORT;
+  if (sq == E8 || sq == A8)
+    m_castle_state &= ~BLACK_LONG;
+  if (sq == E8 || sq == H8)
+    m_castle_state &= ~BLACK_SHORT;
+  m_hash ^= castle_hash[m_castle_state];
+}
+
+inline void Board::switch_colours() noexcept {
+  INFO("Switching colours");
+  m_next_move_colour ^= 1;
+  m_hash ^= side_hash;
+}
+
+bool Board::make_move(const move_t move) noexcept {
+  const MoveFlag flag = move_flag(move);
+  const square_t from = move_from(move), to = move_to(move);
+  INFO("Making move from %s to %s", string_from_square(from).c_str(), string_from_square(to).c_str());
+  INFO("Move flag is %d", flag);
+  INFO("Promoted: %d, Captured: %d", move_promoted(move), move_captured(move));
+  const int cur_side = m_next_move_colour, other_side = ~cur_side;
+  if (move_promoted(move)) {
+    if (move_captured(move))
+      remove_piece(to);
+    add_piece(to, promoted_piece(move));
+    remove_piece(from);
+    set_en_passant(INVALID_SQUARE);
+  } else if (move_castled(move)) {
+    if (cur_side == WHITE) {
+      if (flag == SHORT_CASTLE_MOVE) {
+        move_piece(E1, G1);
+        move_piece(H1, F1);
+      } else {
+        move_piece(E1, C1);
+        move_piece(A1, D1);
+      }
+    } else {
+      if (flag == SHORT_CASTLE_MOVE) {
+        move_piece(E8, G8);
+        move_piece(H8, F8);
+      } else {
+        move_piece(E8, C8);
+        move_piece(A8, D8);
+      }
+    }
+    set_en_passant(INVALID_SQUARE);
+  } else {
+    if (flag == QUIET_MOVE) {
+      move_piece(from, to);
+      update_castling(from);
+      set_en_passant(INVALID_SQUARE);
+    } else if (flag == DOUBLE_PAWN_MOVE) {
+      move_piece(from, to);
+      const square_t new_enpas = (cur_side == WHITE) ? (to - 10) : (to + 10);
+      set_en_passant(new_enpas);
+    } else if (flag == CAPTURE_MOVE) {
+      remove_piece(to);
+      move_piece(from, to);
+      update_castling(from);
+      set_en_passant(INVALID_SQUARE);
+    } else if (flag == EN_PASSANT_MOVE) {
+      INFO("Handling en-passant move");
+      const square_t captured_sq = (cur_side == WHITE) ? (to - 10) : (to + 10);
+      remove_piece(captured_sq);
+      move_piece(from, to);
+      set_en_passant(INVALID_SQUARE);
+    }
+    // TODO: Update fifty_move and half_move counters
+    m_full_move += 1;
+    m_history.push_back(move);
+  }
+
+  const piece_t king_piece = (cur_side == WHITE) ? WHITE_KING : BLACK_KING;
+  switch_colours();
+  validate_board();
+  return !square_attacked(m_positions[king_piece][0], other_side);
 }

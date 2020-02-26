@@ -84,6 +84,10 @@ constexpr inline bool move_captured(const move_t move) {
 constexpr inline bool move_promoted(const move_t move) {
   return (move >> 19) & 1;
 }
+constexpr inline bool move_castled(const move_t move) {
+  const MoveFlag flag = move_flag(move);
+  return flag == SHORT_CASTLE_MOVE || flag == LONG_CASTLE_MOVE;
+}
 
 inline std::string string_from_move(const move_t move) {
   const square_t from = move_from(move), to = move_to(move);

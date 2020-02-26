@@ -4,7 +4,7 @@
 #include <iostream>
 
 static bool hash_flag = 0;
-static inline hash_t random_hash() noexcept {
+hash_t random_hash() noexcept {
 #ifdef DEBUG
   static const auto seed = 42069; // Constant seed for debugging
 #else

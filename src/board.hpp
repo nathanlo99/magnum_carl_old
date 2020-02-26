@@ -32,11 +32,11 @@ class Board {
   bool m_next_move_colour;
   castle_t m_castle_state;
   square_t m_en_passant;
+  square_t m_first_en_passant;
   unsigned int m_fifty_move;
   unsigned int m_full_move;
   hash_t m_hash;
-
-  // std::vector<Move> m_history;
+  std::vector<move_t> m_history;
 
   hash_t compute_hash() const noexcept;
   void validate_board() const noexcept;
@@ -66,6 +66,14 @@ public:
 
   bool square_attacked(const square_t sq, const bool side) const noexcept;
   std::vector<move_t> legal_moves(const int side = INVALID_SIDE) const noexcept;
+
+  inline void remove_piece(const square_t sq) noexcept;
+  inline void add_piece(const square_t sq, const piece_t piece) noexcept;
+  inline void set_en_passant(const square_t sq) noexcept;
+  inline void move_piece(const square_t from, const square_t to) noexcept;
+  inline void update_castling(const square_t sq) noexcept;
+  inline void switch_colours() noexcept;
+  bool make_move(const move_t move) noexcept;
 };
 
 std::ostream& operator<<(std::ostream &os, const Board& board) noexcept;

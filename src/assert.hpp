@@ -5,6 +5,12 @@
 #include <cstdio>
 #include <cstdlib>
 
+#define INFO(...) \
+  do { \
+    printf("[INFO] "); \
+    printf(__VA_ARGS__); \
+    printf(" (%s:%s:%d)\n", __FILE__, __func__, __LINE__); \
+  } while (0)
 #define WARN(s) \
   printf("[WARN] %s (%s:%s:%d)\n", \
   s, __FILE__, __func__, __LINE__)
