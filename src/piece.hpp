@@ -35,7 +35,7 @@ is_king(const piece_t piece) {
     0, 0, 0, 0, 0, 0, 1, 0,
     0, 0, 0, 0, 0, 0, 1, 0,
   };
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return _is_king[piece];
 }
@@ -46,7 +46,7 @@ is_major(const piece_t piece) {
     1, 1, 0, 0, 0, 0, 0, 0,
     1, 1, 0, 0, 0, 0, 0, 0,
   };
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return _is_major[piece];
 }
@@ -57,7 +57,7 @@ is_minor(const piece_t piece) {
     0, 0, 0, 0, 1, 1, 0, 0,
     0, 0, 0, 0, 1, 1, 0, 0,
   };
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return _is_minor[piece];
 }
@@ -68,7 +68,7 @@ is_pawn(const piece_t piece) {
     0, 0, 1, 0, 0, 0, 0, 0,
     0, 0, 1, 0, 0, 0, 0, 0,
   };
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return _is_pawn[piece];
 }
@@ -79,7 +79,7 @@ is_diag(const piece_t piece) {
     1, 0, 0, 0, 1, 0, 0, 0,
     1, 0, 0, 0, 1, 0, 0, 0,
   };
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return _is_diag[piece];
 }
@@ -90,7 +90,7 @@ is_ortho(const piece_t piece) {
     1, 1, 0, 0, 0, 0, 0, 0,
     1, 1, 0, 0, 0, 0, 0, 0,
   };
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return _is_ortho[piece];
 }
@@ -101,7 +101,7 @@ get_side(const piece_t piece) {
     0, 0, 0, 0, 0, 0, 0, 0,
     1, 1, 1, 1, 1, 1, 1, 1,
   };
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return _get_side[piece];
 }
@@ -109,20 +109,20 @@ get_side(const piece_t piece) {
 #else
 constexpr inline bool
 valid_piece(const piece_t piece) {
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   return (piece & 3) != 3;
 }
 
 constexpr inline bool
 is_king(const piece_t piece) {
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return piece == WHITE_KING || piece == BLACK_KING;
 }
 
 constexpr inline bool
 is_major(const piece_t piece) {
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return piece == WHITE_QUEEN || piece == WHITE_ROOK
       || piece == BLACK_QUEEN || piece == BLACK_ROOK;
@@ -130,7 +130,7 @@ is_major(const piece_t piece) {
 
 constexpr inline bool
 is_minor(const piece_t piece) {
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return piece == WHITE_BISHOP || piece == WHITE_KNIGHT
       || piece == BLACK_BISHOP || piece == BLACK_KNIGHT;
@@ -138,14 +138,14 @@ is_minor(const piece_t piece) {
 
 constexpr inline bool
 is_pawn(const piece_t piece) {
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return piece == WHITE_PAWN || piece == BLACK_PAWN;
 }
 
 constexpr inline bool
 is_diag(const piece_t piece) {
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return piece == WHITE_QUEEN || piece == WHITE_BISHOP
       || piece == BLACK_QUEEN || piece == BLACK_BISHOP;
@@ -153,7 +153,7 @@ is_diag(const piece_t piece) {
 
 constexpr inline bool
 is_ortho(const piece_t piece) {
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return piece == WHITE_QUEEN || piece == WHITE_ROOK
       || piece == BLACK_QUEEN || piece == BLACK_ROOK;
@@ -161,7 +161,7 @@ is_ortho(const piece_t piece) {
 
 constexpr inline bool
 get_side(const piece_t piece) {
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return piece / 8;
 }
@@ -180,7 +180,7 @@ piece_from_char(const char chr) {
 constexpr inline char
 char_from_piece(const piece_t piece) {
   const char* PIECE_CHAR = "QRP.BNK.qrp.bnk.";
-  ASSERT(0 <= piece && piece < 16);
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   return PIECE_CHAR[piece];
 }
 

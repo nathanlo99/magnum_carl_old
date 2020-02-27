@@ -12,9 +12,9 @@ SRC_PATH = src
 # Space-separated pkg-config libraries used by this project
 LIBS =
 # General compiler flags
-COMPILE_FLAGS = -std=c++17 -Wall -Wextra -Werror -pedantic -Wno-type-limits -march=native
+COMPILE_FLAGS = -std=c++17 -Wall -Wextra -Werror -pedantic -Wno-type-limits -Wno-unused-variable -Wno-unused-parameter -march=native
 # Additional release-specific flags
-RCOMPILE_FLAGS = -Ofast -ffast-math -fwrapv
+RCOMPILE_FLAGS = -Ofast -ffast-math -fwrapv -DINVISIBLE_ASSERTS
 # Additional debug-specific flags
 DCOMPILE_FLAGS = -D DEBUG -fsanitize=address,undefined -O2 -g
 # Add additional include paths
@@ -22,7 +22,7 @@ INCLUDES = -I src/
 # General linker settings
 LINK_FLAGS = -march=native -flto
 # Additional release-specific linker settings
-RLINK_FLAGS = -Ofast
+RLINK_FLAGS = -Ofast -march=native -flto
 # Additional debug-specific linker settings
 DLINK_FLAGS = -fsanitize=address,undefined -O2
 # Destination directory, like a jail or mounted system

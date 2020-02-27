@@ -9,11 +9,11 @@
 #include <iostream>
 #include <sstream>
 
-struct PerftTest {
+struct perft_t {
   std::string fen;
   std::vector<size_t> expected;
 
-  PerftTest(const std::string &fen, const std::vector<size_t> &expected) : fen{fen}, expected{expected} {}
+  perft_t(const std::string &fen, const std::vector<size_t> &expected) : fen{fen}, expected{expected} {}
 
   std::string to_string() const noexcept {
     std::stringstream res;
@@ -26,8 +26,8 @@ struct PerftTest {
   }
 };
 
-static std::vector<PerftTest> load_perft(const std::string &file_name = "tests/perft.txt") {
-  std::vector<PerftTest> result;
+static std::vector<perft_t> load_perft(const std::string &file_name = "tests/perft.txt") {
+  std::vector<perft_t> result;
   std::ifstream file{file_name};
   std::string line;
   std::string fen;
@@ -54,17 +54,17 @@ static std::vector<PerftTest> load_perft(const std::string &file_name = "tests/p
   return result;
 }
 
-bool test_perft() {
-  std::vector<PerftTest> tests = load_perft();
+bool test_perft(std::ostream &out) {
+  std::vector<perft_t> tests = load_perft();
   for (const auto &perft : tests) {
     Board board{perft.fen};
-    std::cout << board << std::endl;
+    out << board << std::endl;
     const auto &legal_moves = board.legal_moves();
-    std::cout << "Legal moves (" << legal_moves.size() << "): [" << std::endl;
+    out << "Legal moves (" << legal_moves.size() << "): [" << std::endl;
     for (const auto &move: legal_moves) {
-      std::cout << "  " << string_from_move(move) << std::endl;
+      out << "  " << string_from_move(move) << std::endl;
     }
-    std::cout << "]" << std::endl;
+    out << "]" << std::endl;
   }
   return 0;
 }

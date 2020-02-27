@@ -25,7 +25,15 @@ enum { MAX_MOVES = 256 };
 
 enum { WHITE = 0, BLACK = 1, INVALID_SIDE = -1 };
 
-class Board {
+struct history_t {
+  move_t move;
+  castle_t castle_state;
+  square_t en_passant;
+  unsigned int fifty_move;
+  hash_t hash;
+};
+
+struct Board {
   std::array<piece_t, 120> m_pieces;
   std::array<std::array<square_t, MAX_NUM_PIECES>, 16> m_positions;
   std::array<unsigned, 16> m_num_pieces;
@@ -34,9 +42,9 @@ class Board {
   square_t m_en_passant;
   square_t m_first_en_passant;
   unsigned int m_fifty_move;
-  unsigned int m_full_move;
+  unsigned int m_half_move;
   hash_t m_hash;
-  std::vector<move_t> m_history;
+  std::vector<history_t> m_history;
 
   hash_t compute_hash() const noexcept;
   void validate_board() const noexcept;
@@ -69,11 +77,13 @@ public:
 
   inline void remove_piece(const square_t sq) noexcept;
   inline void add_piece(const square_t sq, const piece_t piece) noexcept;
+  inline void set_castle_state(const castle_t state) noexcept;
   inline void set_en_passant(const square_t sq) noexcept;
   inline void move_piece(const square_t from, const square_t to) noexcept;
   inline void update_castling(const square_t sq) noexcept;
   inline void switch_colours() noexcept;
   bool make_move(const move_t move) noexcept;
+  void unmake_move() noexcept;
 };
 
 std::ostream& operator<<(std::ostream &os, const Board& board) noexcept;

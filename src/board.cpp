@@ -118,17 +118,19 @@ Board::Board(const std::string &fen) noexcept {
   ASSERT(*next_chr == ' ');
 
   // Part 6: Full move counter
-  m_full_move = 0;
+  size_t full_move = 0;
   next_chr++;
   while (next_chr != end_ptr) {
     ASSERT_MSG('0' <= *next_chr && *next_chr <= '9',
       "Invalid digit (%c) in full move counter", *next_chr);
-    m_full_move = 10 * m_full_move + (*next_chr - '0');
+    full_move = 10 * full_move + (*next_chr - '0');
     next_chr++;
   }
+  m_half_move = 2 * full_move + m_next_move_colour;
   ASSERT_MSG(next_chr == end_ptr, "FEN string too long");
 
   m_hash = compute_hash();
+  validate_board();
 }
 
 void Board::validate_board() const noexcept {
@@ -144,11 +146,10 @@ void Board::validate_board() const noexcept {
   ASSERT_MSG(m_num_pieces[BLACK_KING] == 1,
     "Black has too few/many (%u) kings", m_num_pieces[BLACK_KING]);
   for (unsigned piece = 0; piece < 16; ++piece) {
-    ASSERT_MSG(valid_piece(piece) || m_num_pieces[piece] == 0,
+    ASSERT_IF_MSG(!valid_piece(piece), m_num_pieces[piece] == 0,
       "Invalid piece %u has non-zero count %u", piece, m_num_pieces[piece]);
     const unsigned end = m_num_pieces[piece];
-    ASSERT_MSG(!valid_piece(piece)
-            || m_num_pieces[piece] == piece_count[piece],
+    ASSERT_IF_MSG(valid_piece(piece), m_num_pieces[piece] == piece_count[piece],
       "Too few/many (%u) pieces of type %u, expected %u",
         m_num_pieces[piece], piece, piece_count[piece]);
     ASSERT_MSG(end <= MAX_NUM_PIECES,
@@ -168,14 +169,20 @@ void Board::validate_board() const noexcept {
     "Castle state (%u) out of range", m_castle_state);
   ASSERT_MSG(valid_square(m_en_passant) || m_en_passant == INVALID_SQUARE,
     "En passant square (%u) not valid nor INVALID_SQUARE", m_en_passant);
-  ASSERT_MSG(m_next_move_colour != BLACK || m_en_passant == INVALID_SQUARE
-    || get_square_row(m_en_passant) == RANK_3,
+  ASSERT_IF_MSG(m_next_move_colour == BLACK,
+    m_en_passant == INVALID_SQUARE || get_square_row(m_en_passant) == RANK_3,
     "En passant square (%s - %u) not on row 3 on black's turn",
       string_from_square(m_en_passant).c_str(), m_en_passant);
-  ASSERT_MSG(m_next_move_colour != WHITE || m_en_passant == INVALID_SQUARE
-    || get_square_row(m_en_passant) == RANK_6,
+  ASSERT_IF_MSG(m_next_move_colour == WHITE,
+    m_en_passant == INVALID_SQUARE || get_square_row(m_en_passant) == RANK_6,
     "En passant square (%s - %u) not on row 6 on white's turn",
       string_from_square(m_en_passant).c_str(), m_en_passant);
+
+  // Assert other king is not in check
+  const piece_t king_piece = (m_next_move_colour == BLACK) ? WHITE_KING : BLACK_KING;
+  const square_t king_square = m_positions[king_piece][0];
+  ASSERT_MSG(!square_attacked(king_square, m_next_move_colour),
+    "Other king on (%s) did not avoid check", string_from_square(king_square).c_str());
 }
 
 std::string Board::fen() const noexcept {
@@ -239,7 +246,7 @@ std::string Board::fen() const noexcept {
   result << m_fifty_move << ' ';
 
   // Part 6: Full move counter
-  result << m_full_move;
+  result << (m_half_move / 2);
 
   return result.str();
 }
@@ -282,10 +289,13 @@ std::string Board::to_string() const noexcept {
   result << ((m_next_move_colour == WHITE) ? "WHITE" : "BLACK") << '\n';
   result << "EN PASS: " << string_from_square(m_en_passant) << '\n';
   result << "FIFTY  : " << m_fifty_move << '\n';
-  result << "MOVE#  : " << m_full_move << '\n';
+  result << "MOVE#  : " << (m_half_move / 2) << '\n';
   result << "HASH   : ";
   result << std::setw(16) << std::setfill('0') << std::hex << hash() << '\n';
   result << "FEN    : " << fen() << '\n';
+  if (!m_history.empty()) {
+    result << "LAST MV: " << string_from_move(m_history.back().move) << '\n';
+  }
   return result.str();
 }
 
@@ -298,8 +308,10 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
                 knight_piece = (side == WHITE) ? WHITE_KNIGHT : BLACK_KNIGHT,
                 pawn_piece   = (side == WHITE) ? WHITE_PAWN   : BLACK_PAWN;
 
-  if (valid_piece(m_pieces[sq]) && get_side(m_pieces[sq]) == side)
+  if (valid_piece(m_pieces[sq])) {
+    ASSERT_MSG(get_side(m_pieces[sq]) != side, "Querying square attacked of own piece");
     return false;
+  }
 
   // Pawns
   const auto &pawn_offsets = {(side == WHITE) ? -9 : 9, (side == WHITE) ? -11 : 11};
@@ -344,7 +356,10 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
 
 std::vector<move_t> Board::legal_moves(const int _side) const noexcept {
   validate_board();
+
   std::vector<move_t> result;
+  if (m_fifty_move > 75)
+    return result; // 50 (75) move rule
   result.reserve(MAX_MOVES);
 
   const int side = (_side != INVALID_SIDE) ? _side : m_next_move_colour;
@@ -545,9 +560,9 @@ std::vector<move_t> Board::legal_moves(const int _side) const noexcept {
 }
 
 inline void Board::remove_piece(const square_t sq) noexcept {
-  INFO("Removing piece on square %s", string_from_square(sq).c_str());
+  INFO("Removing piece on square %s (%u)", string_from_square(sq).c_str(), sq);
   const piece_t piece = m_pieces[sq];
-  ASSERT_MSG(valid_piece(piece), "Removing invalid piece (%d)!", piece);
+  ASSERT_MSG(valid_piece(piece), "Removing invalid piece (%u)!", piece);
   m_pieces[sq] = INVALID_PIECE;
   auto &piece_list = m_positions[piece];
   const auto &this_idx = std::find(piece_list.begin(), piece_list.begin() + m_num_pieces[piece], sq);
@@ -566,6 +581,13 @@ inline void Board::add_piece(const square_t sq, const piece_t piece) noexcept {
   m_positions[piece][m_num_pieces[piece]] = sq;
   m_num_pieces[piece]++;
   m_hash ^= piece_hash[sq][piece];
+}
+
+inline void Board::set_castle_state(const castle_t state) noexcept {
+  INFO("Setting castle state to %u", state);
+  m_hash ^= castle_hash[m_castle_state];
+  m_castle_state = state;
+  m_hash ^= castle_hash[m_castle_state];
 }
 
 inline void Board::set_en_passant(const square_t sq) noexcept {
@@ -615,7 +637,17 @@ bool Board::make_move(const move_t move) noexcept {
   INFO("Making move from %s to %s", string_from_square(from).c_str(), string_from_square(to).c_str());
   INFO("Move flag is %d", flag);
   INFO("Promoted: %d, Captured: %d", move_promoted(move), move_captured(move));
-  const int cur_side = m_next_move_colour, other_side = ~cur_side;
+  const bool cur_side = m_next_move_colour, other_side = !cur_side;
+
+  // Bookkeeping
+  history_t entry;
+  entry.move = move;
+  entry.castle_state = m_castle_state;
+  entry.en_passant = m_en_passant;
+  entry.fifty_move = m_fifty_move;
+  entry.hash = m_hash;
+  m_history.push_back(entry);
+
   if (move_promoted(move)) {
     if (move_captured(move))
       remove_piece(to);
@@ -631,6 +663,8 @@ bool Board::make_move(const move_t move) noexcept {
         move_piece(E1, C1);
         move_piece(A1, D1);
       }
+      const castle_t new_castle_state = m_castle_state & ~(WHITE_LONG | WHITE_SHORT);
+      set_castle_state(new_castle_state);
     } else {
       if (flag == SHORT_CASTLE_MOVE) {
         move_piece(E8, G8);
@@ -639,18 +673,23 @@ bool Board::make_move(const move_t move) noexcept {
         move_piece(E8, C8);
         move_piece(A8, D8);
       }
+      const castle_t new_castle_state = m_castle_state & ~(BLACK_LONG | BLACK_SHORT);
+      set_castle_state(new_castle_state);
     }
     set_en_passant(INVALID_SQUARE);
   } else {
     if (flag == QUIET_MOVE) {
+      INFO("Handling quiet move");
       move_piece(from, to);
       update_castling(from);
       set_en_passant(INVALID_SQUARE);
     } else if (flag == DOUBLE_PAWN_MOVE) {
+      INFO("Handling double pawn move");
       move_piece(from, to);
       const square_t new_enpas = (cur_side == WHITE) ? (to - 10) : (to + 10);
       set_en_passant(new_enpas);
     } else if (flag == CAPTURE_MOVE) {
+      INFO("Handling capture move");
       remove_piece(to);
       move_piece(from, to);
       update_castling(from);
@@ -662,13 +701,76 @@ bool Board::make_move(const move_t move) noexcept {
       move_piece(from, to);
       set_en_passant(INVALID_SQUARE);
     }
-    // TODO: Update fifty_move and half_move counters
-    m_full_move += 1;
-    m_history.push_back(move);
+    m_half_move += 1;
+    if (move_captured(move) || is_pawn(moved_piece(move))) {
+      m_fifty_move = 0;
+    } else {
+      m_fifty_move++;
+    }
+  }
+  switch_colours();
+  const piece_t king_piece = (cur_side == WHITE) ? WHITE_KING : BLACK_KING;
+  INFO("Is %s king attacked by %s?", (cur_side == WHITE) ? "white" : "black", (other_side == WHITE) ? "white" : "black");
+  const bool valid = !square_attacked(m_positions[king_piece][0], other_side);
+  INFO("%s king %s attacked", (cur_side == WHITE) ? "White" : "Black", valid ? "is not" : "is");
+  INFO("=====================================================================================");
+  if (valid) {
+    validate_board();
+    return true;
+  }
+  return false;
+}
+
+void Board::unmake_move() noexcept {
+  ASSERT_MSG(!m_history.empty(), "Trying to unmake move from starting position");
+  const history_t entry = m_history.back();
+  const move_t move = entry.move;
+  const hash_t last_hash = entry.hash;
+  set_castle_state(entry.castle_state);
+  set_en_passant(entry.en_passant);
+  m_fifty_move = entry.fifty_move;
+  switch_colours();
+  const bool cur_side = m_next_move_colour, other_side = !cur_side;
+
+  const MoveFlag flag = move_flag(move);
+  const square_t from = move_from(move), to = move_to(move);
+  INFO("Unmaking move from %s to %s", string_from_square(from).c_str(), string_from_square(to).c_str());
+  INFO("Move flag is %d", flag);
+  INFO("Promoted: %d, Captured: %d", move_promoted(move), move_captured(move));
+
+  if (move_promoted(move)) {
+    remove_piece(to);
+    add_piece(from, moved_piece(move));
+    if (move_captured(move)) {
+      add_piece(to, captured_piece(move));
+    }
+  } else if (move_castled(move)) {
+    if (cur_side == WHITE) {
+      if (flag == SHORT_CASTLE_MOVE) {
+        move_piece(G1, E1);
+        move_piece(F1, H1);
+      } else {
+        move_piece(C1, E1);
+        move_piece(D1, A1);
+      }
+    } else {
+      if (flag == SHORT_CASTLE_MOVE) {
+        move_piece(G8, E8);
+        move_piece(F8, H8);
+      } else {
+        move_piece(C8, E8);
+        move_piece(D8, A8);
+      }
+    }
+  } else {
+    move_piece(to, from);
+    if (move_captured(move)) {
+      const square_t captured_sq = (flag == CAPTURE_MOVE) ? to : ((cur_side == WHITE) ? m_en_passant - 10 : m_en_passant + 10);
+      add_piece(captured_sq, captured_piece(move));
+    }
   }
 
-  const piece_t king_piece = (cur_side == WHITE) ? WHITE_KING : BLACK_KING;
-  switch_colours();
+  ASSERT_MSG(m_hash == last_hash, "Hash did not match history entry's hash");
   validate_board();
-  return !square_attacked(m_positions[king_piece][0], other_side);
+  INFO("=====================================================================================");
 }
