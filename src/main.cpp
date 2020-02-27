@@ -13,11 +13,11 @@
 int main() {
   init_hash();
 
-  std::stringstream test_output;
-  ASSERT_MSG(!run_tests(test_output), "Tests did not complete successfully");
-  INFO("Test output: %s", test_output.str().c_str());
+  const int test_error = run_tests();
+  ASSERT_MSG(!test_error, "Tests did not complete successfully");
   printf("Done testing!\n"
   "========================================================================\n");
+  return 0;
 
   Board starting_board;
 

@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-#if defined(DEBUG)
+#if defined(INFO)
 #define INFO(...) \
   do { \
     printf("[INFO] "); \

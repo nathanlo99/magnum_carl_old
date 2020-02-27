@@ -37,6 +37,29 @@ enum MoveFlag {
   PROMOTE_QUEEN_CAPTURE_MOVE = 15,
 };
 
+inline std::string
+string_from_flag(const MoveFlag flag) {
+  static const std::array<std::string, 16> &lut = {
+    "QUIET_MOVE",
+    "DOUBLE_PAWN_MOVE",
+    "SHORT_CASTLE_MOVE",
+    "LONG_CASTLE_MOVE",
+    "CAPTURE_MOVE",
+    "EN_PASSANT_MOVE",
+    "---------------",
+    "---------------",
+    "PROMOTE_KNIGHT_MOVE",
+    "PROMOTE_BISHOP_MOVE",
+    "PROMOTE_ROOK_MOVE",
+    "PROMOTE_QUEEN_MOVE",
+    "PROMOTE_KNIGHT_CAPTURE_MOVE",
+    "PROMOTE_BISHOP_CAPTURE_MOVE",
+    "PROMOTE_ROOK_CAPTURE_MOVE",
+    "PROMOTE_QUEEN_CAPTURE_MOVE",
+  };
+  return lut[flag];
+}
+
 constexpr inline move_t
 create_move(const square_t from, const square_t to, const MoveFlag flag,
   const piece_t moving, const piece_t captured) {

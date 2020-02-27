@@ -40,7 +40,6 @@ struct Board {
   bool m_next_move_colour;
   castle_t m_castle_state;
   square_t m_en_passant;
-  square_t m_first_en_passant;
   unsigned int m_fifty_move;
   unsigned int m_half_move;
   hash_t m_hash;
