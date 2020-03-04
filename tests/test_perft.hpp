@@ -9,6 +9,8 @@
 #include <iostream>
 #include <sstream>
 
+std::array<int, 3> perft_records;
+
 struct perft_t {
   std::string fen;
   std::vector<std::pair<int, size_t>> expected;
@@ -29,8 +31,7 @@ struct perft_t {
 static std::vector<perft_t> load_perft(const std::string &file_name = "tests/perft.txt") {
   std::vector<perft_t> result;
   std::ifstream file{file_name};
-  std::string line;
-  std::string fen;
+  std::string line, fen;
   std::vector<std::pair<int, size_t>> expected;
   while (std::getline(file, line)) {
     expected.clear();
@@ -54,23 +55,48 @@ static std::vector<perft_t> load_perft(const std::string &file_name = "tests/per
   return result;
 }
 
-size_t do_perft(Board &board, int depth) {
+size_t do_perft(Board &board, const int depth) {
   if (depth == 0) return 1;
+  Board start = board;
   size_t result = 0;
-  const auto &move_list = board.legal_moves();
+  const auto &move_list = board.pseudo_moves();
+  bool move_made = false;
   for (const move_t move : move_list) {
-    if (board.make_move(move))
+    if (board.make_move(move)) {
+      move_made = true;
       result += do_perft(board, depth - 1);
+    }
     board.unmake_move();
   }
+  if (!move_made) {
+    if (board.is_drawn() || !board.king_in_check()) {
+      perft_records[1]++;
+    } else {
+      if (board.m_next_move_colour == WHITE) {
+        // std::cout << "BLACK" << std::endl;
+        // std::cout << board << std::endl;
+        perft_records[0]++;
+      } else {
+        // std::cout << "WHITE" << std::endl;
+        // std::cout << board << std::endl;
+        perft_records[2]++;
+      }
+    }
+  }
+  if (board.fen() != start.fen()) {
+    std::cout << start << std::endl;
+    std::cout << board << std::endl;
+  }
+  ASSERT(board.fen() == start.fen());
+  ASSERT(board.hash() == start.hash());
   return result;
 }
 
-void do_perft_div(Board &board, int depth) {
+void do_perft_div(Board &board, const int depth) {
   if (depth == 0) return;
   std::cout << board << std::endl;
   std::cout << depth << std::endl;
-  for (const move_t move : board.legal_moves()) {
+  for (const move_t move : board.pseudo_moves()) {
     if (board.make_move(move)) {
       const size_t div_result = do_perft(board, depth - 1);
       std::cout << string_from_move(move) << " " << div_result << "\n";
@@ -79,13 +105,16 @@ void do_perft_div(Board &board, int depth) {
   }
 }
 
-bool test_perft() {
-  const std::vector<perft_t> tests = load_perft();
+bool test_perft(const std::string &file_name) {
+  const std::vector<perft_t> tests = load_perft(file_name);
   for (const auto &perft : tests) {
     Board board(perft.fen);
+
     for (const auto &[depth, expect_num]: perft.expected) {
       const auto start = std::chrono::high_resolution_clock::now();
-      size_t actual_num = do_perft(board, depth);
+      perft_records = {0};
+      const size_t actual_num = do_perft(board, depth);
+      std::cout << perft_records[0] << ", " << perft_records[1] << ", " << perft_records[2] << std::endl;
       if (actual_num != expect_num) {
         do_perft_div(board, depth);
         ASSERT_MSG(actual_num == expect_num,

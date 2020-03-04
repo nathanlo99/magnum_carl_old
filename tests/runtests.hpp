@@ -9,6 +9,6 @@ int run_tests() {
   fail_flag |= test_pieces();
   fail_flag |= test_squares();
   fail_flag |= test_board();
-  fail_flag |= test_perft();
+  fail_flag |= test_perft("tests/start_perft.txt");
   return fail_flag;
 }

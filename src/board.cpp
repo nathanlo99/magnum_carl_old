@@ -95,8 +95,9 @@ Board::Board(const std::string &fen) noexcept {
     ASSERT_IF(m_next_move_colour == WHITE, row == RANK_6);
     ASSERT_IF(m_next_move_colour == BLACK, row == RANK_3);
     m_en_passant = get_square_120_rc(row, col);
-    if (m_pieces[m_en_passant - 1] == INVALID_PIECE
-      && m_pieces[m_en_passant + 1] == INVALID_PIECE) {
+    const piece_t my_pawn = (m_next_move_colour == WHITE) ? WHITE_PAWN : BLACK_PAWN;
+    if (m_pieces[m_en_passant - 1] != my_pawn
+      && m_pieces[m_en_passant + 1] != my_pawn) {
       WARN("Elided en passant square");
       m_en_passant = INVALID_SQUARE;
     }
@@ -289,6 +290,7 @@ std::string Board::to_string() const noexcept {
   result << "EN PASS: " << string_from_square(m_en_passant) << '\n';
   result << "FIFTY  : " << m_fifty_move << '\n';
   result << "MOVE#  : " << (m_half_move / 2) << '\n';
+  result << "HALF#  : " << m_half_move << '\n';
   result << "HASH   : ";
   result << std::setw(16) << std::setfill('0') << std::hex << hash() << '\n';
   result << "FEN    : " << fen() << '\n';
@@ -353,11 +355,16 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
   return false;
 }
 
-std::vector<move_t> Board::legal_moves(const int _side) const noexcept {
+bool Board::king_in_check() const noexcept {
+  const piece_t king_piece = (m_next_move_colour == WHITE) ? WHITE_KING : BLACK_KING;
+  return square_attacked(m_positions[king_piece][0], !m_next_move_colour);
+}
+
+std::vector<move_t> Board::pseudo_moves(const int _side) const noexcept {
   validate_board();
 
   std::vector<move_t> result;
-  if (m_fifty_move > 75)
+  if (m_half_move > 1000 || m_fifty_move > 75)
     return result; // 50 (75) move rule
   result.reserve(MAX_MOVES);
 
@@ -558,6 +565,17 @@ std::vector<move_t> Board::legal_moves(const int _side) const noexcept {
   return result;
 }
 
+std::vector<move_t> Board::legal_moves() const noexcept {
+  std::vector<move_t> result;
+  Board tmp = *this;
+  for (const move_t move : tmp.pseudo_moves()) {
+    if (tmp.make_move(move))
+      result.push_back(move);
+    tmp.unmake_move();
+  }
+  return result;
+}
+
 inline void Board::remove_piece(const square_t sq) noexcept {
   INFO("Removing piece on square %s (%u)", string_from_square(sq).c_str(), sq);
   const piece_t piece = m_pieces[sq];
@@ -648,6 +666,7 @@ bool Board::make_move(const move_t move) noexcept {
   entry.fifty_move = m_fifty_move;
   entry.hash = m_hash;
   m_history.push_back(entry);
+  m_half_move++;
 
   if (move_promoted(move)) {
     if (move_captured(move))
@@ -702,7 +721,6 @@ bool Board::make_move(const move_t move) noexcept {
       move_piece(from, to);
       set_en_passant(INVALID_SQUARE);
     }
-    m_half_move += 1;
     if (move_captured(move) || is_pawn(moved_piece(move))) {
       m_fifty_move = 0;
     } else {
@@ -734,6 +752,7 @@ void Board::unmake_move() noexcept {
   set_castle_state(entry.castle_state);
   set_en_passant(entry.en_passant);
   m_fifty_move = entry.fifty_move;
+  ASSERT_MSG(m_half_move > 0, "Unmaking first move");
   m_half_move--;
   switch_colours();
   const bool cur_side = m_next_move_colour, other_side = !cur_side;

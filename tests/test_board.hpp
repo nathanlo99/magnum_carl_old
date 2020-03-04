@@ -11,7 +11,6 @@
 
 inline int test_fen(const std::string& fen) {
   Board board{fen}, board2{fen};
-  // NOTE: If fail due to missing en passant, suspect en passant square elision
   WASSERT_MSG(board.fen() == fen,
     "Parsed\n\t(%s)\nand generated\n\t(%s)\ndo not match.\n"
     "This could be due to en passant elision.",

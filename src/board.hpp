@@ -72,8 +72,10 @@ public:
   std::string to_string() const noexcept;
 
   bool square_attacked(const square_t sq, const bool side) const noexcept;
-  std::vector<move_t> legal_moves(const int side = INVALID_SIDE) const noexcept;
-
+  bool king_in_check() const noexcept;
+  std::vector<move_t> pseudo_moves(const int side = INVALID_SIDE) const noexcept;
+  std::vector<move_t> legal_moves() const noexcept;
+  inline bool is_drawn() const noexcept { return m_half_move > 1000 || m_fifty_move > 75; }
   inline void remove_piece(const square_t sq) noexcept;
   inline void add_piece(const square_t sq, const piece_t piece) noexcept;
   inline void set_castle_state(const castle_t state) noexcept;
