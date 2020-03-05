@@ -18,9 +18,9 @@
 
 #ifdef VARIANT_CHESS
 // NOTE: The max number of any type of piece in play. Keep as small as possible.
-enum { MAX_NUM_PIECES = 16 };
+enum { MAX_PIECE_FREQ = 16 };
 // NOTE: The max number of possible moves in any position.
-enum { MAX_MOVES = 256 };
+enum { MAX_POSITION_MOVES = 4096 };
 #endif
 
 enum { WHITE = 0, BLACK = 1, INVALID_SIDE = -1 };
@@ -35,7 +35,7 @@ struct history_t {
 
 struct Board {
   std::array<piece_t, 120> m_pieces;
-  std::array<std::array<square_t, MAX_NUM_PIECES>, 16> m_positions;
+  std::array<std::array<square_t, MAX_PIECE_FREQ>, 16> m_positions;
   std::array<unsigned, 16> m_num_pieces;
   bool m_next_move_colour;
   castle_t m_castle_state;
@@ -82,7 +82,7 @@ public:
   inline void set_castle_state(const castle_t state) noexcept;
   inline void set_en_passant(const square_t sq) noexcept;
   inline void move_piece(const square_t from, const square_t to) noexcept;
-  inline void update_castling(const square_t sq) noexcept;
+  inline void update_castling(const square_t sq, const piece_t moved) noexcept;
   inline void switch_colours() noexcept;
   bool make_move(const move_t move) noexcept;
   void unmake_move() noexcept;

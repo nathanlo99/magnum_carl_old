@@ -4,6 +4,7 @@
 #include "hash.hpp"
 #include "move.hpp"
 
+#include <algorithm>
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -40,7 +41,7 @@ Board::Board(const std::string &fen) noexcept {
       ASSERT(valid_square(square_idx));
       ASSERT(valid_piece(piece_idx));
       m_pieces[square_idx] = piece_idx;
-      ASSERT_MSG(m_num_pieces[piece_idx] < MAX_NUM_PIECES,
+      ASSERT_MSG(m_num_pieces[piece_idx] < MAX_PIECE_FREQ,
         "Too many (%u) pieces of type %u", m_num_pieces[piece_idx], piece_idx);
       m_positions[piece_idx][m_num_pieces[piece_idx]] = square_idx;
       m_num_pieces[piece_idx]++;
@@ -134,6 +135,7 @@ Board::Board(const std::string &fen) noexcept {
 }
 
 void Board::validate_board() const noexcept {
+#if defined(DEBUG)
   static std::array<unsigned, 16> piece_count;
   piece_count.fill(0);
   for (unsigned sq = 0; sq < 120; ++sq) {
@@ -152,7 +154,7 @@ void Board::validate_board() const noexcept {
     ASSERT_IF_MSG(valid_piece(piece), m_num_pieces[piece] == piece_count[piece],
       "Too few/many (%u) pieces of type %u, expected %u",
         m_num_pieces[piece], piece, piece_count[piece]);
-    ASSERT_MSG(end <= MAX_NUM_PIECES,
+    ASSERT_MSG(end <= MAX_PIECE_FREQ,
       "Too many (%u) pieces of type %u", end, piece);
     for (unsigned num = 0; num < end; ++num) {
       const square_t sq = m_positions[piece][num];
@@ -169,21 +171,21 @@ void Board::validate_board() const noexcept {
     "Castle state (%u) out of range", m_castle_state);
   ASSERT_MSG(valid_square(m_en_passant) || m_en_passant == INVALID_SQUARE,
     "En passant square (%u) not valid nor INVALID_SQUARE", m_en_passant);
-  ASSERT_IF_MSG(m_next_move_colour == BLACK,
-    m_en_passant == INVALID_SQUARE || get_square_row(m_en_passant) == RANK_3,
+  ASSERT_IF_MSG(m_next_move_colour == BLACK && m_en_passant != INVALID_SQUARE,
+    get_square_row(m_en_passant) == RANK_3,
     "En passant square (%s - %u) not on row 3 on black's turn",
       string_from_square(m_en_passant).c_str(), m_en_passant);
-  ASSERT_IF_MSG(m_next_move_colour == WHITE,
-    m_en_passant == INVALID_SQUARE || get_square_row(m_en_passant) == RANK_6,
+  ASSERT_IF_MSG(m_next_move_colour == WHITE && m_en_passant != INVALID_SQUARE,
+    get_square_row(m_en_passant) == RANK_6,
     "En passant square (%s - %u) not on row 6 on white's turn",
       string_from_square(m_en_passant).c_str(), m_en_passant);
 
-  return; // Skip this next test cuz it's being annoying
   // Assert other king is not in check
   const piece_t king_piece = (m_next_move_colour == BLACK) ? WHITE_KING : BLACK_KING;
   const square_t king_square = m_positions[king_piece][0];
   ASSERT_MSG(!square_attacked(king_square, m_next_move_colour),
     "Other king on (%s) did not avoid check", string_from_square(king_square).c_str());
+#endif
 }
 
 std::string Board::fen() const noexcept {
@@ -306,40 +308,26 @@ std::ostream& operator<<(std::ostream &os, const Board& board) noexcept {
 }
 
 bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
-  const piece_t king_piece   = (side == WHITE) ? WHITE_KING   : BLACK_KING,
+  const piece_t king_piece   = (side == WHITE) ? WHITE_KING : BLACK_KING,
                 knight_piece = (side == WHITE) ? WHITE_KNIGHT : BLACK_KNIGHT,
                 pawn_piece   = (side == WHITE) ? WHITE_PAWN   : BLACK_PAWN;
+  const square_t king_square = m_positions[king_piece][0];
 
   if (valid_piece(m_pieces[sq]) && get_side(m_pieces[sq] == side)) {
     ASSERT_MSG(get_side(m_pieces[sq]) != side, "Querying square attacked of own piece");
     return false;
   }
 
-  // Pawns
-  const auto &pawn_offsets = {(side == WHITE) ? -9 : 9, (side == WHITE) ? -11 : 11};
-  for (const int offset : pawn_offsets)
-    if (m_pieces[sq + offset] == pawn_piece)
-      return true;
-
-  // King
-  const auto &king_offsets = {-11, -10, -9, -1, 1, 9, 10, 11};
-  for (const int offset : king_offsets)
-    if (m_pieces[sq + offset] == king_piece)
-      return true;
-
-  // Knights
-  const auto &knight_offsets = {-21, -19, -12, -8, 8, 12, 19, 21};
-  for (const int offset : knight_offsets)
-    if (m_pieces[sq + offset] == knight_piece)
-      return true;
-
   // Diagonals
   const auto &diagonal_offsets = {-11, -9, 9, 11};
   for (const int offset : diagonal_offsets) {
     square_t cur_square = sq + offset;
+    if (king_square == cur_square)
+      return true;
     while (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE)
       cur_square += offset;
-    if (valid_square(cur_square) && get_side(m_pieces[cur_square]) == side && is_diag(m_pieces[cur_square]))
+    const piece_t cur_piece = m_pieces[cur_square];
+    if (valid_square(cur_square) && get_side(cur_piece) == side && is_diag(cur_piece))
       return true;
   }
 
@@ -347,11 +335,26 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
   const auto &orthogonal_offsets = {-10, -1, 1, 10};
   for (const int offset : orthogonal_offsets) {
     square_t cur_square = sq + offset;
+    if (king_square == cur_square)
+      return true;
     while (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE)
       cur_square += offset;
-    if (valid_square(cur_square) && get_side(m_pieces[cur_square]) == side && is_ortho(m_pieces[cur_square]))
+    const piece_t cur_piece = m_pieces[cur_square];
+    if (valid_square(cur_square) && get_side(cur_piece) == side && is_ortho(cur_piece))
       return true;
   }
+
+  // Knights
+  const auto &knight_offsets = {-21, -19, -12, -8, 8, 12, 19, 21};
+  for (const int offset : knight_offsets)
+    if (m_pieces[sq + offset] == knight_piece)
+      return true;
+
+  // Pawns
+  const auto &pawn_offsets = {(side == WHITE) ? -9 : 9, (side == WHITE) ? -11 : 11};
+  for (const int offset : pawn_offsets)
+    if (m_pieces[sq + offset] == pawn_piece)
+      return true;
 
   return false;
 }
@@ -371,7 +374,7 @@ std::vector<move_t> Board::pseudo_moves(const int _side) const noexcept {
   std::vector<move_t> result;
   if (m_half_move > 1000 || m_fifty_move > 75)
     return result; // 50 (75) move rule
-  result.reserve(MAX_MOVES);
+  result.reserve(MAX_POSITION_MOVES);
 
   const int side = (_side != INVALID_SIDE) ? _side : m_next_move_colour;
   ASSERT_MSG(side == WHITE || side == BLACK, "Invalid side (%u)", side);
@@ -535,38 +538,32 @@ std::vector<move_t> Board::pseudo_moves(const int _side) const noexcept {
 
   // Castling
   if (side == WHITE) {
-    if (m_castle_state & WHITE_SHORT
-      && m_pieces[E1] == WHITE_KING && m_pieces[F1] == INVALID_PIECE
-      && m_pieces[G1] == INVALID_PIECE && m_pieces[H1] == WHITE_ROOK
-      && !square_attacked(E1, BLACK) && !square_attacked(F1, BLACK)) {
-      // If G1 is attacked, this move will be rejected after being made
+    const bool d1_attacked = square_attacked(D1, BLACK);
+    const bool e1_attacked = square_attacked(E1, BLACK);
+    const bool f1_attacked = square_attacked(F1, BLACK);
+    if (m_castle_state & WHITE_SHORT && !e1_attacked && !f1_attacked
+      && m_pieces[F1] == INVALID_PIECE && m_pieces[G1] == INVALID_PIECE) {
       result.push_back(castle_move(E1, G1, WHITE_KING, SHORT_CASTLE_MOVE));
     }
-    if (m_castle_state & WHITE_LONG
-      && m_pieces[E1] == WHITE_KING && m_pieces[D1] == INVALID_PIECE
-      && m_pieces[C1] == INVALID_PIECE && m_pieces[B1] == INVALID_PIECE
-      && m_pieces[A1] == WHITE_ROOK && !square_attacked(E1, BLACK)
-      && !square_attacked(D1, BLACK)) {
-      // If C1 is attacked, this move will be rejected after being made
+    if (m_castle_state & WHITE_LONG && !e1_attacked && !d1_attacked
+      && m_pieces[D1] == INVALID_PIECE && m_pieces[C1] == INVALID_PIECE && m_pieces[B1] == INVALID_PIECE) {
       result.push_back(castle_move(E1, C1, WHITE_KING, LONG_CASTLE_MOVE));
     }
   } else if (side == BLACK) {
-    if (m_castle_state & BLACK_SHORT
-      && m_pieces[E8] == BLACK_KING && m_pieces[F8] == INVALID_PIECE
-      && m_pieces[G8] == INVALID_PIECE && m_pieces[H8] == BLACK_ROOK
-      && !square_attacked(E8, WHITE) && !square_attacked(F8, WHITE)) {
+    const bool d8_attacked = square_attacked(D8, WHITE);
+    const bool e8_attacked = square_attacked(E8, WHITE);
+    const bool f8_attacked = square_attacked(F8, WHITE);
+    if (m_castle_state & BLACK_SHORT && !e8_attacked && !f8_attacked
+      && m_pieces[F8] == INVALID_PIECE && m_pieces[G8] == INVALID_PIECE) {
       result.push_back(castle_move(E8, G8, BLACK_KING, SHORT_CASTLE_MOVE));
     }
-    if (m_castle_state & BLACK_LONG
-      && m_pieces[E8] == BLACK_KING && m_pieces[D8] == INVALID_PIECE
-      && m_pieces[C8] == INVALID_PIECE && m_pieces[B8] == INVALID_PIECE
-      && m_pieces[A8] == BLACK_ROOK && !square_attacked(E8, WHITE)
-      && !square_attacked(D8, WHITE)) {
+    if (m_castle_state & BLACK_LONG && !e8_attacked && !d8_attacked
+      && m_pieces[D8] == INVALID_PIECE && m_pieces[C8] == INVALID_PIECE && m_pieces[B8] == INVALID_PIECE) {
       result.push_back(castle_move(E8, C8, BLACK_KING, LONG_CASTLE_MOVE));
     }
   }
 
-  ASSERT(result.size() <= MAX_MOVES);
+  ASSERT(result.size() <= MAX_POSITION_MOVES);
   return m_move_cache[m_hash] = result;
 }
 
@@ -587,11 +584,11 @@ inline void Board::remove_piece(const square_t sq) noexcept {
   ASSERT_MSG(valid_piece(piece), "Removing invalid piece (%u)!", piece);
   m_pieces[sq] = INVALID_PIECE;
   auto &piece_list = m_positions[piece];
-  const auto &this_idx = std::find(piece_list.begin(), piece_list.begin() + m_num_pieces[piece], sq);
-  ASSERT_MSG(this_idx != piece_list.begin() + m_num_pieces[piece], "Removed piece (%d) not in piece_list", piece);
-  m_num_pieces[piece]--;
   const auto &last_idx = piece_list.begin() + m_num_pieces[piece];
-  std::swap(*this_idx, *last_idx);
+  const auto &this_idx = std::find(piece_list.begin(), last_idx, sq);
+  ASSERT_MSG(this_idx != last_idx, "Removed piece (%d) not in piece_list", piece);
+  m_num_pieces[piece]--;
+  std::swap(*this_idx, *(last_idx - 1));
   m_hash ^= piece_hash[sq][piece];
 }
 
@@ -607,16 +604,14 @@ inline void Board::add_piece(const square_t sq, const piece_t piece) noexcept {
 
 inline void Board::set_castle_state(const castle_t state) noexcept {
   INFO("Setting castle state to %u", state);
-  m_hash ^= castle_hash[m_castle_state];
+  m_hash ^= castle_hash[m_castle_state] ^ castle_hash[state];
   m_castle_state = state;
-  m_hash ^= castle_hash[m_castle_state];
 }
 
 inline void Board::set_en_passant(const square_t sq) noexcept {
   INFO("Setting en passant to %s", string_from_square(sq).c_str());
-  m_hash ^= enpas_hash[m_en_passant];
+  m_hash ^= enpas_hash[m_en_passant] ^ enpas_hash[sq];
   m_en_passant = sq;
-  m_hash ^= enpas_hash[m_en_passant];
 }
 
 inline void Board::move_piece(const square_t from, const square_t to) noexcept {
@@ -626,15 +621,16 @@ inline void Board::move_piece(const square_t from, const square_t to) noexcept {
   m_pieces[from] = INVALID_PIECE;
   m_pieces[to] = piece;
   auto &piece_list = m_positions[piece];
-  const auto &this_idx = std::find(piece_list.begin(), piece_list.begin() + m_num_pieces[piece], from);
-  ASSERT_MSG(this_idx != piece_list.begin() + m_num_pieces[piece], "Moved piece not in piece_list");
+  const auto &last_idx = piece_list.begin() + m_num_pieces[piece];
+  const auto &this_idx = std::find(piece_list.begin(), last_idx, from);
+  ASSERT_MSG(this_idx != last_idx, "Moved piece not in piece_list");
   *this_idx = to;
-  m_hash ^= piece_hash[from][piece];
-  m_hash ^= piece_hash[to][piece];
+  m_hash ^= piece_hash[from][piece] ^ piece_hash[to][piece];
 }
 
-inline void Board::update_castling(const square_t sq) noexcept {
+inline void Board::update_castling(const square_t sq, const piece_t moved) noexcept {
   INFO("Updating castling with from = %s", string_from_square(sq).c_str());
+  if (!is_castle(moved)) return;
   m_hash ^= castle_hash[m_castle_state];
   if (sq == E1 || sq == A1)
     m_castle_state &= ~WHITE_LONG;
@@ -657,6 +653,7 @@ bool Board::make_move(const move_t move) noexcept {
   INFO("=====================================================================================");
   const MoveFlag flag = move_flag(move);
   const square_t from = move_from(move), to = move_to(move);
+  const piece_t moved = moved_piece(move);
   INFO("%s", to_string().c_str());
   INFO("Making move from %s to %s", string_from_square(from).c_str(), string_from_square(to).c_str());
   INFO("Move flag is %s", string_from_flag(flag).c_str());
@@ -703,35 +700,35 @@ bool Board::make_move(const move_t move) noexcept {
     }
     set_en_passant(INVALID_SQUARE);
   } else {
+    const square_t enpas_square = (cur_side == WHITE) ? (to - 10) : (to + 10);
+    if (flag == DOUBLE_PAWN_MOVE) {
+      set_en_passant(enpas_square);
+    } else {
+      set_en_passant(INVALID_SQUARE);
+    }
     if (flag == QUIET_MOVE) {
       INFO("Handling quiet move");
       move_piece(from, to);
-      update_castling(from);
-      set_en_passant(INVALID_SQUARE);
+      update_castling(from, moved);
     } else if (flag == DOUBLE_PAWN_MOVE) {
       INFO("Handling double pawn move");
       move_piece(from, to);
-      const square_t new_enpas = (cur_side == WHITE) ? (to - 10) : (to + 10);
-      set_en_passant(new_enpas);
     } else if (flag == CAPTURE_MOVE) {
       INFO("Handling capture move");
       remove_piece(to);
       move_piece(from, to);
-      update_castling(from);
-      set_en_passant(INVALID_SQUARE);
+      update_castling(from, moved);
     } else if (flag == EN_PASSANT_MOVE) {
       INFO("Handling en-passant move");
-      const square_t captured_sq = (cur_side == WHITE) ? (to - 10) : (to + 10);
-      remove_piece(captured_sq);
+      remove_piece(enpas_square);
       move_piece(from, to);
-      set_en_passant(INVALID_SQUARE);
-    }
-    if (move_captured(move) || is_pawn(moved_piece(move))) {
-      m_fifty_move = 0;
-    } else {
-      m_fifty_move++;
     }
   }
+  if (move_captured(move) || is_pawn(moved_piece(move)))
+    m_fifty_move = 0;
+  else
+    m_fifty_move++;
+
   switch_colours();
   const piece_t king_piece = (cur_side == WHITE) ? WHITE_KING : BLACK_KING;
   INFO("Is %s king attacked by %s?", (cur_side == WHITE) ? "white" : "black", (other_side == WHITE) ? "white" : "black");
@@ -772,9 +769,8 @@ void Board::unmake_move() noexcept {
   if (move_promoted(move)) {
     remove_piece(to);
     add_piece(from, moved_piece(move));
-    if (move_captured(move)) {
+    if (move_captured(move))
       add_piece(to, captured_piece(move));
-    }
   } else if (move_castled(move)) {
     if (cur_side == WHITE) {
       if (flag == SHORT_CASTLE_MOVE) {
@@ -796,7 +792,8 @@ void Board::unmake_move() noexcept {
   } else {
     move_piece(to, from);
     if (move_captured(move)) {
-      const square_t captured_sq = (flag == CAPTURE_MOVE) ? to : ((cur_side == WHITE) ? m_en_passant - 10 : m_en_passant + 10);
+      const square_t en_pas_sq = (cur_side == WHITE) ? m_en_passant - 10 : m_en_passant + 10;
+      const square_t captured_sq = (flag == CAPTURE_MOVE) ? to : en_pas_sq;
       add_piece(captured_sq, captured_piece(move));
     }
   }

@@ -41,6 +41,17 @@ is_king(const piece_t piece) {
 }
 
 constexpr inline bool
+is_castle(const piece_t piece) {
+  constexpr static bool _is_castle[16] = {
+    0, 1, 0, 0, 0, 0, 1, 0,
+    0, 1, 0, 0, 0, 0, 1, 0,
+  };
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
+  ASSERT(valid_piece(piece));
+  return _is_castle[piece];
+}
+
+constexpr inline bool
 is_major(const piece_t piece) {
   constexpr static bool _is_major[16] = {
     1, 1, 0, 0, 0, 0, 0, 0,
@@ -118,6 +129,14 @@ is_king(const piece_t piece) {
   ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   ASSERT(valid_piece(piece));
   return piece == WHITE_KING || piece == BLACK_KING;
+}
+
+constexpr inline bool
+is_castle(const piece_t piece) {
+  ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
+  ASSERT(valid_piece(piece));
+  return piece == WHITE_KING || piece == WHITE_ROOK
+      || piece == BLACK_KING || piece == BLACK_ROOK;
 }
 
 constexpr inline bool
