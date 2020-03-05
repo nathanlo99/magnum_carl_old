@@ -6,8 +6,8 @@
 #include <string>
 #include <array>
 #include <vector>
-#include <string_view>
 #include <ostream>
+#include <map>
 
 #include "piece.hpp"
 #include "square.hpp"
@@ -44,6 +44,7 @@ struct Board {
   unsigned int m_half_move;
   hash_t m_hash;
   std::vector<history_t> m_history;
+  mutable std::map<hash_t, std::vector<move_t>> m_move_cache;
 
   hash_t compute_hash() const noexcept;
   void validate_board() const noexcept;
@@ -88,5 +89,6 @@ public:
 };
 
 std::ostream& operator<<(std::ostream &os, const Board& board) noexcept;
+void print_move_list(const std::vector<move_t> &move_list);
 
 #endif /* end of include guard: BOARD_H */

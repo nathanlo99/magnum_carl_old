@@ -18,7 +18,7 @@ RCOMPILE_FLAGS = -Ofast -ffast-math -fwrapv -DINVISIBLE_ASSERTS
 # Additional debug-specific flags
 DCOMPILE_FLAGS = -D DEBUG -fsanitize=address,undefined -O2 -g
 # Add additional include paths
-INCLUDES = -I src/
+INCLUDES = -I src/ # -I /usr/local/Cellar/boost/1.72.0
 # General linker settings
 LINK_FLAGS = -march=native -flto
 # Additional release-specific linker settings

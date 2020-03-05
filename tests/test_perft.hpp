@@ -8,8 +8,9 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-
-std::array<int, 3> perft_records;
+#include <map>
+#include <utility>
+#include "timeit.hpp"
 
 struct perft_t {
   std::string fen;
@@ -40,13 +41,13 @@ static std::vector<perft_t> load_perft(const std::string &file_name = "tests/per
     std::string token;
     unsigned depth = 0;
     while ((pos = line.find("; ")) != std::string::npos) {
-        token = line.substr(0, pos);
-        if (depth == 0)
-          fen = token;
-        else
-          expected.push_back(std::make_pair(depth, std::stol(token)));
-        depth++;
-        line.erase(0, pos + 2);
+      token = line.substr(0, pos);
+      if (depth == 0)
+        fen = token;
+      else
+        expected.push_back(std::make_pair(depth, std::stol(token)));
+      depth++;
+      line.erase(0, pos + 2);
     }
     expected.push_back(std::make_pair(depth, std::stol(line)));
     result.emplace_back(fen, expected);
@@ -55,47 +56,31 @@ static std::vector<perft_t> load_perft(const std::string &file_name = "tests/per
   return result;
 }
 
-size_t do_perft(Board &board, const int depth) {
+size_t do_perft(Board &board, const int depth, const bool reset=true) {
+  static std::map<size_t, std::map<hash_t, size_t>> memo;
+  if (reset) memo.clear();
   if (depth == 0) return 1;
-  Board start = board;
+
+  // Query memoization data structure
+  const hash_t cur_hash = board.hash();
+  auto &depth_map = memo[depth];
+  const auto &it = depth_map.find(cur_hash);
+  if (it != depth_map.end())
+    return it->second;
+
+  // Not present, compute and add to memo
   size_t result = 0;
-  const auto &move_list = board.pseudo_moves();
-  bool move_made = false;
-  for (const move_t move : move_list) {
-    if (board.make_move(move)) {
-      move_made = true;
-      result += do_perft(board, depth - 1);
-    }
+  for (const move_t move : board.pseudo_moves()) {
+    if (board.make_move(move))
+      result += do_perft(board, depth - 1, false);
     board.unmake_move();
   }
-  if (!move_made) {
-    if (board.is_drawn() || !board.king_in_check()) {
-      perft_records[1]++;
-    } else {
-      if (board.m_next_move_colour == WHITE) {
-        // std::cout << "BLACK" << std::endl;
-        // std::cout << board << std::endl;
-        perft_records[0]++;
-      } else {
-        // std::cout << "WHITE" << std::endl;
-        // std::cout << board << std::endl;
-        perft_records[2]++;
-      }
-    }
-  }
-  if (board.fen() != start.fen()) {
-    std::cout << start << std::endl;
-    std::cout << board << std::endl;
-  }
-  ASSERT(board.fen() == start.fen());
-  ASSERT(board.hash() == start.hash());
+  depth_map[cur_hash] = result;
   return result;
 }
 
 void do_perft_div(Board &board, const int depth) {
   if (depth == 0) return;
-  std::cout << board << std::endl;
-  std::cout << depth << std::endl;
   for (const move_t move : board.pseudo_moves()) {
     if (board.make_move(move)) {
       const size_t div_result = do_perft(board, depth - 1);
@@ -105,25 +90,26 @@ void do_perft_div(Board &board, const int depth) {
   }
 }
 
-bool test_perft(const std::string &file_name) {
+bool test_perft(const std::string &file_name, int max_depth = 5) {
   const std::vector<perft_t> tests = load_perft(file_name);
   for (const auto &perft : tests) {
     Board board(perft.fen);
 
-    for (const auto &[depth, expect_num]: perft.expected) {
-      const auto start = std::chrono::high_resolution_clock::now();
-      perft_records = {0};
-      const size_t actual_num = do_perft(board, depth);
-      std::cout << perft_records[0] << ", " << perft_records[1] << ", " << perft_records[2] << std::endl;
-      if (actual_num != expect_num) {
-        do_perft_div(board, depth);
-        ASSERT_MSG(actual_num == expect_num,
-          "Perft failed for %s with depth %d: expected %lu but got %lu", perft.fen.c_str(), depth, expect_num, actual_num);
-      }
-      const auto finish = std::chrono::high_resolution_clock::now();
-      const auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count();
-      std::cout << "Done perft " << perft.fen << " with depth " << depth << " with " << actual_num << " nodes" << "\n";
-      std::cout << "Took " << diff << " ns " << "(" << diff / actual_num << " ns / move" << "), " << "(" << 1e6 * actual_num / diff << "KNps" << ")" << "\n";
+    for (const auto &test: perft.expected) {
+      int depth;
+      size_t expect_num;
+      std::tie(depth, expect_num) = test;
+      if (depth > max_depth) continue;
+      const auto diff = timeit([&]{
+        const size_t actual_num = do_perft(board, depth);
+        if (actual_num != expect_num) {
+          do_perft_div(board, depth);
+          ASSERT_MSG(actual_num == expect_num,
+            "Perft failed for %s with depth %d: expected %lu but got %lu", perft.fen.c_str(), depth, expect_num, actual_num);
+        }
+      });
+      std::cout << "Done perft " << perft.fen << " with depth " << depth << " with " << expect_num << " nodes" << "\n";
+      std::cout << "Took " << diff << " ns " << "(" << diff / expect_num << " ns / move" << "), " << "(" << 1e6 * expect_num / diff << "KNps" << ")" << "\n";
     }
   }
   return 0;

@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <string>
 #include <sstream>
+#include <map>
 
 Board::Board(const std::string &fen) noexcept {
   m_pieces.fill(INVALID_PIECE);
@@ -361,6 +362,10 @@ bool Board::king_in_check() const noexcept {
 }
 
 std::vector<move_t> Board::pseudo_moves(const int _side) const noexcept {
+  const auto &it = m_move_cache.find(m_hash);
+  if (it != m_move_cache.end())
+    return it->second;
+
   validate_board();
 
   std::vector<move_t> result;
@@ -562,7 +567,7 @@ std::vector<move_t> Board::pseudo_moves(const int _side) const noexcept {
   }
 
   ASSERT(result.size() <= MAX_MOVES);
-  return result;
+  return m_move_cache[m_hash] = result;
 }
 
 std::vector<move_t> Board::legal_moves() const noexcept {
@@ -799,4 +804,11 @@ void Board::unmake_move() noexcept {
   ASSERT_MSG(m_hash == last_hash, "Hash did not match history entry's hash");
   validate_board();
   INFO("=====================================================================================");
+}
+
+void print_move_list(const std::vector<move_t> &move_list) {
+  for (const move_t move : move_list) {
+    std::cout << string_from_move(move) << ", ";
+  }
+  std::cout << std::endl;
 }

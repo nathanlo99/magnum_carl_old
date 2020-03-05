@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <string>
 #include <sstream>
+#include <iostream>
 
 #include "defs.hpp"
 #include "assert.hpp"
@@ -318,4 +319,5 @@ constexpr inline move_t
 castle_move(const square_t from, const square_t to, const piece_t moving, const MoveFlag flag) {
   return create_move(from, to, flag, moving, INVALID_PIECE);
 }
+
 #endif /* end of include guard: MOVE_H */
