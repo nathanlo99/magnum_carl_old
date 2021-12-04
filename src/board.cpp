@@ -291,17 +291,20 @@ hash_t Board::compute_hash() const noexcept {
 std::string Board::to_string() const noexcept {
   validate_board();
   std::stringstream result;
-  result << "+---+---+---+---+---+---+---+---+\n";
+  result << "\n";
+  result << "   +---+---+---+---+---+---+---+---+\n";
   for (int row = 7; row >= 0; --row) {
-    result << '|';
+    const char row_name = '1' + (7 - row);
+    result << " " << row_name << " |";
     for (int col = 0; col < 8; ++col) {
       const square_t square = get_square_120_rc(row, col);
       const piece_t piece_idx = m_pieces[square];
       result << " " << char_from_piece(piece_idx) << " |";
     }
     result << '\n';
-    result << "+---+---+---+---+---+---+---+---+\n";
+    result << "   +---+---+---+---+---+---+---+---+\n";
   }
+  result << "     a   b   c   d   e   f   g   h\n\n";
   result << "TO MOVE: ";
   result << ((m_next_move_colour == WHITE) ? "WHITE" : "BLACK") << '\n';
   result << "EN PASS: " << string_from_square(m_en_passant) << '\n';
@@ -719,7 +722,7 @@ bool Board::make_move(const move_t move) noexcept {
   const MoveFlag flag = move_flag(move);
   const square_t from = move_from(move), to = move_to(move);
   const piece_t moved = moved_piece(move);
-  INFO("%s", to_string().c_str());
+  // INFO("%s", to_string().c_str());
   INFO("Making move from %s to %s", string_from_square(from).c_str(),
        string_from_square(to).c_str());
   INFO("Move flag is %s", string_from_flag(flag).c_str());
@@ -801,7 +804,7 @@ bool Board::make_move(const move_t move) noexcept {
   const piece_t king_piece = (cur_side == WHITE) ? WHITE_KING : BLACK_KING;
   INFO("Is %s king attacked by %s?", (cur_side == WHITE) ? "white" : "black",
        (other_side == WHITE) ? "white" : "black");
-  INFO("\n%s", to_string().c_str());
+  // INFO("\n%s", to_string().c_str());
   const bool valid = !square_attacked(m_positions[king_piece][0], other_side);
   INFO("%s king %s attacked", (cur_side == WHITE) ? "White" : "Black",
        valid ? "is not" : "is");
@@ -835,7 +838,7 @@ void Board::unmake_move() noexcept {
 
   const MoveFlag flag = move_flag(move);
   const square_t from = move_from(move), to = move_to(move);
-  INFO("%s", to_string().c_str());
+  // INFO("%s", to_string().c_str());
   INFO("Unmaking move from %s to %s", string_from_square(from).c_str(),
        string_from_square(to).c_str());
   INFO("Move flag is %s", string_from_flag(flag).c_str());
