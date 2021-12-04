@@ -2,7 +2,8 @@
 #ifndef TEST_PERFT_H
 #define TEST_PERFT_H
 
-#include "timeit.hpp"
+#include "../src/move.hpp"
+#include "../src/timeit.hpp"
 #include <cstdlib>
 #include <fstream>
 #include <iostream>

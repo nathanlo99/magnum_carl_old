@@ -2,8 +2,8 @@
 #ifndef TEST_PIECES_H
 #define TEST_PIECES_H
 
-#include "assert.hpp"
-#include "piece.hpp"
+#include "../src/assert.hpp"
+#include "../src/piece.hpp"
 
 inline constexpr int test_pieces() {
   { /* valid_piece */

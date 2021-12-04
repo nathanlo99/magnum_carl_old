@@ -2,8 +2,8 @@
 #ifndef TEST_SQUARES_H
 #define TEST_SQUARES_H
 
-#include "assert.hpp"
-#include "square.hpp"
+#include "../src/assert.hpp"
+#include "../src/square.hpp"
 
 inline int test_squares() {
   { /* valid_square */
