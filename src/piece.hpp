@@ -3,6 +3,7 @@
 #define PIECE_H
 
 #include <cstdint> // for uint8_t
+#include <string>
 
 #include "assert.hpp" // for ASSERT
 #include "defs.hpp"
@@ -169,7 +170,7 @@ constexpr inline bool get_side(const piece_t piece) {
 #endif /* #if LUT_PIECE */
 
 constexpr inline piece_t piece_from_char(const char chr) {
-  const char *PIECE_CHAR = "QRP.BNK.qrp.bnk.";
+  const char *PIECE_CHAR = "QRP BNK qrp bnk ";
   for (int i = 0; i < 16; ++i)
     if (PIECE_CHAR[i] == chr)
       return i;
@@ -177,7 +178,7 @@ constexpr inline piece_t piece_from_char(const char chr) {
 }
 
 constexpr inline char char_from_piece(const piece_t piece) {
-  const char *PIECE_CHAR = "QRP.BNK.qrp.bnk.";
+  const char *PIECE_CHAR = "QRP BNK qrp bnk ";
   ASSERT_MSG(0 <= piece && piece < 16, "Given piece (%u) out of range", piece);
   return PIECE_CHAR[piece];
 }

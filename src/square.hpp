@@ -3,6 +3,7 @@
 #define SQUARE_H
 
 #include <cstdint>
+#include <string>
 
 #include "assert.hpp"
 

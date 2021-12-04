@@ -113,18 +113,12 @@ std::string exec(const std::string &cmd) {
   return result.str();
 }
 
-void do_perft_div(Board &board, const int depth) {
-  std::cout << "Perft divide:" << std::endl;
-  std::cout << board.fen() << std::endl;
-  std::cout << "Depth = " << depth << std::endl;
-  std::cout << board.legal_moves().size() << std::endl;
-  print_move_list(board.legal_moves());
-  if (depth == 0)
-    return;
-
-  std::map<std::string, size_t> actual, expected;
+std::map<std::string, size_t> get_stockfish_perft(const std::string &fen,
+                                                  int depth) {
+  depth = std::max(1, depth);
+  std::map<std::string, size_t> expected;
   std::stringstream cmd;
-  cmd << "echo \"position fen " << board.fen() << "\\n"
+  cmd << "echo \"position fen " << fen << "\\n"
       << "go perft " << depth << "\" | references/Stockfish/src/stockfish";
   std::stringstream out(exec(cmd.str()));
   std::string line;
@@ -134,14 +128,43 @@ void do_perft_div(Board &board, const int depth) {
       continue;
     expected[line.substr(0, 4)] = std::stol(line.substr(6));
   }
+  return expected;
+}
+
+void do_perft_div(Board &board, int depth) {
+  std::cout << "Starting perft divide with FEN:" << std::endl;
+  std::cout << "\t" << board.fen() << std::endl;
+  std::cout << "and depth = " << depth << std::endl;
+
+  std::map<std::string, size_t> actual,
+      expected = get_stockfish_perft(board.fen(), depth);
+
+  if (depth <= 1) {
+    std::cout << "Found " << board.legal_moves().size()
+              << " legal moves:" << std::endl;
+    print_simple_move_list(board.legal_moves());
+
+    std::cout << "Stockfish found " << expected.size()
+              << " legal moves:" << std::endl;
+    for (const auto &[move, expected_perft] : expected) {
+      std::cout << move << ", ";
+    }
+    std::cout << std::endl;
+    return;
+  }
 
   for (const move_t move : board.pseudo_moves()) {
     if (board.make_move(move)) {
       const size_t div_result = do_perft<true>(board, depth - 1);
-      std::string move_name = simple_string_from_move(move);
+      const std::string move_name = simple_string_from_move(move);
       actual[move_name] = div_result;
       if (div_result != expected[move_name]) {
-        std::cout << move_name << std::endl;
+        std::cout << "Perft divide result after making the move " << move_name
+                  << " differed:" << std::endl;
+        std::cout << "Board FEN: " << board.fen() << std::endl;
+        std::cout << "Expected: " << expected[move_name] << std::endl;
+        std::cout << "Got     : " << div_result << std::endl;
+        std::cout << "----------------------------" << std::endl;
         do_perft_div(board, depth - 1);
         return;
       }
@@ -164,22 +187,18 @@ bool test_perft(const std::string &file_name, int max_depth) {
       const auto diff = timeit([&] {
         const size_t actual_num = do_perft<true>(board, depth);
         if (actual_num != expect_num) {
+          ASSERT_MSG(actual_num == expect_num,
+                     "Perft failed for %s with depth "
+                     "%d: expected %lu but got %lu",
+                     perft.fen.c_str(), depth, expect_num, actual_num);
           do_perft_div(board, depth);
-          ASSERT_MSG(
-              actual_num == expect_num,
-              "Perft failed for %s with depth %d: expected %lu but got %lu",
-              perft.fen.c_str(), depth, expect_num, actual_num);
         }
       });
       std::cout << "Done perft " << perft.fen << " with depth " << depth
-                << " with " << expect_num << " nodes"
-                << "\n";
+                << " with " << expect_num << " nodes\n";
       std::cout << "Took " << diff << " ns "
-                << "(" << diff / expect_num << " ns / move"
-                << "), "
-                << "(" << 1e6 * expect_num / diff << "KNps"
-                << ")"
-                << "\n";
+                << "(" << diff / expect_num << " ns / move), "
+                << "(" << 1e6 * expect_num / diff << "KNps)" << std::endl;
     }
   }
   return 0;

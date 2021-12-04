@@ -11,14 +11,15 @@
 #include "move.hpp"
 #include "simulate.hpp"
 
-int main() {
+int main(int argc, char *argv[]) {
   init_hash();
 
-  const int test_error = run_tests("tests/perft.txt", 6);
-  ASSERT_MSG(!test_error, "Tests did not complete successfully");
-  printf("Done testing!\n"
-         "====================================================================="
-         "===\n");
+  // std::string perft_file = (argc > 1) ? argv[1] : "tests/perft.txt";
+  // const int test_error = run_tests(perft_file, 6);
+  // ASSERT_MSG(!test_error, "Tests did not complete successfully");
+  // printf("Done testing!\n"
+  //        "====================================================================="
+  //        "===\n");
 
   const game_record result = manual_play();
   std::cout << "Result: " << result.result << std::endl;

@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <iostream>
 #include <map>
+#include <set>
 #include <sstream>
 #include <string>
 
@@ -290,17 +291,17 @@ hash_t Board::compute_hash() const noexcept {
 std::string Board::to_string() const noexcept {
   validate_board();
   std::stringstream result;
-  result << "+---- BOARD ----+" << '\n';
+  result << "+---+---+---+---+---+---+---+---+\n";
   for (int row = 7; row >= 0; --row) {
     result << '|';
     for (int col = 0; col < 8; ++col) {
       const square_t square = get_square_120_rc(row, col);
       const piece_t piece_idx = m_pieces[square];
-      result << char_from_piece(piece_idx) << '|';
+      result << " " << char_from_piece(piece_idx) << " |";
     }
     result << '\n';
+    result << "+---+---+---+---+---+---+---+---+\n";
   }
-  result << "+---------------+\n";
   result << "TO MOVE: ";
   result << ((m_next_move_colour == WHITE) ? "WHITE" : "BLACK") << '\n';
   result << "EN PASS: " << string_from_square(m_en_passant) << '\n';
@@ -390,9 +391,9 @@ std::vector<move_t> Board::pseudo_moves(const int _side) const noexcept {
   validate_board();
 
   std::vector<move_t> result;
-  if (m_half_move > 1000 || m_fifty_move > 75)
+  if (m_half_move > 1000 || m_fifty_move > 50)
     return result; // 50 (75) move rule
-  result.reserve(MAX_POSITION_MOVES);
+  result.reserve(START_POSITION_MOVES);
 
   const int side = (_side != INVALID_SIDE) ? _side : m_next_move_colour;
   ASSERT_MSG(side == WHITE || side == BLACK, "Invalid side (%u)", side);
@@ -592,30 +593,30 @@ std::vector<move_t> Board::pseudo_moves(const int _side) const noexcept {
 
   // Castling
   if (side == WHITE) {
-    const bool d1_attacked = square_attacked(D1, BLACK);
-    const bool e1_attacked = square_attacked(E1, BLACK);
-    const bool f1_attacked = square_attacked(F1, BLACK);
-    if (m_castle_state & WHITE_SHORT && !e1_attacked && !f1_attacked &&
-        m_pieces[F1] == INVALID_PIECE && m_pieces[G1] == INVALID_PIECE) {
-      result.push_back(castle_move(E1, G1, WHITE_KING, SHORT_CASTLE_MOVE));
-    }
-    if (m_castle_state & WHITE_LONG && !e1_attacked && !d1_attacked &&
-        m_pieces[D1] == INVALID_PIECE && m_pieces[C1] == INVALID_PIECE &&
-        m_pieces[B1] == INVALID_PIECE) {
-      result.push_back(castle_move(E1, C1, WHITE_KING, LONG_CASTLE_MOVE));
+    if (!square_attacked(E1, BLACK)) {
+      if (m_castle_state & WHITE_SHORT && m_pieces[F1] == INVALID_PIECE &&
+          m_pieces[G1] == INVALID_PIECE && m_pieces[H1] == WHITE_ROOK &&
+          !square_attacked(F1, BLACK)) {
+        result.push_back(castle_move(E1, G1, WHITE_KING, SHORT_CASTLE_MOVE));
+      }
+      if (m_castle_state & WHITE_LONG && m_pieces[D1] == INVALID_PIECE &&
+          m_pieces[C1] == INVALID_PIECE && m_pieces[B1] == INVALID_PIECE &&
+          m_pieces[A1] == WHITE_ROOK && !square_attacked(D1, BLACK)) {
+        result.push_back(castle_move(E1, C1, WHITE_KING, LONG_CASTLE_MOVE));
+      }
     }
   } else if (side == BLACK) {
-    const bool d8_attacked = square_attacked(D8, WHITE);
-    const bool e8_attacked = square_attacked(E8, WHITE);
-    const bool f8_attacked = square_attacked(F8, WHITE);
-    if (m_castle_state & BLACK_SHORT && !e8_attacked && !f8_attacked &&
-        m_pieces[F8] == INVALID_PIECE && m_pieces[G8] == INVALID_PIECE) {
-      result.push_back(castle_move(E8, G8, BLACK_KING, SHORT_CASTLE_MOVE));
-    }
-    if (m_castle_state & BLACK_LONG && !e8_attacked && !d8_attacked &&
-        m_pieces[D8] == INVALID_PIECE && m_pieces[C8] == INVALID_PIECE &&
-        m_pieces[B8] == INVALID_PIECE) {
-      result.push_back(castle_move(E8, C8, BLACK_KING, LONG_CASTLE_MOVE));
+    if (!square_attacked(E8, WHITE)) {
+      if (m_castle_state & BLACK_SHORT && m_pieces[F8] == INVALID_PIECE &&
+          m_pieces[G8] == INVALID_PIECE && m_pieces[H8] == BLACK_ROOK &&
+          !square_attacked(F8, WHITE)) {
+        result.push_back(castle_move(E8, G8, BLACK_KING, SHORT_CASTLE_MOVE));
+      }
+      if (m_castle_state & BLACK_LONG && m_pieces[D8] == INVALID_PIECE &&
+          m_pieces[C8] == INVALID_PIECE && m_pieces[B8] == INVALID_PIECE &&
+          m_pieces[A8] == BLACK_ROOK && !square_attacked(D8, WHITE)) {
+        result.push_back(castle_move(E8, C8, BLACK_KING, LONG_CASTLE_MOVE));
+      }
     }
   }
 
@@ -879,9 +880,20 @@ void Board::unmake_move() noexcept {
        "==============");
 }
 
+void print_simple_move_list(const std::vector<move_t> &move_list) {
+  std::multiset<std::string> moves;
+  for (const move_t move : move_list)
+    moves.insert(simple_string_from_move(move));
+  for (const std::string &move : moves)
+    std::cout << move << ", ";
+  std::cout << std::endl;
+}
+
 void print_move_list(const std::vector<move_t> &move_list) {
-  for (const move_t move : move_list) {
-    std::cout << string_from_move(move) << ", ";
-  }
+  std::multiset<std::string> moves;
+  for (const move_t move : move_list)
+    moves.insert(string_from_move(move));
+  for (const std::string &move : moves)
+    std::cout << move << ", ";
   std::cout << std::endl;
 }
