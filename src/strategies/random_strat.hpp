@@ -1,10 +1,10 @@
 
 #pragma once
 
-#include "strategies/strategy.hpp"
-#include "hash.hpp"
 #include "board.hpp"
+#include "hash.hpp"
 #include "move.hpp"
+#include "strategies/strategy.hpp"
 #include <vector>
 
 class RandomStrategy : Strategy {

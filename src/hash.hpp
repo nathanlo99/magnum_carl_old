@@ -2,9 +2,9 @@
 #ifndef HASH_H
 #define HASH_H
 
+#include <cmath>
 #include <cstdint>
 #include <random>
-#include <cmath>
 
 #include "defs.hpp"
 #include "piece.hpp"

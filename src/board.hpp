@@ -2,17 +2,17 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#include <array>
+#include <map>
+#include <ostream>
 #include <stdint.h>
 #include <string>
-#include <array>
 #include <vector>
-#include <ostream>
-#include <map>
 
-#include "piece.hpp"
-#include "square.hpp"
 #include "castle_state.hpp"
 #include "hash.hpp"
+#include "piece.hpp"
+#include "square.hpp"
 
 #define VARIANT_CHESS
 
@@ -50,8 +50,8 @@ struct Board {
   void validate_board() const noexcept;
 
 public:
-  constexpr static const char* startFEN =
-    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  constexpr static const char *startFEN =
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
   Board(const std::string &fen = Board::startFEN) noexcept;
 
@@ -64,8 +64,8 @@ public:
     return m_pieces[square];
   }
   inline bool can_castle(const int castle_flag) const noexcept {
-    ASSERT(castle_flag == WHITE_LONG || castle_flag == WHITE_SHORT
-      || castle_flag == BLACK_LONG || castle_flag == BLACK_SHORT);
+    ASSERT(castle_flag == WHITE_LONG || castle_flag == WHITE_SHORT ||
+           castle_flag == BLACK_LONG || castle_flag == BLACK_SHORT);
     return (m_castle_state & castle_flag) != 0;
   }
 
@@ -74,9 +74,12 @@ public:
 
   bool square_attacked(const square_t sq, const bool side) const noexcept;
   bool king_in_check() const noexcept;
-  std::vector<move_t> pseudo_moves(const int side = INVALID_SIDE) const noexcept;
+  std::vector<move_t>
+  pseudo_moves(const int side = INVALID_SIDE) const noexcept;
   std::vector<move_t> legal_moves() const noexcept;
-  inline bool is_drawn() const noexcept { return m_half_move > 1000 || m_fifty_move > 75; }
+  inline bool is_drawn() const noexcept {
+    return m_half_move > 1000 || m_fifty_move > 75;
+  }
   inline void remove_piece(const square_t sq) noexcept;
   inline void add_piece(const square_t sq, const piece_t piece) noexcept;
   inline void set_castle_state(const castle_t state) noexcept;
@@ -88,7 +91,7 @@ public:
   void unmake_move() noexcept;
 };
 
-std::ostream& operator<<(std::ostream &os, const Board& board) noexcept;
+std::ostream &operator<<(std::ostream &os, const Board &board) noexcept;
 void print_move_list(const std::vector<move_t> &move_list);
 
 #endif /* end of include guard: BOARD_H */

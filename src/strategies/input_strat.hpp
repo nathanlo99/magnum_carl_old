@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "strategies/strategy.hpp"
+#include "strategy.hpp"
 #include <iostream>
 #include <string>
 #include <vector>

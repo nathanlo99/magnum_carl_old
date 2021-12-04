@@ -20,7 +20,8 @@ hash_t enpas_hash[120];
 hash_t side_hash;
 
 void init_hash() noexcept {
-  if (hash_flag) return;
+  if (hash_flag)
+    return;
   for (unsigned sq = 0; sq < 120; ++sq) {
     if (valid_square(sq)) {
       enpas_hash[sq] = random_hash();

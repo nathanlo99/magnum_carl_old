@@ -1,0 +1,3 @@
+[submodule "references/Stockfish"]
+	path = references/Stockfish
+	url = https://github.com/official-stockfish/Stockfish
