@@ -55,15 +55,15 @@ public:
 
   Board(const std::string &fen = Board::startFEN) noexcept;
 
-  inline hash_t hash() const noexcept {
+  constexpr inline hash_t hash() const noexcept {
     ASSERT_MSG(m_hash == compute_hash(), "Hash invariant broken");
     return m_hash;
   }
-  inline piece_t piece_at(const square_t square) const noexcept {
+  constexpr inline piece_t piece_at(const square_t square) const noexcept {
     ASSERT(0 <= square && square < 120);
     return m_pieces[square];
   }
-  inline bool can_castle(const int castle_flag) const noexcept {
+  constexpr inline bool can_castle(const int castle_flag) const noexcept {
     ASSERT(castle_flag == WHITE_LONG || castle_flag == WHITE_SHORT ||
            castle_flag == BLACK_LONG || castle_flag == BLACK_SHORT);
     return (m_castle_state & castle_flag) != 0;
@@ -77,7 +77,7 @@ public:
   std::vector<move_t>
   pseudo_moves(const int side = INVALID_SIDE) const noexcept;
   std::vector<move_t> legal_moves() const noexcept;
-  inline bool is_drawn() const noexcept {
+  constexpr inline bool is_drawn() const noexcept {
     return m_half_move > 1000 || m_fifty_move > 75;
   }
   inline void remove_piece(const square_t sq) noexcept;
