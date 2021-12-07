@@ -7,6 +7,7 @@
 
 class Strategy {
 public:
-  virtual void init(Board board) = 0;
-  virtual size_t choose(Board board, const std::vector<move_t> &move_list) = 0;
+  virtual void init(const Board &board) = 0;
+  virtual move_t make_move(const Board &board,
+                           const std::vector<move_t> &move_list) = 0;
 };

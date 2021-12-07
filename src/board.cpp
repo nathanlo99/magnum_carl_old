@@ -92,8 +92,6 @@ Board::Board(const std::string &fen) noexcept {
   ASSERT(*next_chr == ' ');
 
   // Part 4: En passant square
-  // TODO: Check whether an en passant capture is even possible.
-  // If not, zero the en passant square as it is irrelevant.
   next_chr++;
   if (*next_chr == '-') {
     m_en_passant = INVALID_SQUARE;
@@ -105,8 +103,9 @@ Board::Board(const std::string &fen) noexcept {
     m_en_passant = get_square_120_rc(row, col);
     const piece_t my_pawn =
         (m_next_move_colour == WHITE) ? WHITE_PAWN : BLACK_PAWN;
-    if (m_pieces[m_en_passant - 1] != my_pawn &&
-        m_pieces[m_en_passant + 1] != my_pawn) {
+    const int row_offset = (m_next_move_colour == WHITE) ? -10 : +10;
+    if (m_pieces[m_en_passant + row_offset - 1] != my_pawn &&
+        m_pieces[m_en_passant + row_offset + 1] != my_pawn) {
       WARN("Elided en passant square");
       m_en_passant = INVALID_SQUARE;
     }
@@ -294,7 +293,7 @@ std::string Board::to_string() const noexcept {
   result << "\n";
   result << "   +---+---+---+---+---+---+---+---+\n";
   for (int row = 7; row >= 0; --row) {
-    const char row_name = '1' + (7 - row);
+    const char row_name = '1' + row;
     result << " " << row_name << " |";
     for (int col = 0; col < 8; ++col) {
       const square_t square = get_square_120_rc(row, col);

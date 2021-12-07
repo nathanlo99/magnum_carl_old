@@ -19,7 +19,9 @@ enum { MAX_PIECE_FREQ = 10 };
 // NOTE: The max number of possible moves in any position.
 // SOURCE: https://www.stmintz.com/ccc/index.php?id=424966 (cites 218)
 enum { MAX_POSITION_MOVES = 256 };
-enum { START_POSITION_MOVES = 32 };
+// NOTE: The initial size of the reserved move list when generating moves
+//       Should be close to the twice true average branching factor, which is 35
+enum { START_POSITION_MOVES = 64 };
 
 enum { WHITE = 0, BLACK = 1, INVALID_SIDE = -1 };
 
