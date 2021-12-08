@@ -74,8 +74,7 @@ public:
 
   bool square_attacked(const square_t sq, const bool side) const noexcept;
   bool king_in_check() const noexcept;
-  std::vector<move_t>
-  pseudo_moves(const int side = INVALID_SIDE) const noexcept;
+  std::vector<move_t> pseudo_moves() const noexcept;
   std::vector<move_t> legal_moves() const noexcept;
   constexpr inline bool is_drawn() const noexcept {
     return m_half_move > 1000 || m_fifty_move > 75;

@@ -15,8 +15,7 @@
 int main(int argc, char *argv[]) {
   init_hash();
 
-  std::string perft_file =
-      (argc > 1) ? argv[1] : "tests/perft_files/skip.perft";
+  std::string perft_file = (argc > 1) ? argv[1] : "tests/perft_files/big.perft";
   const int test_error = run_tests(perft_file, 6);
   ASSERT_MSG(!test_error, "Tests did not complete successfully");
   printf("Done testing!\n"

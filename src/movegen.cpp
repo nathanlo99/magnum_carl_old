@@ -9,7 +9,9 @@
 #include <string>
 #include <vector>
 
-std::vector<move_t> Board::pseudo_moves(int side) const noexcept {
+std::vector<move_t> Board::pseudo_moves() const noexcept {
+  const int side = m_next_move_colour;
+
   const auto &it = m_move_cache.find(m_hash);
   if (it != m_move_cache.end())
     return it->second;
@@ -17,12 +19,9 @@ std::vector<move_t> Board::pseudo_moves(int side) const noexcept {
   validate_board();
 
   std::vector<move_t> result;
-  if (m_half_move > 1000 || m_fifty_move > 50)
-    return result; // 50 (75) move rule
+  if (is_drawn())
+    return result;
   result.reserve(START_POSITION_MOVES);
-
-  side = (side != INVALID_SIDE) ? side : m_next_move_colour;
-  ASSERT_MSG(side == WHITE || side == BLACK, "Invalid side (%u)", side);
 
   const piece_t king_piece = (side == WHITE) ? WHITE_KING : BLACK_KING,
                 queen_piece = (side == WHITE) ? WHITE_QUEEN : BLACK_QUEEN,

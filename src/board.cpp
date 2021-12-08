@@ -329,9 +329,9 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
                 pawn_piece = (side == WHITE) ? WHITE_PAWN : BLACK_PAWN;
   const square_t king_square = m_positions[king_piece][0];
 
-  if (valid_piece(m_pieces[sq]) && get_side(m_pieces[sq] == side)) {
-    ASSERT_MSG(get_side(m_pieces[sq]) != side,
-               "Querying square attacked of own piece");
+  if (valid_piece(m_pieces[sq]) && get_side(m_pieces[sq]) == side) {
+    // WASSERT_MSG(get_side(m_pieces[sq]) != side,
+    //             "Querying square attacked of own piece");
     return false;
   }
 
@@ -344,8 +344,7 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
     while (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE)
       cur_square += offset;
     const piece_t cur_piece = m_pieces[cur_square];
-    if (valid_square(cur_square) && get_side(cur_piece) == side &&
-        is_diag(cur_piece))
+    if (get_side(cur_piece) == side && is_diag(cur_piece))
       return true;
   }
 
@@ -358,8 +357,7 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
     while (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE)
       cur_square += offset;
     const piece_t cur_piece = m_pieces[cur_square];
-    if (valid_square(cur_square) && get_side(cur_piece) == side &&
-        is_ortho(cur_piece))
+    if (get_side(cur_piece) == side && is_ortho(cur_piece))
       return true;
   }
 
@@ -370,11 +368,11 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
       return true;
 
   // Pawns
-  const auto &pawn_offsets = {(side == WHITE) ? -9 : 9,
-                              (side == WHITE) ? -11 : 11};
-  for (const int offset : pawn_offsets)
-    if (m_pieces[sq + offset] == pawn_piece)
-      return true;
+  const int offset1 = (side == WHITE) ? -9 : 9;
+  const int offset2 = (side == WHITE) ? -11 : 11;
+  if (m_pieces[sq + offset1] == pawn_piece ||
+      m_pieces[sq + offset2] == pawn_piece)
+    return true;
 
   return false;
 }

@@ -12,19 +12,19 @@ SRC_PATH = src
 # Space-separated pkg-config libraries used by this project
 LIBS =
 # General compiler flags
-COMPILE_FLAGS = -std=c++17 -Wall -Wextra -Werror -pedantic -Wno-type-limits -Wno-unused-variable -Wno-unused-parameter -march=native
+COMPILE_FLAGS = -DLUT_PIECE -std=c++17 -Wall -Wextra -Werror -pedantic -Wno-type-limits -Wno-unused-variable -Wno-unused-parameter -march=native
 # Additional release-specific flags
-RCOMPILE_FLAGS = -Ofast -ffast-math -fwrapv -DINVISIBLE_ASSERTS
+RCOMPILE_FLAGS = -Ofast -ffast-math -fwrapv -funroll-loops -DINVISIBLE_ASSERTS -g
 # Additional debug-specific flags
-DCOMPILE_FLAGS = -DDEBUG -fsanitize=address,undefined -O2 -g
+DCOMPILE_FLAGS = -DDEBUG -fsanitize=undefined -O2 -g
 # Add additional include paths
 INCLUDES = -I src/ # -I /usr/local/Cellar/boost/1.72.0
 # General linker settings
-LINK_FLAGS = -march=native -flto
+LINK_FLAGS = -march=native -flto -g
 # Additional release-specific linker settings
 RLINK_FLAGS = -Ofast -march=native -flto
 # Additional debug-specific linker settings
-DLINK_FLAGS = -fsanitize=address,undefined -O2
+DLINK_FLAGS = -O2 -fsanitize=undefined -g
 # Destination directory, like a jail or mounted system
 DESTDIR = /
 # Install path (bin/ is appended automatically)
