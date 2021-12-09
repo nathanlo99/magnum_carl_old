@@ -15,14 +15,17 @@
 int main(int argc, char *argv[]) {
   init_hash();
 
-  std::string perft_file = (argc > 1) ? argv[1] : "tests/perft_files/big.perft";
+  /*
+  std::string perft_file =
+      (argc > 1) ? argv[1] : "tests/perft_files/skip.perft";
   const int test_error = run_tests(perft_file, 6);
   ASSERT_MSG(!test_error, "Tests did not complete successfully");
   printf("Done testing!\n"
          "====================================================================="
          "===\n");
+         */
 
-  const game_record result = manual_play();
+  const game_record result = manual_play_black();
   switch (result.result) {
   case -1:
     std::cout << "Black wins!" << std::endl;
@@ -47,7 +50,7 @@ int main(int argc, char *argv[]) {
         std::cout << results[-1] << ", " << results[0] << ", " << results[1]
                   << std::endl;
       }
-      const auto &result = simulate_random();
+      const auto &result = simulate_negamax();
       num_moves += result.moves.size();
       results[result.result]++;
     }

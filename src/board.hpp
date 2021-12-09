@@ -1,6 +1,5 @@
 
-#ifndef BOARD_H
-#define BOARD_H
+#pragma once
 
 #include <array>
 #include <map>
@@ -70,7 +69,7 @@ public:
   }
 
   std::string fen() const noexcept;
-  std::string to_string() const noexcept;
+  std::string to_string(const int side = WHITE) const noexcept;
 
   bool square_attacked(const square_t sq, const bool side) const noexcept;
   bool king_in_check() const noexcept;
@@ -93,5 +92,3 @@ public:
 std::ostream &operator<<(std::ostream &os, const Board &board) noexcept;
 void print_move_list(const std::vector<move_t> &move_list);
 void print_simple_move_list(const std::vector<move_t> &move_list);
-
-#endif /* end of include guard: BOARD_H */

@@ -1,6 +1,5 @@
 
-#ifndef HASH_H
-#define HASH_H
+#pragma once
 
 #include <cmath>
 #include <cstdint>
@@ -17,5 +16,3 @@ extern hash_t enpas_hash[120];
 extern hash_t side_hash;
 
 void init_hash() noexcept;
-
-#endif /* end of include guard: HASH_H */

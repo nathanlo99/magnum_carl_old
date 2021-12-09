@@ -1,5 +1,6 @@
 
 #include "board.hpp"
+#include "evaluate.hpp"
 #include "hash.hpp"
 #include "move.hpp"
 #include "piece.hpp"
@@ -133,7 +134,7 @@ Board::Board(const std::string &fen) noexcept {
     full_move = 10 * full_move + (*next_chr - '0');
     next_chr++;
   }
-  m_half_move = 2 * full_move + m_next_move_colour;
+  m_half_move = 2 * (full_move - 1) + m_next_move_colour;
   ASSERT_MSG(next_chr == end_ptr, "FEN string too long");
 
   m_hash = compute_hash();
@@ -142,8 +143,7 @@ Board::Board(const std::string &fen) noexcept {
 
 void Board::validate_board() const noexcept {
 #if defined(DEBUG)
-  static std::array<unsigned, 16> piece_count;
-  piece_count.fill(0);
+  std::array<unsigned, 16> piece_count = {0};
   for (unsigned sq = 0; sq < 120; ++sq) {
     ASSERT_MSG(valid_piece(m_pieces[sq]) || m_pieces[sq] == INVALID_PIECE,
                "Piece %u at %u is neither valid nor INVALID_PIECE",
@@ -261,7 +261,7 @@ std::string Board::fen() const noexcept {
   result << m_fifty_move << ' ';
 
   // Part 6: Full move counter
-  result << (m_half_move / 2);
+  result << (m_half_move / 2 + 1);
 
   return result.str();
 }
@@ -287,35 +287,56 @@ hash_t Board::compute_hash() const noexcept {
   return res;
 }
 
-std::string Board::to_string() const noexcept {
+std::string Board::to_string(const int side) const noexcept {
   validate_board();
   std::stringstream result;
   result << "\n";
-  result << "   +---+---+---+---+---+---+---+---+\n";
-  for (int row = 7; row >= 0; --row) {
-    const char row_name = '1' + row;
-    result << " " << row_name << " |";
-    for (int col = 0; col < 8; ++col) {
-      const square_t square = get_square_120_rc(row, col);
-      const piece_t piece_idx = m_pieces[square];
-      result << " " << char_from_piece(piece_idx) << " |";
-    }
-    result << '\n';
+  if (side == WHITE) {
     result << "   +---+---+---+---+---+---+---+---+\n";
+    for (int row = 7; row >= 0; --row) {
+      const char row_name = '1' + row;
+      result << " " << row_name << " |";
+      for (int col = 0; col < 8; ++col) {
+        const square_t square = get_square_120_rc(row, col);
+        const piece_t piece_idx = m_pieces[square];
+        result << " " << char_from_piece(piece_idx) << " |";
+      }
+      result << "\n";
+      result << "   +---+---+---+---+---+---+---+---+\n";
+    }
+    result << "     a   b   c   d   e   f   g   h\n\n";
+  } else {
+    result << "   +---+---+---+---+---+---+---+---+\n";
+    for (int row = 0; row <= 7; ++row) {
+      const char row_name = '1' + row;
+      result << " " << row_name << " |";
+      for (int col = 7; col >= 0; --col) {
+        const square_t square = get_square_120_rc(row, col);
+        const piece_t piece_idx = m_pieces[square];
+        result << " " << char_from_piece(piece_idx) << " |";
+      }
+      result << "\n";
+      result << "   +---+---+---+---+---+---+---+---+\n";
+    }
+    result << "     h   g   f   e   d   c   b   a\n\n";
   }
-  result << "     a   b   c   d   e   f   g   h\n\n";
   result << "TO MOVE: ";
-  result << ((m_next_move_colour == WHITE) ? "WHITE" : "BLACK") << '\n';
-  result << "EN PASS: " << string_from_square(m_en_passant) << '\n';
-  result << "FIFTY  : " << m_fifty_move << '\n';
-  result << "MOVE#  : " << (m_half_move / 2) << '\n';
-  result << "HALF#  : " << m_half_move << '\n';
+  result << ((m_next_move_colour == WHITE) ? "WHITE" : "BLACK") << "\n";
+  result << "EN PASS: " << string_from_square(m_en_passant) << "\n";
+  result << "FIFTY  : " << m_fifty_move << "\n";
+  result << "MOVE#  : " << (m_half_move / 2) << "\n";
+  result << "HALF#  : " << m_half_move << "\n";
   result << "HASH   : ";
-  result << std::setw(16) << std::setfill('0') << std::hex << hash() << '\n';
-  result << "FEN    : " << fen() << '\n';
+  result << std::setw(16) << std::setfill('0') << std::hex << hash() << std::dec
+         << "\n";
+  result << "FEN    : " << fen() << "\n";
   if (!m_history.empty()) {
-    result << "LAST MV: " << string_from_move(m_history.back().move) << '\n';
+    result << "LAST MV: " << string_from_move(m_history.back().move) << "\n";
   }
+  result << "EVAL   : " << static_evaluate_board(*this) << "\n";
+  move_t best_move = get_best_move(*this);
+  if (best_move != 0)
+    result << "BEST MV: " << string_from_move(best_move) << "\n";
   return result.str();
 }
 
@@ -473,6 +494,10 @@ bool Board::make_move(const move_t move) noexcept {
   INFO("Move flag is %s", string_from_flag(flag).c_str());
   INFO("Promoted: %d, Captured: %d", move_promoted(move), move_captured(move));
   const bool cur_side = m_next_move_colour, other_side = !cur_side;
+
+  ASSERT_MSG(get_side(moved) == cur_side,
+             "Attempted to move other player's pieces: %s",
+             string_from_move(move).c_str());
 
   // Bookkeeping
   history_t entry;

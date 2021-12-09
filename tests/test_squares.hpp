@@ -1,6 +1,5 @@
 
-#ifndef TEST_SQUARES_H
-#define TEST_SQUARES_H
+#pragma once
 
 #include "../src/assert.hpp"
 #include "../src/square.hpp"
@@ -423,5 +422,3 @@ inline int test_squares() {
 }
 return 0;
 }
-
-#endif /* end of include guard: TEST_SQUARES_H */

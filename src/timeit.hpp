@@ -1,5 +1,8 @@
 
+#pragma once
+
 #include <chrono>
+#include <utility>
 
 template <typename Func, typename... Args>
 size_t timeit(Func f, Args &&...args) {

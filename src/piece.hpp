@@ -1,6 +1,5 @@
 
-#ifndef PIECE_H
-#define PIECE_H
+#pragma once
 
 #include <cstdint> // for uint8_t
 #include <string>
@@ -175,5 +174,3 @@ constexpr inline bool opposite_colours(const piece_t piece1,
   ASSERT_MSG(valid_piece(piece2), "Invalid piece2 (%u)", piece2);
   return (piece1 ^ piece2) >> 3;
 }
-
-#endif /* end of include guard: PIECE_H */

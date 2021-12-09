@@ -1,6 +1,5 @@
 
-#ifndef MOVE_H
-#define MOVE_H
+#pragma once
 
 #include <cstdint>
 #include <iostream>
@@ -132,6 +131,9 @@ inline std::string simple_string_from_move(const move_t move) {
   std::stringstream res;
   res << string_from_square(from);
   res << string_from_square(to);
+  if (move_promoted(move)) {
+    res << tolower(char_from_piece(promoted_piece(move)));
+  }
   return res.str();
 }
 
@@ -337,5 +339,3 @@ constexpr inline move_t castle_move(const square_t from, const square_t to,
                                     const piece_t moving, const MoveFlag flag) {
   return create_move(from, to, flag, moving, INVALID_PIECE);
 }
-
-#endif /* end of include guard: MOVE_H */

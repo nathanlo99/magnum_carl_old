@@ -1,6 +1,5 @@
 
-#ifndef TEST_PIECES_H
-#define TEST_PIECES_H
+#pragma once
 
 #include "../src/assert.hpp"
 #include "../src/piece.hpp"
@@ -159,5 +158,3 @@ ASSERT(is_ortho(BLACK_ROOK));
 }
 return 0;
 }
-
-#endif /* end of include guard: TEST_PIECES_H */

@@ -1,6 +1,5 @@
 
-#ifndef TEST_BOARD_H
-#define TEST_BOARD_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -43,5 +42,3 @@ inline int test_board() {
   }
   return fail_flag;
 }
-
-#endif /* end of include guard: TEST_BOARD_H */

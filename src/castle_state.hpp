@@ -1,6 +1,5 @@
 
-#ifndef CASTLE_STATE_H
-#define CASTLE_STATE_H
+#pragma once
 
 #include <cstdint>
 
@@ -13,5 +12,3 @@ enum Castle {
   BLACK_SHORT = 0x4,
   BLACK_LONG = 0x8,
 };
-
-#endif /* end of include guard: CASTLE_STATE_H */

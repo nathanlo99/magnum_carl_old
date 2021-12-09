@@ -1,6 +1,5 @@
 
-#ifndef ASSERT_H
-#define ASSERT_H
+#pragma once
 
 #include <cstdio>
 #include <cstdlib>
@@ -103,5 +102,3 @@
   do {                                                                         \
   } while (0)
 #endif
-
-#endif /* end of include guard: ASSERT_H */

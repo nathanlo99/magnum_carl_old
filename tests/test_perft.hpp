@@ -1,6 +1,5 @@
 
-#ifndef TEST_PERFT_H
-#define TEST_PERFT_H
+#pragma once
 
 #include "../src/move.hpp"
 #include "../src/timeit.hpp"
@@ -93,9 +92,12 @@ std::map<std::string, size_t> get_stockfish_perft(const std::string &fen,
   std::map<std::string, size_t> expected;
   std::string line;
   while (std::getline(out, line)) {
-    if (line.size() < 4 || line[4] != ':')
+    if (line.size() < 4)
       continue;
-    expected[line.substr(0, 4)] = std::stol(line.substr(6));
+    if (line[4] == ':')
+      expected[line.substr(0, 4)] = std::stol(line.substr(6));
+    if (line[5] == ':')
+      expected[line.substr(0, 5)] = std::stol(line.substr(7));
   }
   return expected;
 }
@@ -168,5 +170,3 @@ bool test_perft(const std::string &file_name, int max_depth) {
   }
   return 0;
 }
-
-#endif /* end of include guard: TEST_PERFT_H */

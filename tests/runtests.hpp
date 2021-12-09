@@ -1,4 +1,6 @@
 
+#pragma once
+
 #include "test_board.hpp"
 #include "test_perft.hpp"
 #include "test_pieces.hpp"

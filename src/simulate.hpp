@@ -3,6 +3,7 @@
 
 #include "board.hpp"
 #include "strategies/input_strat.hpp"
+#include "strategies/negamax_strat.hpp"
 #include "strategies/random_strat.hpp"
 #include <iostream>
 #include <string>
@@ -40,10 +41,18 @@ game_record simulate_game(WhiteStrategy white_strat, BlackStrategy black_strat,
   return result;
 }
 
-game_record manual_play(const std::string &fen = Board::startFEN) {
-  return simulate_game(InputStrategy(), RandomStrategy(), fen);
+game_record manual_play_white(const std::string &fen = Board::startFEN) {
+  return simulate_game(InputStrategy(), NegamaxStrategy(), fen);
+}
+
+game_record manual_play_black(const std::string &fen = Board::startFEN) {
+  return simulate_game(NegamaxStrategy(), InputStrategy(), fen);
 }
 
 game_record simulate_random(const std::string &fen = Board::startFEN) {
   return simulate_game(RandomStrategy(), RandomStrategy(), fen);
+}
+
+game_record simulate_negamax(const std::string &fen = Board::startFEN) {
+  return simulate_game(NegamaxStrategy(), NegamaxStrategy(), fen);
 }
