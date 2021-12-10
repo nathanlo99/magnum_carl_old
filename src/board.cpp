@@ -320,23 +320,23 @@ std::string Board::to_string(const int side) const noexcept {
     }
     result << "     h   g   f   e   d   c   b   a\n\n";
   }
-  result << "TO MOVE: ";
+  result << "TO MOVE : ";
   result << ((m_next_move_colour == WHITE) ? "WHITE" : "BLACK") << "\n";
-  result << "EN PASS: " << string_from_square(m_en_passant) << "\n";
-  result << "FIFTY  : " << m_fifty_move << "\n";
-  result << "MOVE#  : " << (m_half_move / 2) << "\n";
-  result << "HALF#  : " << m_half_move << "\n";
-  result << "HASH   : ";
+  result << "EN PASS : " << string_from_square(m_en_passant) << "\n";
+  result << "FIFTY   : " << m_fifty_move << "\n";
+  result << "MOVE#   : " << (m_half_move / 2) << "\n";
+  result << "HALF#   : " << m_half_move << "\n";
+  result << "HASH    : ";
   result << std::setw(16) << std::setfill('0') << std::hex << hash() << std::dec
          << "\n";
-  result << "FEN    : " << fen() << "\n";
+  result << "FEN     : " << fen() << "\n";
   if (!m_history.empty()) {
-    result << "LAST MV: " << string_from_move(m_history.back().move) << "\n";
+    result << "LAST MV : " << string_from_move(m_history.back().move) << "\n";
   }
-  result << "EVAL   : " << static_evaluate_board(*this) << "\n";
-  move_t best_move = get_best_move(*this);
-  if (best_move != 0)
-    result << "BEST MV: " << string_from_move(best_move) << "\n";
+  const int evaluation = 0; // evaluate_board(*this);
+  const int side_evaluation =
+      (m_next_move_colour == WHITE) ? evaluation : -evaluation;
+  result << "EVAL    : " << side_evaluation << "\n";
   return result.str();
 }
 
@@ -496,8 +496,8 @@ bool Board::make_move(const move_t move) noexcept {
   const bool cur_side = m_next_move_colour, other_side = !cur_side;
 
   ASSERT_MSG(get_side(moved) == cur_side,
-             "Attempted to move other player's pieces: %s",
-             string_from_move(move).c_str());
+             "Attempted to move other player's pieces: %s\n%s\n",
+             string_from_move(move).c_str(), to_string().c_str());
 
   // Bookkeeping
   history_t entry;

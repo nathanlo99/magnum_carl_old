@@ -77,11 +77,16 @@ constexpr const int *piece_square_tables[16] = {
     bishop_table, knight_table, king_opening_table, empty_table, //
 };
 
-constexpr square_t flip_square(square_t sq) { return sq + 56 - (sq / 8) * 16; }
+constexpr inline square_t flip_square(const square_t sq) {
+  return sq + 56 - (sq / 8) * 16;
+}
 
-int static_evaluate_board(const Board &board) {
-  if (board.is_drawn())
+int static_evaluate_board(const Board &board, const int side) {
+  if (board.legal_moves().empty()) {
+    return board.king_in_check() ? -90000 : 0;
+  } else if (board.is_drawn()) {
     return 0;
+  }
 
   int result = 0;
   for (piece_t piece = 0; piece < 16; ++piece) {
@@ -109,50 +114,75 @@ int static_evaluate_board(const Board &board) {
       }
     }
   }
-  return result;
+  return (side == WHITE) ? result : -result;
+}
+
+int quiescence_search(Board &board, int alpha = -SCORE_INFINITY,
+                      int beta = SCORE_INFINITY, int depth = 0) {
+  const auto legal_captures =
+      board.legal_moves(MOVEGEN_CAPTURES | MOVEGEN_PROMOTIONS);
+  if (legal_captures.empty()) {
+    if (board.legal_moves().empty()) {
+      return board.king_in_check() ? -90000 : 0;
+    }
+    return static_evaluate_board(board, board.m_next_move_colour);
+  }
+
+  for (const move_t next_move : legal_captures) {
+    board.make_move(next_move);
+    const int value = -quiescence_search(board, -beta, -alpha, depth + 1);
+    if (value >= beta) {
+      board.unmake_move();
+      return value;
+    }
+    if (value > alpha)
+      alpha = value;
+    board.unmake_move();
+  }
+  return alpha;
 }
 
 const int SEARCH_DEPTH = 4;
 
-int negamax(Board &board, move_t &best_move, int depth) {
-  if (depth == 0) {
-    const int static_eval = static_evaluate_board(board);
-    return board.m_next_move_colour == WHITE ? static_eval : -static_eval;
+int alpha_beta(Board &board, move_t &best_move, int alpha = -SCORE_INFINITY,
+               int beta = SCORE_INFINITY, int depth = SEARCH_DEPTH) {
+
+  const auto legal_moves = board.legal_moves();
+  if (legal_moves.empty()) {
+    return board.king_in_check() ? -90000 : 0;
+  } else if (board.is_drawn()) {
+    return 0;
+  } else if (depth == 0) {
+    return quiescence_search(board, alpha, beta);
   }
 
+  best_move = 0;
   move_t tmp_move;
-
-  int result = -1000000;
-  int legal_moves = 0;
-  for (const move_t next_move : board.pseudo_moves()) {
-    if (board.make_move(next_move)) {
-      legal_moves++;
-
-      const int child_value = -negamax(board, tmp_move, depth - 1);
-      if (child_value > result) {
-        result = child_value;
-        best_move = next_move;
-      }
+  for (const move_t next_move : board.legal_moves()) {
+    board.make_move(next_move);
+    const int value = -alpha_beta(board, tmp_move, -beta, -alpha, depth - 1);
+    if (value >= beta) {
+      best_move = next_move;
+      board.unmake_move();
+      return value;
+    }
+    if (value > alpha) {
+      alpha = value;
+      best_move = next_move;
     }
     board.unmake_move();
   }
-
-  if (legal_moves == 0) {
-    best_move = 0;
-    return board.king_in_check() ? -90000 : 0;
-  }
-  return result;
+  return alpha;
 }
 
-int evaluate_board(const Board &board) {
+int evaluate_board(const Board &board, move_t &best_move) {
   Board tmp(board);
-  move_t best_move;
-  return negamax(tmp, best_move, SEARCH_DEPTH);
+  return alpha_beta(tmp, best_move);
 }
 
 move_t get_best_move(const Board &board) {
   Board tmp(board);
-  move_t best_move;
-  negamax(tmp, best_move, SEARCH_DEPTH);
+  move_t best_move = 0;
+  alpha_beta(tmp, best_move);
   return best_move;
 }

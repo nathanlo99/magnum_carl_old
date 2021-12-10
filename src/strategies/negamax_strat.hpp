@@ -13,7 +13,10 @@ public:
   void init(const Board &board) override {}
   move_t make_move(const Board &board,
                    const std::vector<move_t> &move_list) override {
-    const move_t best_move = get_best_move(board);
+    move_t best_move;
+    const int value = evaluate_board(board, best_move);
+    std::cout << "Negamax strategy evaluates this position at " << value
+              << " in its favour" << std::endl;
     return best_move;
   }
 };

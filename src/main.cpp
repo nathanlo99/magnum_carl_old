@@ -15,7 +15,6 @@
 int main(int argc, char *argv[]) {
   init_hash();
 
-  /*
   std::string perft_file =
       (argc > 1) ? argv[1] : "tests/perft_files/skip.perft";
   const int test_error = run_tests(perft_file, 6);
@@ -23,9 +22,8 @@ int main(int argc, char *argv[]) {
   printf("Done testing!\n"
          "====================================================================="
          "===\n");
-         */
 
-  const game_record result = manual_play_black();
+  const game_record result = manual_play_white();
   switch (result.result) {
   case -1:
     std::cout << "Black wins!" << std::endl;
@@ -40,24 +38,28 @@ int main(int argc, char *argv[]) {
     break;
   }
 
-  const size_t num_games = 1000000;
+  const size_t num_games = 10;
   size_t num_moves = 0;
   std::map<size_t, int> results;
   const auto diff = timeit([&] {
     for (size_t i = 0; i < num_games; ++i) {
-      if (i % 2000 == 0) {
-        std::cout << i << std::endl;
-        std::cout << results[-1] << ", " << results[0] << ", " << results[1]
-                  << std::endl;
-      }
       const auto &result = simulate_negamax();
       num_moves += result.moves.size();
       results[result.result]++;
+      if (i % 1 == 0) {
+        std::cout << "After " << i << " games, white won: " << results[1]
+                  << ", black won: " << results[-1] << " and there were "
+                  << results[0] << " draws" << std::endl;
+        const std::string last_result = (result.result == 0)
+                                            ? "The game was drawn"
+                                        : (result.result == 1) ? "White won"
+                                                               : "Black won";
+        std::cout << last_result << " in " << result.moves.size() << " moves"
+                  << std::endl;
+      }
     }
   });
-  std::cout << "Took " << diff << " ns "
-            << "(" << diff / num_moves << " ns / move), "
-            << "(" << 1e6 * num_moves / diff << "KNps)" << std::endl;
-  std::cout << results[0] << ", " << results[1] << ", " << results[2]
-            << std::endl;
+  std::cout << "Took " << (diff / 1e9) << " s "
+            << "(" << (diff / num_moves) / 1e6 << " ms / move), "
+            << "(" << 1e9 * num_moves / diff << "Nps)" << std::endl;
 }

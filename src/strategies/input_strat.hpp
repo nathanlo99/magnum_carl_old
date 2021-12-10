@@ -13,6 +13,7 @@ public:
                    const std::vector<move_t> &move_list) override {
     std::cout << board.to_string(board.m_next_move_colour) << std::endl;
     std::string input;
+    std::cout << "Enter a move: " << std::flush;
     while (std::getline(std::cin, input)) {
       for (const move_t move : move_list) {
         if (input == string_from_move(move))
@@ -21,6 +22,8 @@ public:
       std::cout << "Invalid move: " << input << std::endl;
       std::cout << "Legal moves here are: " << std::endl;
       print_move_list(move_list);
+
+      std::cout << "Try again: " << std::flush;
     }
     throw std::runtime_error("No input");
   }

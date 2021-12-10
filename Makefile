@@ -16,7 +16,7 @@ COMPILE_FLAGS = -DLUT_PIECE -std=c++17 -Wall -Wextra -Werror -pedantic -Wno-type
 # Additional release-specific flags
 RCOMPILE_FLAGS = -Ofast -ffast-math -fwrapv -funroll-loops -DINVISIBLE_ASSERTS -g
 # Additional debug-specific flags
-DCOMPILE_FLAGS = -DDEBUG -fsanitize=undefined -O2 -g
+DCOMPILE_FLAGS = -DDEBUG -fsanitize=undefined -O3 -g
 # Add additional include paths
 INCLUDES = -I src/ # -I /usr/local/Cellar/boost/1.72.0
 # General linker settings
