@@ -27,7 +27,7 @@ game_record simulate_game(WhiteStrategy white_strat, BlackStrategy black_strat,
     const auto &move_list = board.legal_moves();
     if (board.is_drawn() || move_list.empty())
       break;
-    const move_t move = (board.m_next_move_colour == WHITE)
+    const move_t move = (board.m_side_to_move == WHITE)
                             ? white_strat.make_move(board, move_list)
                             : black_strat.make_move(board, move_list);
     board.make_move(move);
@@ -36,7 +36,7 @@ game_record simulate_game(WhiteStrategy white_strat, BlackStrategy black_strat,
   if (board.is_drawn() || !board.king_in_check()) {
     result.result = 0;
   } else {
-    result.result = (board.m_next_move_colour == WHITE) ? -1 : 1;
+    result.result = (board.m_side_to_move == WHITE) ? -1 : 1;
   }
   return result;
 }

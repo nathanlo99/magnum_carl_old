@@ -11,7 +11,7 @@ public:
   void init(const Board &board) override {}
   move_t make_move(const Board &board,
                    const std::vector<move_t> &move_list) override {
-    std::cout << board.to_string(board.m_next_move_colour) << std::endl;
+    std::cout << board.to_string(board.m_side_to_move) << std::endl;
     std::string input;
     std::cout << "Enter a move: " << std::flush;
     while (std::getline(std::cin, input)) {

@@ -156,7 +156,7 @@ int quiescence_search(Board &board, int alpha = -SCORE_INFINITY,
     if (board.legal_moves().empty()) {
       return board.king_in_check() ? -90000 : 0;
     }
-    return static_evaluate_board(board, board.m_next_move_colour);
+    return static_evaluate_board(board, board.m_side_to_move);
   }
 
   for (const move_t next_move : legal_captures) {

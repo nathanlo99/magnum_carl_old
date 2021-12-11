@@ -13,19 +13,27 @@
 static std::map<std::pair<int, hash_t>, std::vector<move_t>> pseudo_move_memo;
 
 std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
-  const int side = m_next_move_colour;
+  const int side = m_side_to_move;
 
+  // Check whether this position and spec has already been computed, return the
+  // cached value if true
   const auto &it = pseudo_move_memo.find(std::make_pair(spec, m_hash));
   if (it != pseudo_move_memo.end()) {
     // TODO: Do at least one more check here in case of hash collision?
     return it->second;
   }
 
+  // In debug mode, check that invariants are maintained
   validate_board();
 
   std::vector<move_t> result;
+  // If the fifty move rule applies, or the game has exceeded 1000 plies,
+  // declare a draw and do not generate any further moves
   if (is_drawn())
     return result;
+
+  // Reserve some starting amount of space for moves, this is set to 64, roughly
+  // twice the average branching factor
   result.reserve(START_POSITION_MOVES);
 
   const piece_t king_piece = (side == WHITE) ? WHITE_KING : BLACK_KING,
@@ -44,10 +52,10 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
 
   // Queens
   INFO("Generating queen moves");
-  for (unsigned queen_idx = 0; queen_idx < m_num_pieces[queen_piece];
-       ++queen_idx) {
+  const size_t num_queens = m_num_pieces[queen_piece];
+  for (unsigned queen_idx = 0; queen_idx < num_queens; ++queen_idx) {
     const square_t start = m_positions[queen_piece][queen_idx];
-    for (int offset : {-11, -10, -9, -1, 1, 9, 10, 11}) {
+    for (const int offset : {-11, -10, -9, -1, 1, 9, 10, 11}) {
       square_t cur_square = start + offset;
       while (valid_square(cur_square) &&
              m_pieces[cur_square] == INVALID_PIECE) {
@@ -71,9 +79,10 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
 
   // Rooks
   INFO("Generating rook moves");
-  for (unsigned rook_idx = 0; rook_idx < m_num_pieces[rook_piece]; ++rook_idx) {
+  const size_t num_rooks = m_num_pieces[rook_piece];
+  for (unsigned rook_idx = 0; rook_idx < num_rooks; ++rook_idx) {
     const square_t start = m_positions[rook_piece][rook_idx];
-    for (int offset : {-10, -1, 1, 10}) {
+    for (const int offset : {-10, -1, 1, 10}) {
       square_t cur_square = start + offset;
       while (valid_square(cur_square) &&
              m_pieces[cur_square] == INVALID_PIECE) {
@@ -97,8 +106,8 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
 
   // Bishops
   INFO("Generating bishop moves");
-  for (unsigned bishop_idx = 0; bishop_idx < m_num_pieces[bishop_piece];
-       ++bishop_idx) {
+  const size_t num_bishops = m_num_pieces[bishop_piece];
+  for (unsigned bishop_idx = 0; bishop_idx < num_bishops; ++bishop_idx) {
     const square_t start = m_positions[bishop_piece][bishop_idx];
     for (const int offset : {-11, -9, 9, 11}) {
       square_t cur_square = start + offset;
@@ -124,16 +133,17 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
 
   // Knights
   INFO("Generating knight moves");
-  for (unsigned knight_idx = 0; knight_idx < m_num_pieces[knight_piece];
-       ++knight_idx) {
+  const size_t num_knights = m_num_pieces[knight_piece];
+  for (unsigned knight_idx = 0; knight_idx < num_knights; ++knight_idx) {
     const square_t start = m_positions[knight_piece][knight_idx];
     for (const int offset : {-21, -19, -12, -8, 8, 12, 19, 21}) {
       const square_t cur_square = start + offset;
-      if (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE) {
+      if (!valid_square(cur_square))
+        continue;
+      if (m_pieces[cur_square] == INVALID_PIECE) {
         if (spec & MOVEGEN_NORMAL)
           result.push_back(quiet_move(start, cur_square, knight_piece));
-      } else if (valid_square(cur_square) &&
-                 opposite_colours(knight_piece, m_pieces[cur_square]) &&
+      } else if (opposite_colours(knight_piece, m_pieces[cur_square]) &&
                  !is_king(m_pieces[cur_square])) {
         if (spec & MOVEGEN_CAPTURES)
           result.push_back(capture_move(start, cur_square, knight_piece,
@@ -144,7 +154,8 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
 
   // Pawns
   INFO("Generating pawn moves");
-  for (unsigned pawn_idx = 0; pawn_idx < m_num_pieces[pawn_piece]; ++pawn_idx) {
+  const size_t num_pawns = m_num_pieces[pawn_piece];
+  for (unsigned pawn_idx = 0; pawn_idx < num_pawns; ++pawn_idx) {
     const square_t start = m_positions[pawn_piece][pawn_idx];
     const int offset = (side == WHITE) ? 10 : -10;
     const square_t cur_square = start + offset;
@@ -161,18 +172,21 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
           m_pieces[start - 20] == INVALID_PIECE) {
         result.push_back(double_move(start, start - 20, pawn_piece));
       }
+    }
 
-      // Single pawn moves
-      if (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE) {
-        if (get_square_row(cur_square) == RANK_1 ||
-            get_square_row(cur_square) == RANK_8) {
+    // Single pawn moves
+    if (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE) {
+      if (get_square_row(cur_square) == RANK_1 ||
+          get_square_row(cur_square) == RANK_8) {
+        if (spec & MOVEGEN_CAPTURES) {
           for (const piece_t promote_piece : promote_pieces) {
             result.push_back(
                 promote_move(start, cur_square, pawn_piece, promote_piece));
           }
-        } else {
-          result.push_back(quiet_move(start, start + offset, pawn_piece));
         }
+      } else {
+        if (spec & MOVEGEN_NORMAL)
+          result.push_back(quiet_move(start, start + offset, pawn_piece));
       }
     }
 
@@ -210,16 +224,22 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
               capture_move(start, capture2, pawn_piece, m_pieces[capture2]));
         }
       }
+    }
+  }
 
-      // En-pass capture
-      if (m_en_passant != INVALID_SQUARE) {
-        if (capture1 == m_en_passant && m_pieces[capture1] == INVALID_PIECE) {
-          result.push_back(en_passant_move(start, m_en_passant, pawn_piece));
-        }
-        if (capture2 == m_en_passant && m_pieces[capture2] == INVALID_PIECE) {
-          result.push_back(en_passant_move(start, m_en_passant, pawn_piece));
-        }
-      }
+  // En-passant capture
+  if (spec & MOVEGEN_CAPTURES && m_en_passant != INVALID_SQUARE) {
+    const int offset = (side == WHITE) ? 10 : -10;
+    const square_t start1 = m_en_passant + 1 - offset;
+    const square_t start2 = m_en_passant - 1 - offset;
+    // 'start1' and 'start2' are the two possible starting squares for an
+    // en-passant capture: we don't have to check that they are valid since
+    // invalid squares will always have invalid pieces
+    if (m_pieces[start1] == pawn_piece) {
+      result.push_back(en_passant_move(start1, m_en_passant, pawn_piece));
+    }
+    if (m_pieces[start2] == pawn_piece) {
+      result.push_back(en_passant_move(start2, m_en_passant, pawn_piece));
     }
   }
 
@@ -229,14 +249,14 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
   for (const int offset : {-11, -10, -9, -1, 1, 9, 10, 11}) {
     const square_t cur_square = start + offset;
     const piece_t piece = m_pieces[cur_square];
-    if (valid_square(cur_square)) {
-      if (piece == INVALID_PIECE) {
-        if (spec & MOVEGEN_NORMAL)
-          result.push_back(quiet_move(start, cur_square, king_piece));
-      } else if (opposite_colours(king_piece, piece) && !is_king(piece)) {
-        if (spec & MOVEGEN_CAPTURES)
-          result.push_back(capture_move(start, cur_square, king_piece, piece));
-      }
+    if (!valid_square(cur_square))
+      continue;
+    if (piece == INVALID_PIECE) {
+      if (spec & MOVEGEN_NORMAL)
+        result.push_back(quiet_move(start, cur_square, king_piece));
+    } else if (opposite_colours(king_piece, piece) && !is_king(piece)) {
+      if (spec & MOVEGEN_CAPTURES)
+        result.push_back(capture_move(start, cur_square, king_piece, piece));
     }
   }
 

@@ -6,6 +6,7 @@
 #include <ostream>
 #include <stdint.h>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "castle_state.hpp"
@@ -43,7 +44,7 @@ struct Board {
   std::array<piece_t, 120> m_pieces;
   std::array<std::array<square_t, MAX_PIECE_FREQ>, 16> m_positions;
   std::array<unsigned, 16> m_num_pieces;
-  bool m_next_move_colour;
+  bool m_side_to_move;
   castle_t m_castle_state;
   square_t m_en_passant;
   unsigned int m_fifty_move;

@@ -60,7 +60,7 @@ Board::Board(const std::string &fen) noexcept {
   next_chr++;
   ASSERT_MSG(*next_chr == 'w' || *next_chr == 'b', "Invalid FEN side (%c)",
              *next_chr);
-  m_next_move_colour = (*next_chr == 'w') ? WHITE : BLACK;
+  m_side_to_move = (*next_chr == 'w') ? WHITE : BLACK;
 
   // Part 3: Castle state
   next_chr += 2;
@@ -99,12 +99,11 @@ Board::Board(const std::string &fen) noexcept {
     next_chr += 1;
   } else {
     const unsigned row = *(next_chr + 1) - '1', col = *next_chr - 'a';
-    ASSERT_IF(m_next_move_colour == WHITE, row == RANK_6);
-    ASSERT_IF(m_next_move_colour == BLACK, row == RANK_3);
+    ASSERT_IF(m_side_to_move == WHITE, row == RANK_6);
+    ASSERT_IF(m_side_to_move == BLACK, row == RANK_3);
     m_en_passant = get_square_120_rc(row, col);
-    const piece_t my_pawn =
-        (m_next_move_colour == WHITE) ? WHITE_PAWN : BLACK_PAWN;
-    const int row_offset = (m_next_move_colour == WHITE) ? -10 : +10;
+    const piece_t my_pawn = (m_side_to_move == WHITE) ? WHITE_PAWN : BLACK_PAWN;
+    const int row_offset = (m_side_to_move == WHITE) ? -10 : +10;
     if (m_pieces[m_en_passant + row_offset - 1] != my_pawn &&
         m_pieces[m_en_passant + row_offset + 1] != my_pawn) {
       WARN("Elided en passant square");
@@ -134,7 +133,7 @@ Board::Board(const std::string &fen) noexcept {
     full_move = 10 * full_move + (*next_chr - '0');
     next_chr++;
   }
-  m_half_move = 2 * (full_move - 1) + m_next_move_colour;
+  m_half_move = 2 * (full_move - 1) + m_side_to_move;
   ASSERT_MSG(next_chr == end_ptr, "FEN string too long");
 
   m_hash = compute_hash();
@@ -181,20 +180,20 @@ void Board::validate_board() const noexcept {
   ASSERT_MSG(valid_square(m_en_passant) || m_en_passant == INVALID_SQUARE,
              "En passant square (%u) not valid nor INVALID_SQUARE",
              m_en_passant);
-  ASSERT_IF_MSG(m_next_move_colour == BLACK && m_en_passant != INVALID_SQUARE,
+  ASSERT_IF_MSG(m_side_to_move == BLACK && m_en_passant != INVALID_SQUARE,
                 get_square_row(m_en_passant) == RANK_3,
                 "En passant square (%s - %u) not on row 3 on black's turn",
                 string_from_square(m_en_passant).c_str(), m_en_passant);
-  ASSERT_IF_MSG(m_next_move_colour == WHITE && m_en_passant != INVALID_SQUARE,
+  ASSERT_IF_MSG(m_side_to_move == WHITE && m_en_passant != INVALID_SQUARE,
                 get_square_row(m_en_passant) == RANK_6,
                 "En passant square (%s - %u) not on row 6 on white's turn",
                 string_from_square(m_en_passant).c_str(), m_en_passant);
 
   // Assert other king is not in check
   const piece_t king_piece =
-      (m_next_move_colour == BLACK) ? WHITE_KING : BLACK_KING;
+      (m_side_to_move == BLACK) ? WHITE_KING : BLACK_KING;
   const square_t king_square = m_positions[king_piece][0];
-  ASSERT_MSG(!square_attacked(king_square, m_next_move_colour),
+  ASSERT_MSG(!square_attacked(king_square, m_side_to_move),
              "Other king on (%s) did not avoid check",
              string_from_square(king_square).c_str());
 #endif
@@ -237,7 +236,7 @@ std::string Board::fen() const noexcept {
   result << ' ';
 
   // Part 2: Side to move
-  result << (m_next_move_colour == WHITE ? 'w' : 'b') << ' ';
+  result << (m_side_to_move == WHITE ? 'w' : 'b') << ' ';
 
   // Part 3: Castle state
   if (m_castle_state == 0) {
@@ -283,7 +282,7 @@ hash_t Board::compute_hash() const noexcept {
              "Invalid square had non-zero hash (%llu)",
              enpas_hash[INVALID_SQUARE]);
   res ^= enpas_hash[m_en_passant];
-  res ^= (m_next_move_colour * side_hash);
+  res ^= (m_side_to_move * side_hash);
   return res;
 }
 
@@ -321,7 +320,7 @@ std::string Board::to_string(const int side) const noexcept {
     result << "     h   g   f   e   d   c   b   a\n\n";
   }
   result << "TO MOVE : ";
-  result << ((m_next_move_colour == WHITE) ? "WHITE" : "BLACK") << "\n";
+  result << ((m_side_to_move == WHITE) ? "WHITE" : "BLACK") << "\n";
   result << "EN PASS : " << string_from_square(m_en_passant) << "\n";
   result << "FIFTY   : " << m_fifty_move << "\n";
   result << "MOVE#   : " << (m_half_move / 2) << "\n";
@@ -335,7 +334,7 @@ std::string Board::to_string(const int side) const noexcept {
   }
   const int evaluation = 0; // evaluate_board(*this);
   const int side_evaluation =
-      (m_next_move_colour == WHITE) ? evaluation : -evaluation;
+      (m_side_to_move == WHITE) ? evaluation : -evaluation;
   result << "EVAL    : " << side_evaluation << "\n";
   return result.str();
 }
@@ -400,8 +399,8 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
 
 bool Board::king_in_check() const noexcept {
   const piece_t king_piece =
-      (m_next_move_colour == WHITE) ? WHITE_KING : BLACK_KING;
-  return square_attacked(m_positions[king_piece][0], !m_next_move_colour);
+      (m_side_to_move == WHITE) ? WHITE_KING : BLACK_KING;
+  return square_attacked(m_positions[king_piece][0], !m_side_to_move);
 }
 
 inline void Board::remove_piece(const square_t sq) noexcept {
@@ -478,7 +477,7 @@ inline void Board::update_castling(const square_t sq,
 
 inline void Board::switch_colours() noexcept {
   INFO("Switching colours");
-  m_next_move_colour ^= 1;
+  m_side_to_move ^= 1;
   m_hash ^= side_hash;
 }
 
@@ -493,7 +492,7 @@ bool Board::make_move(const move_t move) noexcept {
        string_from_square(to).c_str());
   INFO("Move flag is %s", string_from_flag(flag).c_str());
   INFO("Promoted: %d, Captured: %d", move_promoted(move), move_captured(move));
-  const bool cur_side = m_next_move_colour, other_side = !cur_side;
+  const bool cur_side = m_side_to_move, other_side = !cur_side;
 
   ASSERT_MSG(get_side(moved) == cur_side,
              "Attempted to move other player's pieces: %s\n%s\n",
@@ -604,7 +603,7 @@ void Board::unmake_move() noexcept {
   ASSERT_MSG(m_half_move > 0, "Unmaking first move");
   m_half_move--;
   switch_colours();
-  const bool cur_side = m_next_move_colour;
+  const bool cur_side = m_side_to_move;
 
   const MoveFlag flag = move_flag(move);
   const square_t from = move_from(move), to = move_to(move);
