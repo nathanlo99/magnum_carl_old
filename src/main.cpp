@@ -23,20 +23,22 @@ int main(int argc, char *argv[]) {
          "====================================================================="
          "===\n");
 
-  const game_record result = manual_play_white();
-  switch (result.result) {
-  case -1:
-    std::cout << "Black wins!" << std::endl;
-    break;
-  case 0:
-    std::cout << "Tie!" << std::endl;
-    break;
-  case 1:
-    std::cout << "White wins!" << std::endl;
-    break;
-  default:
-    break;
-  }
+  /*
+    const game_record result = manual_play_white();
+    switch (result.result) {
+    case -1:
+      std::cout << "Black wins!" << std::endl;
+      break;
+    case 0:
+      std::cout << "Tie!" << std::endl;
+      break;
+    case 1:
+      std::cout << "White wins!" << std::endl;
+      break;
+    default:
+      break;
+    }
+    */
 
   const size_t num_games = 10;
   size_t num_moves = 0;

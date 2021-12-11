@@ -1,6 +1,6 @@
 
 Short term:
-- Write alpha-beta pruning and benchmark
+- Add a transposition table, better move ordering, null move pruning, and consider MTD-bi search
 
 
 Longer term:
