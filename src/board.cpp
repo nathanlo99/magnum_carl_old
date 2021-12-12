@@ -332,10 +332,8 @@ std::string Board::to_string(const int side) const noexcept {
   if (!m_history.empty()) {
     result << "LAST MV : " << string_from_move(m_history.back().move) << "\n";
   }
-  const int evaluation = 0; // evaluate_board(*this);
-  const int side_evaluation =
-      (m_side_to_move == WHITE) ? evaluation : -evaluation;
-  result << "EVAL    : " << side_evaluation << "\n";
+  const int evaluation = static_evaluate_board(*this, WHITE);
+  result << "EVAL    : " << evaluation << "\n";
   return result.str();
 }
 

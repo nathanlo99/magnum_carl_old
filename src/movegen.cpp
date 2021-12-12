@@ -10,18 +10,7 @@
 #include <string>
 #include <vector>
 
-static std::map<std::pair<int, hash_t>, std::vector<move_t>> pseudo_move_memo;
-
 std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
-  const int side = m_side_to_move;
-
-  // Check whether this position and spec has already been computed, return the
-  // cached value if true
-  const auto &it = pseudo_move_memo.find(std::make_pair(spec, m_hash));
-  if (it != pseudo_move_memo.end()) {
-    // TODO: Do at least one more check here in case of hash collision?
-    return it->second;
-  }
 
   // In debug mode, check that invariants are maintained
   validate_board();
@@ -36,6 +25,7 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
   // twice the average branching factor
   result.reserve(START_POSITION_MOVES);
 
+  const int side = m_side_to_move;
   const piece_t king_piece = (side == WHITE) ? WHITE_KING : BLACK_KING,
                 queen_piece = (side == WHITE) ? WHITE_QUEEN : BLACK_QUEEN,
                 rook_piece = (side == WHITE) ? WHITE_ROOK : BLACK_ROOK,
@@ -293,7 +283,7 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
   }
 
   ASSERT(result.size() <= MAX_POSITION_MOVES);
-  return pseudo_move_memo[std::make_pair(spec, m_hash)] = result;
+  return result;
 }
 
 std::vector<move_t> Board::legal_moves(const int spec) const noexcept {

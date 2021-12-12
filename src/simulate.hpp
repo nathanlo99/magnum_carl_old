@@ -41,6 +41,30 @@ game_record simulate_game(WhiteStrategy white_strat, BlackStrategy black_strat,
   return result;
 }
 
+void print_game_result(const game_record &record) {
+  Board board(record.start_fen);
+  std::cout << "Starting position:" << std::endl;
+  std::cout << board << std::endl;
+  for (const move_t move : record.moves) {
+    board.make_move(move);
+    std::cout << "Played: " << string_from_move(move) << std::endl;
+    std::cout << board << std::endl;
+  }
+  switch (record.result) {
+  case -1:
+    std::cout << "Black wins!" << std::endl;
+    break;
+  case 0:
+    std::cout << "Draw!" << std::endl;
+    break;
+  case 1:
+    std::cout << "White wins!" << std::endl;
+    break;
+  default:
+    break;
+  }
+}
+
 game_record manual_play_white(const std::string &fen = Board::startFEN) {
   return simulate_game(InputStrategy(), SearchStrategy(), fen);
 }

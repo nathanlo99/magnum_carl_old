@@ -102,8 +102,8 @@ int evaluate_move(const Board &board, const move_t move) {
   const square_t to_square = move_to(move);
   const int start_value = evaluate_piece(board, moved_piece, from_square);
   const int end_value = evaluate_piece(board, moved_piece, to_square);
-  const int value = piece_values[captured_piece] +
-                    piece_values[promoted_piece] + end_value - start_value;
+  const int value = 2 * piece_values[captured_piece] +
+                    3 * piece_values[promoted_piece] + end_value - start_value;
   return value;
 }
 
@@ -178,18 +178,6 @@ const int SEARCH_DEPTH = 4;
 int alpha_beta(Board &board, move_t &best_move, int alpha = -SCORE_INFINITY,
                int beta = SCORE_INFINITY, int depth = SEARCH_DEPTH) {
 
-  const hash_t hash = board.hash();
-  const auto it = transposition_table.find(hash);
-  move_t killer_move = 0;
-  if (it != transposition_table.end()) {
-    const TableEntry &cached_entry = it->second;
-    if (cached_entry.depth >= depth) {
-      best_move = cached_entry.best_move;
-      return cached_entry.value;
-    }
-    killer_move = cached_entry.best_move;
-  }
-
   const auto legal_moves = get_sorted_legal_moves(board, MOVEGEN_ALL);
   if (legal_moves.empty()) {
     return board.king_in_check() ? -90000 : 0;
@@ -202,32 +190,12 @@ int alpha_beta(Board &board, move_t &best_move, int alpha = -SCORE_INFINITY,
   best_move = 0;
   move_t tmp_move;
 
-  // Try the killer move first
-  if (killer_move != 0) {
-    board.make_move(killer_move);
-    const int value = -alpha_beta(board, tmp_move, -beta, -alpha, depth - 1);
-    if (value >= beta) {
-      board.unmake_move();
-      best_move = killer_move;
-      transposition_table[hash] = TableEntry(best_move, value, depth);
-      return value;
-    }
-    if (value > alpha) {
-      alpha = value;
-      best_move = killer_move;
-    }
-    board.unmake_move();
-  }
-
   for (const move_t next_move : legal_moves) {
-    if (next_move == killer_move)
-      continue;
     board.make_move(next_move);
     const int value = -alpha_beta(board, tmp_move, -beta, -alpha, depth - 1);
     if (value >= beta) {
       best_move = next_move;
       board.unmake_move();
-      transposition_table[hash] = TableEntry(best_move, value, depth);
       return value;
     }
     if (value > alpha) {
@@ -235,16 +203,6 @@ int alpha_beta(Board &board, move_t &best_move, int alpha = -SCORE_INFINITY,
       best_move = next_move;
     }
     board.unmake_move();
-  }
-  transposition_table[hash] = TableEntry(best_move, alpha, depth);
-
-  // Transposition table debug logging
-  static int iteration_count = 0;
-  iteration_count++;
-  if (iteration_count % 1000 == 0) {
-    std::cout << "After " << iteration_count
-              << " iterations, the transposition table has size "
-              << transposition_table.size() << std::endl;
   }
   return alpha;
 }

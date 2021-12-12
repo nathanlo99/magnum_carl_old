@@ -84,7 +84,7 @@ public:
   std::vector<move_t> pseudo_moves(const int spec = MOVEGEN_ALL) const noexcept;
   std::vector<move_t> legal_moves(const int spec = MOVEGEN_ALL) const noexcept;
   constexpr inline bool is_drawn() const noexcept {
-    return m_half_move > 1000 || m_fifty_move > 75;
+    return m_half_move > 1000 || m_fifty_move >= 50;
   }
   inline void remove_piece(const square_t sq) noexcept;
   inline void add_piece(const square_t sq, const piece_t piece) noexcept;
