@@ -6,7 +6,7 @@
 #include <ostream>
 #include <stdint.h>
 #include <string>
-#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "castle_state.hpp"
@@ -51,7 +51,7 @@ struct Board {
   unsigned int m_half_move;
   hash_t m_hash;
   std::vector<history_t> m_history;
-  mutable std::map<hash_t, std::vector<move_t>> m_move_cache;
+  std::unordered_multiset<hash_t> m_position_freq;
 
   hash_t compute_hash() const noexcept;
   void validate_board() const noexcept;
@@ -83,8 +83,15 @@ public:
   bool king_in_check() const noexcept;
   std::vector<move_t> pseudo_moves(const int spec = MOVEGEN_ALL) const noexcept;
   std::vector<move_t> legal_moves(const int spec = MOVEGEN_ALL) const noexcept;
+  constexpr inline bool is_three_fold() const noexcept {
+    // Since the position frequency map is updated with a given position only
+    // when that position is _played on_, if we reach a position with frequency
+    // two, it has appeared twice, not counting the current board state, which
+    // is a threefold repetition.
+    return m_position_freq.count(m_hash) >= 2;
+  }
   constexpr inline bool is_drawn() const noexcept {
-    return m_half_move > 1000 || m_fifty_move >= 50;
+    return m_half_move > 1000 || m_fifty_move >= 50 || is_three_fold();
   }
   inline void remove_piece(const square_t sq) noexcept;
   inline void add_piece(const square_t sq, const piece_t piece) noexcept;

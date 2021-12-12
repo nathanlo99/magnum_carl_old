@@ -196,6 +196,22 @@ void Board::validate_board() const noexcept {
   ASSERT_MSG(!square_attacked(king_square, m_side_to_move),
              "Other king on (%s) did not avoid check",
              string_from_square(king_square).c_str());
+
+  // Assert that the total number of positions seen (including repetitions) is
+  // the number of half moves played
+  ASSERT_MSG(m_position_freq.size() == m_history.size(),
+             "The total number of positions seen (%lu) did not match the "
+             "number of half moves played (%lu)",
+             m_position_freq.size(), m_history.size());
+  std::unordered_multiset<hash_t> expected_position_freq;
+  for (const history_t &entry : m_history) {
+    expected_position_freq.insert(entry.hash);
+  }
+  ASSERT_MSG(expected_position_freq.size() == m_position_freq.size(),
+             "Size of frequency map (%lu) did not match expected size (%lu)",
+             m_position_freq.size(), expected_position_freq.size());
+  ASSERT_MSG(expected_position_freq == m_position_freq,
+             "Position frequency map did not match expected frequency map");
 #endif
 }
 
@@ -504,6 +520,7 @@ bool Board::make_move(const move_t move) noexcept {
   entry.fifty_move = m_fifty_move;
   entry.hash = m_hash;
   m_history.push_back(entry);
+  m_position_freq.insert(entry.hash);
   m_half_move++;
 
   if (move_promoted(move)) {
@@ -562,10 +579,13 @@ bool Board::make_move(const move_t move) noexcept {
       move_piece(from, to);
     }
   }
-  if (move_captured(move) || is_pawn(moved_piece(move)))
+  if (move_captured(move) || is_pawn(moved_piece(move))) {
     m_fifty_move = 0;
-  else
+    // TODO: Could clear the position_freq table here so long as we can get it
+    // back when unmaking a move
+  } else {
     m_fifty_move++;
+  }
 
   switch_colours();
   const piece_t king_piece = (cur_side == WHITE) ? WHITE_KING : BLACK_KING;
@@ -600,6 +620,9 @@ void Board::unmake_move() noexcept {
   m_fifty_move = entry.fifty_move;
   ASSERT_MSG(m_half_move > 0, "Unmaking first move");
   m_half_move--;
+  // We have to beat around the bush a little to avoid removing _all_ instances
+  // of the position and to instead only remove one of them.
+  m_position_freq.erase(m_position_freq.find(entry.hash));
   switch_colours();
   const bool cur_side = m_side_to_move;
 
