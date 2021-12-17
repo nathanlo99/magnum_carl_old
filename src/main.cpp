@@ -8,9 +8,17 @@
 
 #include "assert.hpp"
 #include "board.hpp"
+#include "evaluate.hpp"
 #include "hash.hpp"
 #include "move.hpp"
 #include "simulate.hpp"
+
+void test_position(std::string fen) {
+  Board test_board(fen);
+  const move_t best_move = get_best_move(test_board, 5);
+  std::cout << test_board << std::endl;
+  std::cout << "Best move is " << string_from_move(best_move) << std::endl;
+}
 
 int main(int argc, char *argv[]) {
   init_hash();
@@ -23,8 +31,11 @@ int main(int argc, char *argv[]) {
          "====================================================================="
          "===\n");
 
-  print_game_result(simulate_random());
-  print_game_result(simulate_negamax());
+  test_position("6k1/8/8/8/8/2Q2q2/8/K7 w - - 0 1");
+  test_position("8/8/3n1k2/1p3r2/8/2KQ2b1/4q3/8 w - - 0 1");
+
+  // print_game_result(simulate_random());
+  // print_game_result(simulate_negamax());
 
   const game_record result = manual_play_white();
   switch (result.result) {

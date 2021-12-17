@@ -9,14 +9,13 @@
 #include <vector>
 
 class SearchStrategy : Strategy {
+  const int m_depth;
+
 public:
+  SearchStrategy(const int depth) : m_depth(depth) {}
   void init(const Board &board) override {}
   move_t make_move(const Board &board,
                    const std::vector<move_t> &move_list) override {
-    move_t best_move;
-    evaluate_board(board, best_move);
-    // std::cout << "Search strategy evaluates this position at " << value
-    //           << " in its favour" << std::endl;
-    return best_move;
+    return get_best_move(board, m_depth);
   }
 };

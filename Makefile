@@ -4,7 +4,7 @@
 # The name of the executable to be created
 BIN_NAME := playchess
 # Compiler used
-CXX ?= g++
+CXX ?= g++-11
 # Extension of source files used in the project
 SRC_EXT = cpp
 # Path to the source directory, relative to the makefile
@@ -22,9 +22,9 @@ INCLUDES = -I src/ # -I /usr/local/Cellar/boost/1.72.0
 # General linker settings
 LINK_FLAGS = -march=native -flto -g
 # Additional release-specific linker settings
-RLINK_FLAGS = -Ofast -march=native -flto
+RLINK_FLAGS = -Ofast
 # Additional debug-specific linker settings
-DLINK_FLAGS = -O2 -fsanitize=undefined -g
+DLINK_FLAGS = -O3 -fsanitize=undefined -g
 # Destination directory, like a jail or mounted system
 DESTDIR = /
 # Install path (bin/ is appended automatically)

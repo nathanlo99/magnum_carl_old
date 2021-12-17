@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+enum { SEARCH_DEPTH = 5 };
+
 struct game_record {
   std::string start_fen;
   int result;
@@ -66,11 +68,11 @@ void print_game_result(const game_record &record) {
 }
 
 game_record manual_play_white(const std::string &fen = Board::startFEN) {
-  return simulate_game(InputStrategy(), SearchStrategy(), fen);
+  return simulate_game(InputStrategy(), SearchStrategy(SEARCH_DEPTH), fen);
 }
 
 game_record manual_play_black(const std::string &fen = Board::startFEN) {
-  return simulate_game(SearchStrategy(), InputStrategy(), fen);
+  return simulate_game(SearchStrategy(SEARCH_DEPTH), InputStrategy(), fen);
 }
 
 game_record simulate_random(const std::string &fen = Board::startFEN) {
@@ -78,5 +80,6 @@ game_record simulate_random(const std::string &fen = Board::startFEN) {
 }
 
 game_record simulate_negamax(const std::string &fen = Board::startFEN) {
-  return simulate_game(SearchStrategy(), SearchStrategy(), fen);
+  return simulate_game(SearchStrategy(SEARCH_DEPTH),
+                       SearchStrategy(SEARCH_DEPTH), fen);
 }

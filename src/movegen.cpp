@@ -16,10 +16,6 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
   validate_board();
 
   std::vector<move_t> result;
-  // If the fifty move rule applies, or the game has exceeded 1000 plies,
-  // declare a draw and do not generate any further moves
-  if (is_drawn())
-    return result;
 
   // Reserve some starting amount of space for moves, this is set to 64, roughly
   // twice the average branching factor
