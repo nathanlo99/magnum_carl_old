@@ -458,11 +458,11 @@ int evaluate_board(const Board &board, const int depth) {
   return alpha_beta(tmp, iterative_depth);
 }
 
-move_t get_best_move(const Board &board, const int depth) {
+move_t get_best_move(const Board &board, const int depth, const float seconds) {
   Board tmp = board;
   const auto legal_moves = get_sorted_legal_moves(board);
 
-  iterative_deepening(tmp, depth, 5);
+  iterative_deepening(tmp, depth, seconds);
   const TableEntry entry = transposition_table.query(board.hash());
   std::cout << "The overall best move was: "
             << algebraic_notation(legal_moves, entry.best_move)

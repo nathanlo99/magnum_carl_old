@@ -15,7 +15,7 @@
 
 void test_position(std::string fen) {
   Board test_board(fen);
-  const move_t best_move = get_best_move(test_board, 6);
+  const move_t best_move = get_best_move(test_board, 6, 2.0);
   std::cout << test_board << std::endl;
   std::cout << "Best move is " << string_from_move(best_move) << std::endl;
 }
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 
   // simulate_negamax();
 
-  const game_record result = manual_play_white();
+  const game_record result = manual_play_white(6, 2.0);
   switch (result.result) {
   case -1:
     std::cout << "Black wins!" << std::endl;
@@ -51,12 +51,12 @@ int main(int argc, char *argv[]) {
     break;
   }
 
-  const size_t num_games = 10;
+  const size_t num_games = 1;
   size_t num_moves = 0;
   std::map<size_t, int> results;
   const auto diff = timeit([&] {
     for (size_t i = 0; i < num_games; ++i) {
-      const auto &result = simulate_negamax();
+      const auto &result = simulate_negamax(6, 2.0);
       num_moves += result.moves.size();
       results[result.result]++;
       if (i % 1 == 0) {

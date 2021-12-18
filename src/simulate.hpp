@@ -76,19 +76,24 @@ void print_game_result(const game_record &record) {
   }
 }
 
-game_record manual_play_white(const std::string &fen = Board::startFEN) {
-  return simulate_game(InputStrategy(), SearchStrategy(SEARCH_DEPTH), fen);
+game_record manual_play_white(const int max_depth, const float max_seconds,
+                              const std::string &fen = Board::startFEN) {
+  return simulate_game(InputStrategy(), SearchStrategy(max_depth, max_seconds),
+                       fen);
 }
 
-game_record manual_play_black(const std::string &fen = Board::startFEN) {
-  return simulate_game(SearchStrategy(SEARCH_DEPTH), InputStrategy(), fen);
+game_record manual_play_black(const int max_depth, const float max_seconds,
+                              const std::string &fen = Board::startFEN) {
+  return simulate_game(SearchStrategy(max_depth, max_seconds), InputStrategy(),
+                       fen);
 }
 
 game_record simulate_random(const std::string &fen = Board::startFEN) {
   return simulate_game(RandomStrategy(), RandomStrategy(), fen);
 }
 
-game_record simulate_negamax(const std::string &fen = Board::startFEN) {
-  return simulate_game(SearchStrategy(SEARCH_DEPTH),
-                       SearchStrategy(SEARCH_DEPTH), fen);
+game_record simulate_negamax(const int max_depth, const float max_seconds,
+                             const std::string &fen = Board::startFEN) {
+  return simulate_game(SearchStrategy(max_depth, max_seconds),
+                       SearchStrategy(max_depth, max_seconds), fen);
 }
