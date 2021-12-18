@@ -29,11 +29,18 @@ game_record simulate_game(WhiteStrategy white_strat, BlackStrategy black_strat,
     const auto &move_list = board.legal_moves();
     if (board.is_drawn() || move_list.empty())
       break;
-    const move_t move = (board.m_side_to_move == WHITE)
-                            ? white_strat.make_move(board, move_list)
-                            : black_strat.make_move(board, move_list);
-    board.make_move(move);
-    result.moves.push_back(move);
+    try {
+      const move_t move = (board.m_side_to_move == WHITE)
+                              ? white_strat.make_move(board, move_list)
+                              : black_strat.make_move(board, move_list);
+      board.make_move(move);
+      result.moves.push_back(move);
+    } catch (const std::exception &e) {
+      result.result = 0;
+      std::cout << "An error occurred within a strategy: '" << e.what() << "'"
+                << std::endl;
+      return result;
+    }
   }
   if (board.is_drawn() || !board.king_in_check()) {
     result.result = 0;

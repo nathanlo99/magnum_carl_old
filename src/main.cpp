@@ -31,10 +31,10 @@ int main(int argc, char *argv[]) {
          "====================================================================="
          "===\n");
 
-  test_position("6k1/8/8/8/8/2Q2q2/8/K7 w - - 0 1");
-  test_position("8/8/3n1k2/1p3r2/8/2KQ2b1/4q3/8 w - - 0 1");
+  // test_position("6k1/8/8/8/8/2Q2q2/8/K7 w - - 0 1");
+  // test_position("8/8/3n1k2/1p3r2/8/2KQ2b1/4q3/8 w - - 0 1");
 
-  simulate_negamax();
+  // simulate_negamax();
 
   const game_record result = manual_play_white();
   switch (result.result) {

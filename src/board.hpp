@@ -93,13 +93,13 @@ public:
   constexpr inline bool is_drawn() const noexcept {
     return m_half_move > 1000 || m_fifty_move >= 50 || is_three_fold();
   }
-  bool is_endgame() const;
+  bool is_endgame() const noexcept;
   inline void remove_piece(const square_t sq) noexcept;
   inline void add_piece(const square_t sq, const piece_t piece) noexcept;
   inline void set_castle_state(const castle_t state) noexcept;
   inline void set_en_passant(const square_t sq) noexcept;
   inline void move_piece(const square_t from, const square_t to) noexcept;
-  inline void update_castling(const square_t sq, const piece_t moved) noexcept;
+  inline void update_castling(const square_t from, const square_t to) noexcept;
   inline void switch_colours() noexcept;
   bool make_move(const move_t move) noexcept;
   void unmake_move() noexcept;

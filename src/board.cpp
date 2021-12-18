@@ -379,6 +379,7 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
     while (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE)
       cur_square += offset;
     const piece_t cur_piece = m_pieces[cur_square];
+    // If the square is invalid, then the piece is invalid thus not on our side
     if (get_side(cur_piece) == side && is_diag(cur_piece))
       return true;
   }
@@ -392,6 +393,7 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
     while (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE)
       cur_square += offset;
     const piece_t cur_piece = m_pieces[cur_square];
+    // If the square is invalid, then the piece is invalid thus not on our side
     if (get_side(cur_piece) == side && is_ortho(cur_piece))
       return true;
   }
@@ -433,7 +435,7 @@ inline void Board::remove_piece(const square_t sq) noexcept {
   m_hash ^= piece_hash[sq][piece];
 }
 
-bool Board::is_endgame() const {
+bool Board::is_endgame() const noexcept {
   // Return true if neither side has a queen
   if (m_num_pieces[WHITE_QUEEN] == 0 && m_num_pieces[BLACK_QUEEN] == 0)
     return true;
@@ -489,19 +491,17 @@ inline void Board::move_piece(const square_t from, const square_t to) noexcept {
   m_hash ^= piece_hash[from][piece] ^ piece_hash[to][piece];
 }
 
-inline void Board::update_castling(const square_t sq,
-                                   const piece_t moved) noexcept {
-  INFO("Updating castling with from = %s", string_from_square(sq).c_str());
-  if (!is_castle(moved))
-    return;
+inline void Board::update_castling(const square_t from,
+                                   const square_t to) noexcept {
+  INFO("Updating castling which affected %s", string_from_square(sq).c_str());
   m_hash ^= castle_hash[m_castle_state];
-  if (sq == E1 || sq == A1)
+  if (from == E1 || from == A1 || to == E1 || to == A1)
     m_castle_state &= ~WHITE_LONG;
-  if (sq == E1 || sq == H1)
+  if (from == E1 || from == H1 || to == E1 || to == H1)
     m_castle_state &= ~WHITE_SHORT;
-  if (sq == E8 || sq == A8)
+  if (from == E8 || from == A8 || to == E8 || to == A8)
     m_castle_state &= ~BLACK_LONG;
-  if (sq == E8 || sq == H8)
+  if (from == E8 || from == H8 || to == E8 || to == H8)
     m_castle_state &= ~BLACK_SHORT;
   m_hash ^= castle_hash[m_castle_state];
 }
@@ -540,6 +540,7 @@ bool Board::make_move(const move_t move) noexcept {
   m_position_freq.insert(entry.hash);
   m_half_move++;
 
+  update_castling(from, to);
   if (move_promoted(move)) {
     if (move_captured(move))
       remove_piece(to);
@@ -555,9 +556,6 @@ bool Board::make_move(const move_t move) noexcept {
         move_piece(E1, C1);
         move_piece(A1, D1);
       }
-      const castle_t new_castle_state =
-          m_castle_state & ~(WHITE_LONG | WHITE_SHORT);
-      set_castle_state(new_castle_state);
     } else {
       if (flag == SHORT_CASTLE_MOVE) {
         move_piece(E8, G8);
@@ -566,30 +564,22 @@ bool Board::make_move(const move_t move) noexcept {
         move_piece(E8, C8);
         move_piece(A8, D8);
       }
-      const castle_t new_castle_state =
-          m_castle_state & ~(BLACK_LONG | BLACK_SHORT);
-      set_castle_state(new_castle_state);
     }
     set_en_passant(INVALID_SQUARE);
   } else {
     const square_t enpas_square = (cur_side == WHITE) ? (to - 10) : (to + 10);
-    if (flag == DOUBLE_PAWN_MOVE) {
-      set_en_passant(enpas_square);
-    } else {
-      set_en_passant(INVALID_SQUARE);
-    }
+    set_en_passant(INVALID_SQUARE);
     if (flag == QUIET_MOVE) {
       INFO("Handling quiet move");
       move_piece(from, to);
-      update_castling(from, moved);
     } else if (flag == DOUBLE_PAWN_MOVE) {
       INFO("Handling double pawn move");
       move_piece(from, to);
+      set_en_passant(enpas_square);
     } else if (flag == CAPTURE_MOVE) {
       INFO("Handling capture move");
       remove_piece(to);
       move_piece(from, to);
-      update_castling(from, moved);
     } else if (flag == EN_PASSANT_MOVE) {
       INFO("Handling en-passant move");
       remove_piece(enpas_square);
@@ -608,7 +598,6 @@ bool Board::make_move(const move_t move) noexcept {
   const piece_t king_piece = (cur_side == WHITE) ? WHITE_KING : BLACK_KING;
   INFO("Is %s king attacked by %s?", (cur_side == WHITE) ? "white" : "black",
        (other_side == WHITE) ? "white" : "black");
-  // INFO("\n%s", to_string().c_str());
   const bool valid = !square_attacked(m_positions[king_piece][0], other_side);
   INFO("%s king %s attacked", (cur_side == WHITE) ? "White" : "Black",
        valid ? "is not" : "is");
@@ -692,6 +681,11 @@ void Board::unmake_move() noexcept {
 // Algebraic notation for a move
 std::string algebraic_notation(const std::vector<move_t> &move_list,
                                const move_t move) {
+  if (move_flag(move) == SHORT_CASTLE_MOVE)
+    return "O-O";
+  if (move_flag(move) == LONG_CASTLE_MOVE)
+    return "O-O-O";
+
   std::string result;
   const piece_t moved_piece = ::moved_piece(move);
   const square_t from_square = move_from(move);
@@ -736,9 +730,8 @@ std::string algebraic_notation(const std::vector<move_t> &move_list,
   }
   result += string_from_square(to_square);
   if (move_promoted(move)) {
-    const piece_t promoted_piece = ::promoted_piece(move);
     result.push_back('=');
-    result.push_back(char_from_piece(to_white(promoted_piece)));
+    result.push_back(char_from_piece(to_white(::promoted_piece(move))));
   }
   return result;
 }
