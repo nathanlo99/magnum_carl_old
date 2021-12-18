@@ -8,21 +8,29 @@
 #include <unordered_map>
 
 // The transposition table currently stores a mapping from position hashes, to
-// an entry containing the best move, the evaluation, and the depth.
+// an entry containing the best move, the evaluation, the depth, the node type,
+// and the half move at which this was computed.
 
 // Searches can then use this information to provide better move ordering, and
 // faster evaluations
 
-struct TableEntry {
-  move_t best_move;
-  int value;
-  int depth;
-
-  TableEntry() : best_move(0), value(0), depth(0) {}
-  TableEntry(move_t best_move, int value, int depth)
-      : best_move(best_move), value(value), depth(depth) {}
+enum NodeType {
+  Exact, // (PV-Node) This node provides an exact evaluated score at the depth
+  Lower, // (All-Node) This node was a beta-cut: the score is only a lower bound
+  Upper, // (Cut-Node) This score is an upper bound: no moves exceeded value
 };
 
-using Table = std::unordered_map<hash_t, TableEntry>;
+struct TableEntry {
+  hash_t hash = 0;
+  move_t best_move = 0;
+  int depth = 0;
+  int value = 0;
+  NodeType type = Exact;
+  int half_move = 0;
+};
 
-extern Table transposition_table;
+class TranspositionTable {
+  using Table = std::unordered_map<hash_t, TableEntry>;
+};
+
+extern TranspositionTable transposition_table;

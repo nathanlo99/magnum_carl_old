@@ -25,6 +25,8 @@ enum Piece {
   INVALID_PIECE = 15, // 3, 7, 11 unused
 };
 
+constexpr inline piece_t to_white(const piece_t piece) { return piece & 7; }
+
 #ifdef LUT_PIECE
 
 constexpr inline bool valid_piece(const piece_t piece) {

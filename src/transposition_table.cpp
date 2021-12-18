@@ -1,4 +1,4 @@
 
 #include "transposition_table.hpp"
 
-Table transposition_table;
+TranspositionTable transposition_table;

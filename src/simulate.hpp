@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-enum { SEARCH_DEPTH = 5 };
+enum { SEARCH_DEPTH = 6 };
 
 struct game_record {
   std::string start_fen;

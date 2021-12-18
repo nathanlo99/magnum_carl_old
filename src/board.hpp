@@ -93,6 +93,7 @@ public:
   constexpr inline bool is_drawn() const noexcept {
     return m_half_move > 1000 || m_fifty_move >= 50 || is_three_fold();
   }
+  bool is_endgame() const;
   inline void remove_piece(const square_t sq) noexcept;
   inline void add_piece(const square_t sq, const piece_t piece) noexcept;
   inline void set_castle_state(const castle_t state) noexcept;
@@ -107,3 +108,7 @@ public:
 std::ostream &operator<<(std::ostream &os, const Board &board) noexcept;
 void print_move_list(const std::vector<move_t> &move_list);
 void print_simple_move_list(const std::vector<move_t> &move_list);
+
+std::string ambiguous_algebraic_notation(const move_t move);
+std::string algebraic_notation(const std::vector<move_t> &move_list,
+                               const move_t move);

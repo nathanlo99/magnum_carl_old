@@ -346,10 +346,11 @@ std::string Board::to_string(const int side) const noexcept {
          << "\n";
   result << "FEN     : " << fen() << "\n";
   if (!m_history.empty()) {
-    result << "LAST MV : " << string_from_move(m_history.back().move) << "\n";
+    result << "LAST MV : "
+           << algebraic_notation(legal_moves(), m_history.back().move) << "\n";
   }
-  const int evaluation = static_evaluate_board(*this, WHITE);
-  result << "EVAL    : " << evaluation << "\n";
+  // const int evaluation = static_evaluate_board(*this, WHITE);
+  // result << "EVAL    : " << evaluation << "\n";
   return result.str();
 }
 
@@ -430,6 +431,22 @@ inline void Board::remove_piece(const square_t sq) noexcept {
   m_num_pieces[piece]--;
   std::swap(*this_idx, *(last_idx - 1));
   m_hash ^= piece_hash[sq][piece];
+}
+
+bool Board::is_endgame() const {
+  // Return true if neither side has a queen
+  if (m_num_pieces[WHITE_QUEEN] == 0 && m_num_pieces[BLACK_QUEEN] == 0)
+    return true;
+  // Otherwise, if every side which has a queen
+  const bool white_has_no_queen_or_one_minor =
+      m_num_pieces[WHITE_QUEEN] == 0 ||
+      (m_num_pieces[WHITE_ROOK] == 0 &&
+       m_num_pieces[WHITE_KNIGHT] + m_num_pieces[WHITE_BISHOP] <= 1);
+  const bool black_has_no_queen_or_one_minor =
+      m_num_pieces[BLACK_QUEEN] == 0 ||
+      (m_num_pieces[BLACK_ROOK] == 0 &&
+       m_num_pieces[BLACK_KNIGHT] + m_num_pieces[BLACK_BISHOP] <= 1);
+  return white_has_no_queen_or_one_minor && black_has_no_queen_or_one_minor;
 }
 
 inline void Board::add_piece(const square_t sq, const piece_t piece) noexcept {
@@ -670,4 +687,58 @@ void Board::unmake_move() noexcept {
   validate_board();
   INFO("======================================================================="
        "==============");
+}
+
+// Algebraic notation for a move
+std::string algebraic_notation(const std::vector<move_t> &move_list,
+                               const move_t move) {
+  std::string result;
+  const piece_t moved_piece = ::moved_piece(move);
+  const square_t from_square = move_from(move);
+  const square_t to_square = move_to(move);
+
+  std::vector<move_t> same_piece_and_target;
+  std::copy_if(move_list.begin(), move_list.end(),
+               std::back_inserter(same_piece_and_target),
+               [to_square, moved_piece, move](const move_t list_move) {
+                 return move != list_move && move_to(list_move) == to_square &&
+                        ::moved_piece(list_move) == moved_piece;
+               });
+
+  const bool ambiguous = same_piece_and_target.size() > 0;
+  bool ambiguous_file = false;
+  bool ambiguous_rank = false;
+  for (const move_t list_move : same_piece_and_target) {
+    if (get_square_row(move_from(list_move)) == get_square_row(from_square))
+      ambiguous_rank = true;
+    if (get_square_col(move_from(list_move)) == get_square_col(from_square))
+      ambiguous_file = true;
+  }
+
+  if (!is_pawn(moved_piece))
+    result.push_back(char_from_piece(to_white(moved_piece)));
+
+  if (ambiguous) {
+    if (!ambiguous_file) {
+      result.push_back('a' + get_square_col(from_square));
+    } else if (!ambiguous_rank) {
+      result.push_back('1' + get_square_row(from_square));
+    } else {
+      result.push_back('a' + get_square_row(from_square));
+      result.push_back('1' + get_square_col(from_square));
+    }
+  }
+
+  if (move_captured(move)) {
+    if (is_pawn(moved_piece))
+      result.push_back('a' + get_square_col(from_square));
+    result.push_back('x');
+  }
+  result += string_from_square(to_square);
+  if (move_promoted(move)) {
+    const piece_t promoted_piece = ::promoted_piece(move);
+    result.push_back('=');
+    result.push_back(char_from_piece(to_white(promoted_piece)));
+  }
+  return result;
 }
