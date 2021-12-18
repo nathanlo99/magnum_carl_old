@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-enum { SEARCH_DEPTH = 6 };
+enum { SEARCH_DEPTH = 7 };
 
 struct game_record {
   std::string start_fen;
@@ -29,6 +29,8 @@ game_record simulate_game(WhiteStrategy white_strat, BlackStrategy black_strat,
     const auto &move_list = board.legal_moves();
     if (board.is_drawn() || move_list.empty())
       break;
+    std::cout << board << std::endl;
+
     try {
       const move_t move = (board.m_side_to_move == WHITE)
                               ? white_strat.make_move(board, move_list)

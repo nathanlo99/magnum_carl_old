@@ -183,7 +183,7 @@ int evaluate_piece(const Board &board, piece_t piece, square_t square) {
 // evaluation of the move from the perspective of the side to move.
 //
 // Captured and promoted pieces significantly boost this score.
-int evaluate_move(const Board &board, const move_t move) {
+int static_evaluate_move(const Board &board, const move_t move) {
   int value = 0;
   const piece_t moved_piece = ::moved_piece(move);
   if (move_captured(move)) {
@@ -202,6 +202,15 @@ int evaluate_move(const Board &board, const move_t move) {
       side_multiplier * evaluate_piece(board, moved_piece, to_square);
   value += to_eval - from_eval;
   return value;
+}
+
+int evaluate_move(const Board &board, const move_t move) {
+  Board tmp(board);
+  tmp.make_move(move);
+  const TableEntry entry = transposition_table.query(tmp.hash());
+  if (entry.type != NodeType::None)
+    return entry.value;
+  return static_evaluate_move(board, move);
 }
 
 std::vector<move_t> get_sorted_legal_moves(const Board &board,
@@ -269,20 +278,18 @@ int static_evaluate_board(const Board &board, const int side) {
       }
     }
   }
-
-  // std::cout << "White result was: " << white_eval << std::endl;
   return (side == WHITE) ? white_eval : -white_eval;
 }
 
 int quiescence_search(Board &board, int depth = 0, int alpha = -SCORE_INFINITY,
                       const int beta = SCORE_INFINITY) {
-  /*
-  std::cout << "QS " << std::setw(16) << std::setfill('0') << std::hex
-            << board.hash() << std::dec << "\t\t";
-  std::cout << std::setw(3) << std::setfill(' ') << depth << " | ";
-  std::cout << std::setw(10) << std::setfill(' ') << alpha << ", "
-            << std::setw(10) << std::setfill(' ') << beta << std::endl;
-  */
+
+  // std::cout << "QS " << std::setw(16) << std::setfill('0') << std::hex
+  //           << board.hash() << std::dec << "\t\t";
+  // std::cout << std::setw(3) << std::setfill(' ') << depth << " | ";
+  // std::cout << std::setw(10) << std::setfill(' ') << alpha << ", "
+  //           << std::setw(10) << std::setfill(' ') << beta << std::endl;
+
   const int stand_pat_eval = static_evaluate_board(board, board.m_side_to_move);
   const auto legal_captures =
       get_sorted_legal_moves(board, MOVEGEN_CAPTURES | MOVEGEN_PROMOTIONS);
@@ -329,23 +336,60 @@ int negamax(Board &board, const int depth) {
 
 int alpha_beta(Board &board, const int depth, int alpha, const int beta) {
   ASSERT_MSG(alpha <= beta, "alpha_beta range (%d - %d) is empty", alpha, beta);
-  /*
-  if (depth > 1) {
-    std::cout << "AB " << std::setw(16) << std::setfill('0') << std::hex
-              << board.hash() << std::dec << "\t\t";
-    std::cout << std::setw(2) << std::setfill(' ') << depth << " | ";
-    std::cout << std::setw(10) << std::setfill(' ') << alpha << ", "
-              << std::setw(10) << std::setfill(' ') << beta << std::endl;
-  }
-  */
 
+  // if (depth > 1) {
+  //   std::cout << "AB " << std::setw(16) << std::setfill('0') << std::hex
+  //             << board.hash() << std::dec << "\t\t";
+  //   std::cout << std::setw(3) << std::setfill(' ') << depth << " | ";
+  //   std::cout << std::setw(10) << std::setfill(' ') << alpha << ", "
+  //             << std::setw(10) << std::setfill(' ') << beta << std::endl;
+  // }
+
+  // Get the move-ordered legal moves and check for game termination cases
   const auto legal_moves = get_sorted_legal_moves(board);
   if (legal_moves.empty()) {
     return board.king_in_check() ? -MATE : 0;
   } else if (board.is_drawn()) {
     return 0;
   } else if (depth <= 0) {
-    return quiescence_search(board, 0, alpha, beta);
+    // If we've reached the search depth, perform quiescence_search instead
+    return quiescence_search(board, depth, alpha, beta);
+  }
+
+  // Consult the transposition table: grab a cached evaluation and the best move
+  const TableEntry entry = transposition_table.query(board.hash());
+  ASSERT_MSG(entry.hash == board.hash(),
+             "Queried table entry's hash (%lu) did not match board hash (%lu)",
+             entry.hash, board.hash());
+  const move_t killer_move = entry.best_move;
+  // Switch on entry.type to get better bounds on alpha and beta
+  if (entry.depth >= depth) {
+    if (entry.type == NodeType::Exact) {
+      return entry.value;
+    } else if (entry.type == NodeType::Upper && entry.value <= alpha) {
+      return alpha;
+    } else if (entry.type == NodeType::Lower && entry.value >= beta) {
+      return entry.value;
+    }
+  }
+
+  int start_alpha = alpha;
+  move_t best_move = 0;
+
+  if (killer_move != 0) {
+    board.make_move(killer_move);
+    const int value = -alpha_beta(board, depth - 1, -beta, -alpha);
+    board.unmake_move();
+
+    if (value >= beta) {
+      transposition_table.insert(board.hash(), killer_move, depth, value,
+                                 NodeType::Lower, board.m_half_move);
+      return value;
+    }
+    if (value > alpha) {
+      alpha = value;
+      best_move = killer_move;
+    }
   }
 
   for (const move_t next_move : legal_moves) {
@@ -353,49 +397,76 @@ int alpha_beta(Board &board, const int depth, int alpha, const int beta) {
     const int value = -alpha_beta(board, depth - 1, -beta, -alpha);
     board.unmake_move();
 
-    if (value >= beta)
+    if (value >= beta) {
+      transposition_table.insert(board.hash(), next_move, depth, value,
+                                 NodeType::Lower, board.m_half_move);
       return value;
-    alpha = std::max(alpha, value);
+    }
+    if (value > alpha) {
+      alpha = value;
+      best_move = next_move;
+    }
   }
 
+  if (alpha == start_alpha) {
+    transposition_table.insert(board.hash(), best_move, depth, alpha,
+                               NodeType::Upper, board.m_half_move);
+  } else {
+    transposition_table.insert(board.hash(), best_move, depth, alpha,
+                               NodeType::Exact, board.m_half_move);
+  }
   return alpha;
+}
+
+float seconds_since(
+    const std::chrono::time_point<std::chrono::high_resolution_clock> start) {
+  const auto finish = std::chrono::high_resolution_clock::now();
+  const auto ns =
+      std::chrono::duration_cast<std::chrono::nanoseconds>(finish - start)
+          .count();
+  return ns / 1e9;
+}
+
+int iterative_deepening(Board &board, const int max_depth,
+                        const float seconds_to_search) {
+
+  int depth = 1;
+  const auto legal_moves = board.legal_moves();
+  const auto start = std::chrono::high_resolution_clock::now();
+
+  while (depth < max_depth && seconds_since(start) < seconds_to_search / 2.) {
+    std::cout << "Searching to depth " << std::setw(2) << depth << "..."
+              << std::flush;
+    alpha_beta(board, depth);
+
+    const TableEntry entry = transposition_table.query(board.hash());
+    const float sceonds_elapsed = seconds_since(start);
+    std::cout << "  done! (" << std::setw(7) << transposition_table.size()
+              << " entries, PV = "
+              << algebraic_notation(legal_moves, entry.best_move)
+              << ", eval = " << (entry.value / 100.) << ")" << std::endl;
+    std::cout << sceonds_elapsed << "s elapsed" << std::endl;
+    depth++;
+  }
+
+  return depth - 1;
 }
 
 int evaluate_board(const Board &board, const int depth) {
   Board tmp = board;
-  return alpha_beta(tmp, depth);
+  const int iterative_depth = iterative_deepening(tmp, depth, 5);
+  return alpha_beta(tmp, iterative_depth);
 }
 
 move_t get_best_move(const Board &board, const int depth) {
   Board tmp = board;
-  move_t best_move = 0;
-  int value = -SCORE_INFINITY;
-
-  std::cout << "------------------------------------------------" << std::endl;
-  std::cout << board << std::endl;
-
   const auto legal_moves = get_sorted_legal_moves(board);
-  for (const move_t move : legal_moves) {
-    tmp.make_move(move);
-    const int this_value = -alpha_beta(tmp, depth - 1, -SCORE_INFINITY, -value);
-    tmp.unmake_move();
 
-    printf(
-        "Evaluated the move %s (%s) with a searched score of %d and a static "
-        "score of %d\n",
-        string_from_move(move).c_str(),
-        algebraic_notation(legal_moves, move).c_str(), this_value,
-        evaluate_move(tmp, move));
-    std::cout << std::flush;
-
-    if (this_value > value) {
-      std::cout << "New best move!" << std::endl;
-      best_move = move;
-      value = this_value;
-    }
-  }
+  iterative_deepening(tmp, depth, 5);
+  const TableEntry entry = transposition_table.query(board.hash());
   std::cout << "The overall best move was: "
-            << algebraic_notation(legal_moves, best_move) << " with score "
-            << value << std::endl;
-  return best_move;
+            << algebraic_notation(legal_moves, entry.best_move)
+            << " with score " << entry.value << std::endl;
+
+  return entry.best_move;
 }
