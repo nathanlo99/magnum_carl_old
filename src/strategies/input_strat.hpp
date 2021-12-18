@@ -16,12 +16,13 @@ public:
     std::cout << "Enter a move: " << std::flush;
     while (std::getline(std::cin, input)) {
       for (const move_t move : move_list) {
-        if (input == string_from_move(move))
+        if (input == string_from_move(move) ||
+            input == board.algebraic_notation(move))
           return move;
       }
       std::cout << "Invalid move: " << input << std::endl;
       std::cout << "Legal moves here are: " << std::endl;
-      print_move_list(move_list);
+      print_algebraic_move_list(board, move_list);
 
       std::cout << "Try again: " << std::flush;
     }

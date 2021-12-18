@@ -1,8 +1,8 @@
 
 #pragma once
 
-#include "../src/assert.hpp"
-#include "../src/piece.hpp"
+#include "assert.hpp"
+#include "piece.hpp"
 
 inline constexpr int test_pieces() {
   { /* valid_piece */

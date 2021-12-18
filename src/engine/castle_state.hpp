@@ -4,7 +4,7 @@
 #include <cstdint>
 
 #include "assert.hpp"
-#include "defs.hpp"
+#include "types.hpp"
 
 enum Castle {
   WHITE_SHORT = 0x1,

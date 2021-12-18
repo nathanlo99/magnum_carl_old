@@ -1,8 +1,8 @@
 
 #pragma once
 
-#include "../src/move.hpp"
-#include "../src/timeit.hpp"
+#include "move.hpp"
+#include "timeit.hpp"
 #include <cstdlib>
 #include <fstream>
 #include <iostream>

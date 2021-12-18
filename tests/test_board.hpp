@@ -4,9 +4,9 @@
 #include <iostream>
 #include <string>
 
-#include "../src/assert.hpp"
-#include "../src/board.hpp"
-#include "../src/move.hpp"
+#include "assert.hpp"
+#include "board.hpp"
+#include "move.hpp"
 
 inline int test_fen(const std::string &fen) {
   Board board{fen}, board2{fen};

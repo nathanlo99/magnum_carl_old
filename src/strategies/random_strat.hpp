@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include "../board.hpp"
-#include "../hash.hpp"
-#include "../move.hpp"
+#include "board.hpp"
+#include "hash.hpp"
+#include "move.hpp"
 #include "strategy.hpp"
 #include <vector>
 

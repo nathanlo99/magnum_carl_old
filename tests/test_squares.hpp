@@ -1,8 +1,8 @@
 
 #pragma once
 
-#include "../src/assert.hpp"
-#include "../src/square.hpp"
+#include "assert.hpp"
+#include "square.hpp"
 
 inline int test_squares() {
   { /* valid_square */

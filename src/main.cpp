@@ -11,6 +11,7 @@
 #include "evaluate.hpp"
 #include "hash.hpp"
 #include "move.hpp"
+#include "opening_book.hpp"
 #include "simulate.hpp"
 
 void test_position(std::string fen) {
@@ -22,6 +23,7 @@ void test_position(std::string fen) {
 
 int main(int argc, char *argv[]) {
   init_hash();
+  opening_book.read("references/book/processed_games.txt", 15);
 
   std::string perft_file =
       (argc > 1) ? argv[1] : "tests/perft_files/skip.perft";
@@ -31,8 +33,8 @@ int main(int argc, char *argv[]) {
          "====================================================================="
          "===\n");
 
-  test_position("6k1/8/8/8/8/2Q2q2/8/K7 w - - 0 1");
-  test_position("8/8/3n1k2/1p3r2/8/2KQ2b1/4q3/8 w - - 0 1");
+  // test_position("6k1/8/8/8/8/2Q2q2/8/K7 w - - 0 1");
+  // test_position("8/8/3n1k2/1p3r2/8/2KQ2b1/4q3/8 w - - 0 1");
 
   // simulate_negamax();
 

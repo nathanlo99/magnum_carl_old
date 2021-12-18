@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <random>
 
-#include "defs.hpp"
+#include "types.hpp"
 #include "piece.hpp"
 #include "square.hpp"
 

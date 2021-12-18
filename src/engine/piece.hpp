@@ -5,7 +5,7 @@
 #include <string>
 
 #include "assert.hpp" // for ASSERT
-#include "defs.hpp"
+#include "types.hpp"
 
 // Organized (hopefully) to optimize bit variance
 // colour | major | spec-1 | spec-0

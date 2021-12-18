@@ -1,8 +1,8 @@
 
 #pragma once
 
-#include "../board.hpp"
-#include "../move.hpp"
+#include "board.hpp"
+#include "move.hpp"
 #include <vector>
 
 class Strategy {

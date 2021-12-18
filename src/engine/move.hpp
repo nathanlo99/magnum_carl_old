@@ -8,7 +8,7 @@
 
 #include "assert.hpp"
 #include "board.hpp"
-#include "defs.hpp"
+#include "types.hpp"
 
 /*
 MOVE:
@@ -122,7 +122,7 @@ inline std::string string_from_move(const move_t move) {
     res << "x";
   res << string_from_square(to);
   if (move_promoted(move))
-    res << "=" << char_from_piece(promoted_piece(move));
+    res << "=" << (char)toupper(char_from_piece(promoted_piece(move)));
   return res.str();
 }
 
@@ -132,7 +132,7 @@ inline std::string simple_string_from_move(const move_t move) {
   res << string_from_square(from);
   res << string_from_square(to);
   if (move_promoted(move)) {
-    res << tolower(char_from_piece(promoted_piece(move)));
+    res << (char)toupper(char_from_piece(promoted_piece(move)));
   }
   return res.str();
 }

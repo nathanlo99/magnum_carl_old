@@ -3,6 +3,7 @@
 #include "evaluate.hpp"
 #include "hash.hpp"
 #include "move.hpp"
+#include "opening_book.hpp"
 #include "piece.hpp"
 
 #include <algorithm>
@@ -345,9 +346,11 @@ std::string Board::to_string(const int side) const noexcept {
   result << std::setw(16) << std::setfill('0') << std::hex << hash() << std::dec
          << "\n";
   result << "FEN     : " << fen() << "\n";
+  // if (opening_book.query_all(*this).size() > 0) {
+  //   result << "BOOK    : " << opening_book.book_moves_string(*this) << "\n";
+  // }
   if (!m_history.empty()) {
-    result << "LAST MV : "
-           << algebraic_notation(legal_moves(), m_history.back().move) << "\n";
+    result << "LAST MV : " << algebraic_notation(m_history.back().move) << "\n";
   }
   // const int evaluation = static_evaluate_board(*this, WHITE);
   // result << "EVAL    : " << evaluation << "\n";
@@ -420,21 +423,6 @@ bool Board::king_in_check() const noexcept {
   return square_attacked(m_positions[king_piece][0], !m_side_to_move);
 }
 
-inline void Board::remove_piece(const square_t sq) noexcept {
-  INFO("Removing piece on square %s (%u)", string_from_square(sq).c_str(), sq);
-  const piece_t piece = m_pieces[sq];
-  ASSERT_MSG(valid_piece(piece), "Removing invalid piece (%u)!", piece);
-  m_pieces[sq] = INVALID_PIECE;
-  auto &piece_list = m_positions[piece];
-  const auto &last_idx = piece_list.begin() + m_num_pieces[piece];
-  const auto &this_idx = std::find(piece_list.begin(), last_idx, sq);
-  ASSERT_MSG(this_idx != last_idx, "Removed piece (%d) not in piece_list",
-             piece);
-  m_num_pieces[piece]--;
-  std::swap(*this_idx, *(last_idx - 1));
-  m_hash ^= piece_hash[sq][piece];
-}
-
 bool Board::is_endgame() const noexcept {
   // Return true if neither side has a queen
   if (m_num_pieces[WHITE_QUEEN] == 0 && m_num_pieces[BLACK_QUEEN] == 0)
@@ -449,6 +437,21 @@ bool Board::is_endgame() const noexcept {
       (m_num_pieces[BLACK_ROOK] == 0 &&
        m_num_pieces[BLACK_KNIGHT] + m_num_pieces[BLACK_BISHOP] <= 1);
   return white_has_no_queen_or_one_minor && black_has_no_queen_or_one_minor;
+}
+
+inline void Board::remove_piece(const square_t sq) noexcept {
+  INFO("Removing piece on square %s (%u)", string_from_square(sq).c_str(), sq);
+  const piece_t piece = m_pieces[sq];
+  ASSERT_MSG(valid_piece(piece), "Removing invalid piece (%u)!", piece);
+  m_pieces[sq] = INVALID_PIECE;
+  auto &piece_list = m_positions[piece];
+  const auto &last_idx = piece_list.begin() + m_num_pieces[piece];
+  const auto &this_idx = std::find(piece_list.begin(), last_idx, sq);
+  ASSERT_MSG(this_idx != last_idx, "Removed piece (%d) not in piece_list",
+             piece);
+  m_num_pieces[piece]--;
+  std::swap(*this_idx, *(last_idx - 1));
+  m_hash ^= piece_hash[sq][piece];
 }
 
 inline void Board::add_piece(const square_t sq, const piece_t piece) noexcept {
@@ -679,8 +682,7 @@ void Board::unmake_move() noexcept {
 }
 
 // Algebraic notation for a move
-std::string algebraic_notation(const std::vector<move_t> &move_list,
-                               const move_t move) {
+std::string Board::algebraic_notation(const move_t move) const {
   if (move_flag(move) == SHORT_CASTLE_MOVE)
     return "O-O";
   if (move_flag(move) == LONG_CASTLE_MOVE)
@@ -691,6 +693,7 @@ std::string algebraic_notation(const std::vector<move_t> &move_list,
   const square_t from_square = move_from(move);
   const square_t to_square = move_to(move);
 
+  const std::vector<move_t> move_list = legal_moves();
   std::vector<move_t> same_piece_and_target;
   std::copy_if(move_list.begin(), move_list.end(),
                std::back_inserter(same_piece_and_target),
@@ -712,7 +715,7 @@ std::string algebraic_notation(const std::vector<move_t> &move_list,
   if (!is_pawn(moved_piece))
     result.push_back(char_from_piece(to_white(moved_piece)));
 
-  if (ambiguous) {
+  if (!is_pawn(moved_piece) && ambiguous) {
     if (!ambiguous_file) {
       result.push_back('a' + get_square_col(from_square));
     } else if (!ambiguous_rank) {
@@ -728,10 +731,13 @@ std::string algebraic_notation(const std::vector<move_t> &move_list,
       result.push_back('a' + get_square_col(from_square));
     result.push_back('x');
   }
+
   result += string_from_square(to_square);
+
   if (move_promoted(move)) {
     result.push_back('=');
     result.push_back(char_from_piece(to_white(::promoted_piece(move))));
   }
+
   return result;
 }

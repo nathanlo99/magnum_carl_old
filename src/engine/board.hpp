@@ -103,12 +103,12 @@ public:
   inline void switch_colours() noexcept;
   bool make_move(const move_t move) noexcept;
   void unmake_move() noexcept;
+
+  std::string algebraic_notation(const move_t move) const;
 };
 
 std::ostream &operator<<(std::ostream &os, const Board &board) noexcept;
 void print_move_list(const std::vector<move_t> &move_list);
 void print_simple_move_list(const std::vector<move_t> &move_list);
-
-std::string ambiguous_algebraic_notation(const move_t move);
-std::string algebraic_notation(const std::vector<move_t> &move_list,
-                               const move_t move);
+void print_algebraic_move_list(const Board &board,
+                               const std::vector<move_t> &move_list);

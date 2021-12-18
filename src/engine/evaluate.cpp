@@ -358,9 +358,10 @@ int alpha_beta(Board &board, const int depth, int alpha, const int beta) {
 
   // Consult the transposition table: grab a cached evaluation and the best move
   const TableEntry entry = transposition_table.query(board.hash());
-  ASSERT_MSG(entry.hash == board.hash(),
-             "Queried table entry's hash (%lu) did not match board hash (%lu)",
-             entry.hash, board.hash());
+  ASSERT_MSG(
+      entry.type == NodeType::None || entry.hash == board.hash(),
+      "Queried table entry's hash (%llu) did not match board hash (%llu)",
+      entry.hash, board.hash());
   const move_t killer_move = entry.best_move;
   // Switch on entry.type to get better bounds on alpha and beta
   if (entry.depth >= depth) {
@@ -442,8 +443,7 @@ int iterative_deepening(Board &board, const int max_depth,
     const TableEntry entry = transposition_table.query(board.hash());
     const float sceonds_elapsed = seconds_since(start);
     std::cout << "  done! (" << std::setw(7) << transposition_table.size()
-              << " entries, PV = "
-              << algebraic_notation(legal_moves, entry.best_move)
+              << " entries, PV = " << board.algebraic_notation(entry.best_move)
               << ", eval = " << (entry.value / 100.) << ")" << std::endl;
     std::cout << sceonds_elapsed << "s elapsed" << std::endl;
     depth++;
@@ -465,8 +465,8 @@ move_t get_best_move(const Board &board, const int depth, const float seconds) {
   iterative_deepening(tmp, depth, seconds);
   const TableEntry entry = transposition_table.query(board.hash());
   std::cout << "The overall best move was: "
-            << algebraic_notation(legal_moves, entry.best_move)
-            << " with score " << entry.value << std::endl;
+            << board.algebraic_notation(entry.best_move) << " with score "
+            << entry.value << std::endl;
 
   return entry.best_move;
 }

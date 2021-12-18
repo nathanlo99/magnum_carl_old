@@ -312,10 +312,11 @@ void print_move_list(const std::vector<move_t> &move_list) {
   std::cout << std::endl;
 }
 
-void print_algebraic_move_list(const std::vector<move_t> &legal_move_list) {
+void print_algebraic_move_list(const Board &board,
+                               const std::vector<move_t> &move_list) {
   std::set<std::string> moves;
-  for (const move_t move : legal_move_list)
-    moves.insert(algebraic_notation(legal_move_list, move));
+  for (const move_t move : move_list)
+    moves.insert(board.algebraic_notation(move));
   for (const std::string &move : moves)
     std::cout << move << ", ";
   std::cout << std::endl;
