@@ -346,9 +346,9 @@ std::string Board::to_string(const int side) const noexcept {
   result << std::setw(16) << std::setfill('0') << std::hex << hash() << std::dec
          << "\n";
   result << "FEN     : " << fen() << "\n";
-  // if (opening_book.query_all(*this).size() > 0) {
-  //   result << "BOOK    : " << opening_book.book_moves_string(*this) << "\n";
-  // }
+  if (opening_book.query_all(*this).size() > 0) {
+    result << "BOOK    : " << opening_book.book_moves_string(*this) << "\n";
+  }
   if (!m_history.empty()) {
     // Since the previous move was not played in the current position, we have
     // to revert to the last position before calling algebraic_notation, because
@@ -359,8 +359,8 @@ std::string Board::to_string(const int side) const noexcept {
     tmp.unmake_move();
     result << "LAST MV : " << tmp.algebraic_notation(last_move) << "\n";
   }
-  // const int evaluation = static_evaluate_board(*this, WHITE);
-  // result << "EVAL    : " << evaluation << "\n";
+  // const int evaluation = evaluate_board(*this, 6);
+  // result << "EVAL    : " << eval_to_string(evaluation) << "\n";
   return result.str();
 }
 
