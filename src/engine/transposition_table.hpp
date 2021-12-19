@@ -38,24 +38,11 @@ class TranspositionTable {
 
 public:
   size_t size() const noexcept { return m_table.size(); }
-  TableEntry query(const hash_t hash) const {
-    const auto it = m_table.find(hash);
-    if (it == m_table.end())
-      return TableEntry();
-    return it->second;
-  }
-
+  TableEntry query(const hash_t hash) const;
   void insert(const hash_t hash, const move_t best_move, const int depth,
-              const int value, const NodeType type, const int half_move) {
-    if (m_table.count(hash) > 0) {
-      const TableEntry previous_entry = query(hash);
-      // For now, only insert entries which are refinements of previous ones
-      if (previous_entry.depth > depth)
-        return;
-      // WARN("Overwriting existing entry in transposition_table");
-    }
-    m_table[hash] = {hash, best_move, depth, value, type, half_move};
-  }
+              const int value, const NodeType type, const int half_move);
+  std::vector<move_t> get_pv(const Board &board) const;
+  std::string get_pv_string(const Board &board) const;
 };
 
 extern TranspositionTable transposition_table;

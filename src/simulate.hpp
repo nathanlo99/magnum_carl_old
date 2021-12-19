@@ -90,8 +90,8 @@ game_record simulate_random(const std::string &fen = Board::startFEN) {
   return simulate_game(RandomStrategy(), RandomStrategy(), fen);
 }
 
-game_record simulate_negamax(const int max_depth, const float max_seconds,
-                             const std::string &fen = Board::startFEN) {
+game_record simulate_search(const int max_depth, const float max_seconds,
+                            const std::string &fen = Board::startFEN) {
   return simulate_game(SearchStrategy(true, max_depth, max_seconds),
                        SearchStrategy(true, max_depth, max_seconds), fen);
 }

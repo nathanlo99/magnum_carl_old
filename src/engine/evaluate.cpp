@@ -303,6 +303,17 @@ int quiescence_search(Board &board, int depth = 0, int alpha = -SCORE_INFINITY,
     return beta;
   alpha = std::max(alpha, stand_pat_eval);
 
+  const TableEntry entry = transposition_table.query(board.hash());
+  const move_t killer_move = entry.best_move;
+  if (killer_move != 0 && move_captured(killer_move)) {
+    board.make_move(killer_move);
+    const int value = -quiescence_search(board, depth - 1, -beta, -alpha);
+    board.unmake_move();
+    if (value >= beta)
+      return value;
+    alpha = std::max(value, alpha);
+  }
+
   for (const move_t next_move : legal_captures) {
     board.make_move(next_move);
     const int value = -quiescence_search(board, depth - 1, -beta, -alpha);
@@ -441,11 +452,12 @@ int iterative_deepening(Board &board, const int max_depth,
     alpha_beta(board, depth);
 
     const TableEntry entry = transposition_table.query(board.hash());
-    const float sceonds_elapsed = seconds_since(start);
+    const float seconds_elapsed = seconds_since(start);
     std::cout << "  done! (" << std::setw(7) << transposition_table.size()
-              << " entries, PV = " << board.algebraic_notation(entry.best_move)
-              << ", eval = " << (entry.value / 100.) << ")" << std::endl;
-    std::cout << sceonds_elapsed << "s elapsed" << std::endl;
+              << " entries, eval = " << (entry.value / 100.)
+              << ", PV = " << transposition_table.get_pv_string(board) << ")"
+              << std::endl;
+    std::cout << seconds_elapsed << "s elapsed" << std::endl;
     depth++;
   }
 

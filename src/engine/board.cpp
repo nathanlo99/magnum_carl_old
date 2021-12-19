@@ -350,7 +350,14 @@ std::string Board::to_string(const int side) const noexcept {
   //   result << "BOOK    : " << opening_book.book_moves_string(*this) << "\n";
   // }
   if (!m_history.empty()) {
-    result << "LAST MV : " << algebraic_notation(m_history.back().move) << "\n";
+    // Since the previous move was not played in the current position, we have
+    // to revert to the last position before calling algebraic_notation, because
+    // algebraic_notation needs to be aware of the legal moves at the time the
+    // move was played (to disambiguate)
+    const move_t last_move = m_history.back().move;
+    Board tmp(*this);
+    tmp.unmake_move();
+    result << "LAST MV : " << tmp.algebraic_notation(last_move) << "\n";
   }
   // const int evaluation = static_evaluate_board(*this, WHITE);
   // result << "EVAL    : " << evaluation << "\n";

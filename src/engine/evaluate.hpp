@@ -5,7 +5,7 @@
 
 enum {
   MATE = 90000,
-  SCORE_INFINITY = MATE + 1,
+  SCORE_INFINITY = MATE,
 };
 
 int static_evaluate_board(const Board &board, const int side);
