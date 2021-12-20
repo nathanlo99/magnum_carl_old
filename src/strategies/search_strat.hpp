@@ -20,7 +20,7 @@ public:
   move_t make_move(const Board &board,
                    const std::vector<move_t> &move_list) override {
     if (m_use_book) {
-      const move_t book_move = opening_book.query(board);
+      const move_t book_move = opening_book.query(board, 10);
       if (book_move != 0)
         return book_move;
     }

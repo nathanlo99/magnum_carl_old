@@ -1,11 +1,6 @@
 
 #pragma once
 
-#include <cstdint>
-
-#include "assert.hpp"
-#include "types.hpp"
-
 enum Castle {
   WHITE_SHORT = 0x1,
   WHITE_LONG = 0x2,

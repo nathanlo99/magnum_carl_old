@@ -12,6 +12,7 @@
 #include "hash.hpp"
 #include "move.hpp"
 #include "opening_book.hpp"
+#include "perf_counter.hpp"
 #include "simulate.hpp"
 
 void test_position(const std::string &fen) {
@@ -22,11 +23,12 @@ void test_position(const std::string &fen) {
 }
 
 int main(int argc, char *argv[]) {
+  std::cout << "Initializing playchess..." << std::endl;
   init_hash();
-  const auto ns = timeit(
-      [&] { opening_book.read("references/book/processed_games.txt", 16); });
-  std::cout << "Reading opening book took " << (ns / 1e9) << " seconds"
-            << std::endl;
+  const auto book_ns = timeit(
+      [&] { opening_book.read_book("references/book/opening_book.txt"); });
+  std::cout << "Reading processed opening book took " << (book_ns / 1e9)
+            << " seconds" << std::endl;
 
   std::string perft_file =
       (argc > 1) ? argv[1] : "tests/perft_files/skip.perft";
@@ -36,24 +38,9 @@ int main(int argc, char *argv[]) {
          "====================================================================="
          "===\n");
 
-  test_position("6k1/8/8/8/8/2Q2q2/8/K7 w - - 0 1");
-  test_position("8/8/3n1k2/1p3r2/8/2KQ2b1/4q3/8 w - - 0 1");
+  // test_position("6k1/8/8/8/8/2Q2q2/8/K7 w - - 0 1");
+  // test_position("8/8/3n1k2/1p3r2/8/2KQ2b1/4q3/8 w - - 0 1");
   test_position("6k1/3b3r/1p1p4/p1n2p2/1PPNpP1q/P3Q1p1/1R1RB1P1/5K2 b - - 0 1");
 
-  // simulate_search(100, 150.0, "8/k7/3p4/p2P1p2/P2P1P2/8/8/K7 w - - 0 1");
-
-  const game_record result = manual_play_white(8, 10.0);
-  switch (result.result) {
-  case -1:
-    std::cout << "Black wins!" << std::endl;
-    break;
-  case 0:
-    std::cout << "Tie!" << std::endl;
-    break;
-  case 1:
-    std::cout << "White wins!" << std::endl;
-    break;
-  default:
-    break;
-  }
+  manual_play_white(7, 3.0);
 }

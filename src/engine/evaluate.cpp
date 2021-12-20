@@ -444,10 +444,9 @@ float seconds_since(
 int iterative_deepening(Board &board, const int max_depth,
                         const float seconds_to_search) {
 
-  int depth = 1;
-  const auto legal_moves = board.legal_moves();
   const auto start = std::chrono::high_resolution_clock::now();
 
+  int depth = 1;
   while (depth < max_depth && seconds_since(start) < seconds_to_search / 2.) {
     std::cout << "Searching to depth " << std::setw(2) << depth << "..."
               << std::flush;
@@ -457,8 +456,7 @@ int iterative_deepening(Board &board, const int max_depth,
     const float seconds_elapsed = seconds_since(start);
     std::cout << "  done! (" << std::setw(7) << transposition_table.size()
               << " entries, eval = " << eval_to_string(entry.value)
-              << ", PV = " << transposition_table.get_pv_string(board) << ")"
-              << std::endl;
+              << ", PV = " << get_pv_string(board) << ")" << std::endl;
     std::cout << seconds_elapsed << "s elapsed" << std::endl;
     depth++;
   }
@@ -480,7 +478,7 @@ move_t get_best_move(const Board &board, const int depth, const float seconds) {
   const TableEntry entry = transposition_table.query(board.hash());
   std::cout << "The overall best move was: "
             << board.algebraic_notation(entry.best_move) << " with score "
-            << entry.value << std::endl;
+            << eval_to_string(entry.value) << std::endl;
 
   return entry.best_move;
 }

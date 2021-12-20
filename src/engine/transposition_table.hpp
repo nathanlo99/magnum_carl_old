@@ -37,12 +37,14 @@ class TranspositionTable {
   Table m_table;
 
 public:
+  void clear() noexcept { m_table.clear(); }
   size_t size() const noexcept { return m_table.size(); }
   TableEntry query(const hash_t hash) const;
   void insert(const hash_t hash, const move_t best_move, const int depth,
               const int value, const NodeType type, const int half_move);
-  std::vector<move_t> get_pv(const Board &board) const;
-  std::string get_pv_string(const Board &board) const;
 };
+
+std::vector<move_t> get_pv(const Board &board);
+std::string get_pv_string(const Board &board);
 
 extern TranspositionTable transposition_table;

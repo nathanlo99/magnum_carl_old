@@ -23,12 +23,12 @@ void TranspositionTable::insert(const hash_t hash, const move_t best_move,
   m_table[hash] = {hash, best_move, depth, value, type, half_move};
 }
 
-std::vector<move_t> TranspositionTable::get_pv(const Board &board) const {
+std::vector<move_t> get_pv(const Board &board) {
   Board tmp(board);
   std::set<hash_t> seen;
   std::vector<move_t> result;
   while (true) {
-    const TableEntry entry = query(tmp.hash());
+    const TableEntry entry = transposition_table.query(tmp.hash());
     if (entry.type == NodeType::None || entry.best_move == 0)
       break;
     const move_t pv_move = entry.best_move;
@@ -43,7 +43,7 @@ std::vector<move_t> TranspositionTable::get_pv(const Board &board) const {
   return result;
 }
 
-std::string TranspositionTable::get_pv_string(const Board &board) const {
+std::string get_pv_string(const Board &board) {
   Board tmp(board);
   const std::vector<move_t> pv_moves = get_pv(board);
   std::stringstream result;
