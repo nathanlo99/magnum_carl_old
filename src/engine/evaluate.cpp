@@ -204,27 +204,31 @@ int static_evaluate_move(const Board &board, const move_t move) {
   return value;
 }
 
-int evaluate_move(const Board &board, const move_t move) {
-  Board tmp(board);
-  tmp.make_move(move);
-  const TableEntry entry = transposition_table.query(tmp.hash());
-  if (entry.type != NodeType::None)
-    return entry.value;
-  return static_evaluate_move(board, move);
+int evaluate_move(const Board &board, const move_t move,
+                  const hash_t next_hash) {
+  const int static_eval = static_evaluate_move(board, move);
+  // const TableEntry entry = transposition_table.query(next_hash);
+  // if (entry.valid())
+  // return entry.value() + static_eval / 2;
+  return static_eval;
 }
 
 std::vector<move_t> get_sorted_legal_moves(const Board &board,
                                            const int spec = MOVEGEN_ALL) {
-  std::vector<move_t> legal_moves = board.legal_moves(spec);
+  const auto pseudo_moves = board.pseudo_moves(spec);
   std::vector<std::pair<int, move_t>> eval_legal_moves;
   std::vector<move_t> result;
 
-  eval_legal_moves.reserve(legal_moves.size());
-  result.reserve(legal_moves.size());
+  eval_legal_moves.reserve(pseudo_moves.size());
+  result.reserve(pseudo_moves.size());
 
-  for (const move_t move : legal_moves) {
-    const int value = evaluate_move(board, move);
-    eval_legal_moves.emplace_back(value, move);
+  Board tmp(board);
+  for (const move_t move : board.pseudo_moves(spec)) {
+    if (tmp.make_move(move)) {
+      const int value = evaluate_move(board, move, tmp.hash());
+      eval_legal_moves.emplace_back(value, move);
+    }
+    tmp.unmake_move();
   }
 
   std::sort(eval_legal_moves.begin(), eval_legal_moves.end(),
@@ -281,12 +285,12 @@ int static_evaluate_board(const Board &board, const int side) {
   return (side == WHITE) ? white_eval : -white_eval;
 }
 
-int quiescence_search(Board &board, int depth = 0, int alpha = -SCORE_INFINITY,
+int quiescence_search(Board &board, const int ply, int alpha = -SCORE_INFINITY,
                       const int beta = SCORE_INFINITY) {
 
   // std::cout << "QS " << std::setw(16) << std::setfill('0') << std::hex
   //           << board.hash() << std::dec << "\t\t";
-  // std::cout << std::setw(3) << std::setfill(' ') << depth << " | ";
+  // std::cout << std::setw(3) << std::setfill(' ') << ply << " | ";
   // std::cout << std::setw(10) << std::setfill(' ') << alpha << ", "
   //           << std::setw(10) << std::setfill(' ') << beta << std::endl;
 
@@ -294,7 +298,7 @@ int quiescence_search(Board &board, int depth = 0, int alpha = -SCORE_INFINITY,
   const auto legal_captures =
       get_sorted_legal_moves(board, MOVEGEN_CAPTURES | MOVEGEN_PROMOTIONS);
   if (board.legal_moves().empty()) {
-    return board.king_in_check() ? -MATE : 0;
+    return board.king_in_check() ? -MATE + ply * MATE_OFFSET : 0;
   } else if (legal_captures.empty()) {
     return stand_pat_eval;
   }
@@ -307,7 +311,7 @@ int quiescence_search(Board &board, int depth = 0, int alpha = -SCORE_INFINITY,
   const move_t killer_move = entry.best_move;
   if (killer_move != 0 && move_captured(killer_move)) {
     board.make_move(killer_move);
-    const int value = -quiescence_search(board, depth - 1, -beta, -alpha);
+    const int value = -quiescence_search(board, ply + 1, -beta, -alpha);
     board.unmake_move();
     if (value >= beta)
       return value;
@@ -316,7 +320,7 @@ int quiescence_search(Board &board, int depth = 0, int alpha = -SCORE_INFINITY,
 
   for (const move_t next_move : legal_captures) {
     board.make_move(next_move);
-    const int value = -quiescence_search(board, depth - 1, -beta, -alpha);
+    const int value = -quiescence_search(board, ply + 1, -beta, -alpha);
     board.unmake_move();
     if (value >= beta)
       return value;
@@ -325,33 +329,34 @@ int quiescence_search(Board &board, int depth = 0, int alpha = -SCORE_INFINITY,
   return alpha;
 }
 
-int negamax(Board &board, const int depth) {
+int negamax(Board &board, const int ply, const int depth) {
   const auto legal_moves = get_sorted_legal_moves(board);
   if (legal_moves.empty()) {
-    return board.king_in_check() ? -MATE : 0;
+    return board.king_in_check() ? -mate_in(ply) : 0;
   } else if (board.is_drawn()) {
     return 0;
-  } else if (depth <= 0) {
-    return quiescence_search(board, 0);
+  } else if (ply >= depth) {
+    return quiescence_search(board, ply);
   }
 
   int best_score = -SCORE_INFINITY;
   for (const move_t move : legal_moves) {
     board.make_move(move);
-    const int this_score = -negamax(board, depth - 1);
+    const int value = -negamax(board, ply + 1, depth);
     board.unmake_move();
-    best_score = std::max(best_score, this_score);
+    best_score = std::max(best_score, value);
   }
   return best_score;
 }
 
-int alpha_beta(Board &board, const int depth, int alpha, const int beta) {
+int alpha_beta(Board &board, const int ply, const int max_depth, int alpha,
+               const int beta) {
   ASSERT_MSG(alpha <= beta, "alpha_beta range (%d - %d) is empty", alpha, beta);
 
-  // if (depth > 1) {
+  // if (ply > 1) {
   //   std::cout << "AB " << std::setw(16) << std::setfill('0') << std::hex
   //             << board.hash() << std::dec << "\t\t";
-  //   std::cout << std::setw(3) << std::setfill(' ') << depth << " | ";
+  //   std::cout << std::setw(3) << std::setfill(' ') << ply << " | ";
   //   std::cout << std::setw(10) << std::setfill(' ') << alpha << ", "
   //             << std::setw(10) << std::setfill(' ') << beta << std::endl;
   // }
@@ -359,12 +364,12 @@ int alpha_beta(Board &board, const int depth, int alpha, const int beta) {
   // Get the move-ordered legal moves and check for game termination cases
   const auto legal_moves = get_sorted_legal_moves(board);
   if (legal_moves.empty()) {
-    return board.king_in_check() ? -MATE : 0;
+    return board.king_in_check() ? -mate_in(ply) : 0;
   } else if (board.is_drawn()) {
     return 0;
-  } else if (depth <= 0) {
+  } else if (ply >= max_depth) {
     // If we've reached the search depth, perform quiescence_search instead
-    return quiescence_search(board, depth, alpha, beta);
+    return quiescence_search(board, ply, alpha, beta);
   }
 
   // Consult the transposition table: grab a cached evaluation and the best move
@@ -375,7 +380,7 @@ int alpha_beta(Board &board, const int depth, int alpha, const int beta) {
       entry.hash, board.hash());
   const move_t killer_move = entry.best_move;
   // Switch on entry.type to get better bounds on alpha and beta
-  if (entry.depth >= depth) {
+  if (entry.depth >= max_depth) {
     if (entry.type == NodeType::Exact) {
       return entry.value;
     } else if (entry.type == NodeType::Upper && entry.value <= alpha) {
@@ -390,11 +395,11 @@ int alpha_beta(Board &board, const int depth, int alpha, const int beta) {
 
   if (killer_move != 0) {
     board.make_move(killer_move);
-    const int value = -alpha_beta(board, depth - 1, -beta, -alpha);
+    const int value = -alpha_beta(board, ply + 1, max_depth, -beta, -alpha);
     board.unmake_move();
 
     if (value >= beta) {
-      transposition_table.insert(board.hash(), killer_move, depth, value,
+      transposition_table.insert(board.hash(), killer_move, max_depth, value,
                                  NodeType::Lower, board.m_half_move);
       return value;
     }
@@ -406,11 +411,11 @@ int alpha_beta(Board &board, const int depth, int alpha, const int beta) {
 
   for (const move_t next_move : legal_moves) {
     board.make_move(next_move);
-    const int value = -alpha_beta(board, depth - 1, -beta, -alpha);
+    const int value = -alpha_beta(board, ply + 1, max_depth, -beta, -alpha);
     board.unmake_move();
 
     if (value >= beta) {
-      transposition_table.insert(board.hash(), next_move, depth, value,
+      transposition_table.insert(board.hash(), next_move, max_depth, value,
                                  NodeType::Lower, board.m_half_move);
       return value;
     }
@@ -420,13 +425,10 @@ int alpha_beta(Board &board, const int depth, int alpha, const int beta) {
     }
   }
 
-  if (alpha == start_alpha) {
-    transposition_table.insert(board.hash(), best_move, depth, alpha,
-                               NodeType::Upper, board.m_half_move);
-  } else {
-    transposition_table.insert(board.hash(), best_move, depth, alpha,
-                               NodeType::Exact, board.m_half_move);
-  }
+  const NodeType type = (alpha == start_alpha) ? Upper : Exact;
+  transposition_table.insert(board.hash(), best_move, max_depth, alpha, type,
+                             board.m_half_move);
+
   return alpha;
 }
 
@@ -449,12 +451,12 @@ int iterative_deepening(Board &board, const int max_depth,
   while (depth < max_depth && seconds_since(start) < seconds_to_search / 2.) {
     std::cout << "Searching to depth " << std::setw(2) << depth << "..."
               << std::flush;
-    alpha_beta(board, depth);
+    alpha_beta(board, 0, depth);
 
     const TableEntry entry = transposition_table.query(board.hash());
     const float seconds_elapsed = seconds_since(start);
     std::cout << "  done! (" << std::setw(7) << transposition_table.size()
-              << " entries, eval = " << (entry.value / 100.)
+              << " entries, eval = " << eval_to_string(entry.value)
               << ", PV = " << transposition_table.get_pv_string(board) << ")"
               << std::endl;
     std::cout << seconds_elapsed << "s elapsed" << std::endl;
@@ -467,7 +469,7 @@ int iterative_deepening(Board &board, const int max_depth,
 int evaluate_board(const Board &board, const int depth) {
   Board tmp = board;
   const int iterative_depth = iterative_deepening(tmp, depth, 5);
-  return alpha_beta(tmp, iterative_depth);
+  return alpha_beta(tmp, 0, iterative_depth);
 }
 
 move_t get_best_move(const Board &board, const int depth, const float seconds) {

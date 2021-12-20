@@ -14,16 +14,19 @@
 #include "opening_book.hpp"
 #include "simulate.hpp"
 
-void test_position(std::string fen) {
+void test_position(const std::string &fen) {
   Board test_board(fen);
-  const move_t best_move = get_best_move(test_board, 10, 5.0);
+  const move_t best_move = get_best_move(test_board, 10, 30.0);
   std::cout << test_board << std::endl;
   std::cout << "Best move is " << string_from_move(best_move) << std::endl;
 }
 
 int main(int argc, char *argv[]) {
   init_hash();
-  opening_book.read("references/book/processed_games.txt", 12);
+  const auto ns = timeit(
+      [&] { opening_book.read("references/book/processed_games.txt", 16); });
+  std::cout << "Reading opening book took " << (ns / 1e9) << " seconds"
+            << std::endl;
 
   std::string perft_file =
       (argc > 1) ? argv[1] : "tests/perft_files/skip.perft";
@@ -39,7 +42,7 @@ int main(int argc, char *argv[]) {
 
   // simulate_search(100, 150.0, "8/k7/3p4/p2P1p2/P2P1P2/8/8/K7 w - - 0 1");
 
-  const game_record result = manual_play_white(100, 10.0);
+  const game_record result = manual_play_white(8, 10.0);
   switch (result.result) {
   case -1:
     std::cout << "Black wins!" << std::endl;
