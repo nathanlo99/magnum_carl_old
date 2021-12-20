@@ -204,31 +204,27 @@ int static_evaluate_move(const Board &board, const move_t move) {
   return value;
 }
 
-int evaluate_move(const Board &board, const move_t move,
-                  const hash_t next_hash) {
-  const int static_eval = static_evaluate_move(board, move);
-  const TableEntry entry = transposition_table.query(next_hash);
-  if (entry.valid())
-    return entry.value() + static_eval / 2;
-  return static_eval;
+int evaluate_move(const Board &board, const move_t move) {
+  Board tmp(board);
+  tmp.make_move(move);
+  const TableEntry entry = transposition_table.query(tmp.hash());
+  if (entry.type != NodeType::None)
+    return entry.value;
+  return static_evaluate_move(board, move);
 }
 
 std::vector<move_t> get_sorted_legal_moves(const Board &board,
                                            const int spec = MOVEGEN_ALL) {
-  const auto pseudo_moves = board.pseudo_moves(spec);
+  std::vector<move_t> legal_moves = board.legal_moves(spec);
   std::vector<std::pair<int, move_t>> eval_legal_moves;
   std::vector<move_t> result;
 
-  eval_legal_moves.reserve(pseudo_moves.size());
-  result.reserve(pseudo_moves.size());
+  eval_legal_moves.reserve(legal_moves.size());
+  result.reserve(legal_moves.size());
 
-  Board tmp(board);
-  for (const move_t move : board.pseudo_moves(spec)) {
-    if (tmp.make_move(move)) {
-      const int value = evaluate_move(board, move, tmp.hash());
-      eval_legal_moves.emplace_back(value, move);
-    }
-    tmp.unmake_move();
+  for (const move_t move : legal_moves) {
+    const int value = evaluate_move(board, move);
+    eval_legal_moves.emplace_back(value, move);
   }
 
   std::sort(eval_legal_moves.begin(), eval_legal_moves.end(),
@@ -309,8 +305,7 @@ int quiescence_search(Board &board, int depth = 0, int alpha = -SCORE_INFINITY,
 
   const TableEntry entry = transposition_table.query(board.hash());
   const move_t killer_move = entry.best_move;
-  if (killer_move != 0 &&
-      (move_captured(killer_move) || move_promoted(killer_move))) {
+  if (killer_move != 0 && move_captured(killer_move)) {
     board.make_move(killer_move);
     const int value = -quiescence_search(board, depth - 1, -beta, -alpha);
     board.unmake_move();
@@ -343,9 +338,9 @@ int negamax(Board &board, const int depth) {
   int best_score = -SCORE_INFINITY;
   for (const move_t move : legal_moves) {
     board.make_move(move);
-    const int value = -negamax(board, depth - 1);
+    const int this_score = -negamax(board, depth - 1);
     board.unmake_move();
-    best_score = std::max(best_score, value);
+    best_score = std::max(best_score, this_score);
   }
   return best_score;
 }
@@ -374,23 +369,24 @@ int alpha_beta(Board &board, const int depth, int alpha, const int beta) {
 
   // Consult the transposition table: grab a cached evaluation and the best move
   const TableEntry entry = transposition_table.query(board.hash());
-  ASSERT_IF_MSG(
-      entry.valid(), entry.hash == board.hash(),
+  ASSERT_MSG(
+      entry.type == NodeType::None || entry.hash == board.hash(),
       "Queried table entry's hash (%llu) did not match board hash (%llu)",
       entry.hash, board.hash());
   const move_t killer_move = entry.best_move;
+  // Switch on entry.type to get better bounds on alpha and beta
   if (entry.depth >= depth) {
-    if (entry.min_value == entry.max_value) {
-      return entry.min_value;
-    } else if (entry.max_value <= alpha) {
+    if (entry.type == NodeType::Exact) {
+      return entry.value;
+    } else if (entry.type == NodeType::Upper && entry.value <= alpha) {
       return alpha;
-    } else if (entry.min_value >= beta) {
-      return entry.min_value;
+    } else if (entry.type == NodeType::Lower && entry.value >= beta) {
+      return entry.value;
     }
   }
 
   int start_alpha = alpha;
-  move_t best_move = legal_moves[0];
+  move_t best_move = 0;
 
   if (killer_move != 0) {
     board.make_move(killer_move);
@@ -398,7 +394,8 @@ int alpha_beta(Board &board, const int depth, int alpha, const int beta) {
     board.unmake_move();
 
     if (value >= beta) {
-      transposition_table.insert(board, killer_move, depth, value, MATE);
+      transposition_table.insert(board.hash(), killer_move, depth, value,
+                                 NodeType::Lower, board.m_half_move);
       return value;
     }
     if (value > alpha) {
@@ -413,7 +410,8 @@ int alpha_beta(Board &board, const int depth, int alpha, const int beta) {
     board.unmake_move();
 
     if (value >= beta) {
-      transposition_table.insert(board, next_move, depth, value, MATE);
+      transposition_table.insert(board.hash(), next_move, depth, value,
+                                 NodeType::Lower, board.m_half_move);
       return value;
     }
     if (value > alpha) {
@@ -422,10 +420,13 @@ int alpha_beta(Board &board, const int depth, int alpha, const int beta) {
     }
   }
 
-  if (alpha > start_alpha) {
-    transposition_table.insert(board, best_move, depth, alpha, alpha);
+  if (alpha == start_alpha) {
+    transposition_table.insert(board.hash(), best_move, depth, alpha,
+                               NodeType::Upper, board.m_half_move);
+  } else {
+    transposition_table.insert(board.hash(), best_move, depth, alpha,
+                               NodeType::Exact, board.m_half_move);
   }
-
   return alpha;
 }
 
@@ -453,9 +454,8 @@ int iterative_deepening(Board &board, const int max_depth,
     const TableEntry entry = transposition_table.query(board.hash());
     const float seconds_elapsed = seconds_since(start);
     std::cout << "  done! (" << std::setw(7) << transposition_table.size()
-              << " entries, eval = (" << eval_to_string(entry.min_value) << ", "
-              << eval_to_string(entry.max_value)
-              << "), PV = " << transposition_table.get_pv_string(board) << ")"
+              << " entries, eval = " << (entry.value / 100.)
+              << ", PV = " << transposition_table.get_pv_string(board) << ")"
               << std::endl;
     std::cout << seconds_elapsed << "s elapsed" << std::endl;
     depth++;
@@ -478,7 +478,7 @@ move_t get_best_move(const Board &board, const int depth, const float seconds) {
   const TableEntry entry = transposition_table.query(board.hash());
   std::cout << "The overall best move was: "
             << board.algebraic_notation(entry.best_move) << " with score "
-            << eval_to_string(entry.value()) << std::endl;
+            << entry.value << std::endl;
 
   return entry.best_move;
 }

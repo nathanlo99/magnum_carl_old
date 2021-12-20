@@ -2,7 +2,6 @@
 #pragma once
 
 #include "board.hpp"
-#include "evaluate.hpp"
 #include "hash.hpp"
 #include "move.hpp"
 
@@ -14,24 +13,21 @@
 
 // Searches can then use this information to provide better move ordering, and
 // faster evaluations
+
+enum NodeType {
+  None = 0,
+  Exact, // (PV-Node) This node provides an exact evaluated score at the depth
+  Lower, // (All-Node) This node was a beta-cut: the score is only a lower bound
+  Upper, // (Cut-Node) This score is an upper bound: no moves exceeded value
+};
+
 struct TableEntry {
   hash_t hash = 0;
   move_t best_move = 0;
   int depth = 0;
-  int min_value = MATE;
-  int max_value = -MATE;
-
-  bool valid() const { return min_value <= max_value; }
-  int value() const { return min_value == -MATE ? max_value : min_value; }
-
-  std::string to_string() const {
-    std::stringstream result;
-    result << "{";
-    result << " depth: " << depth;
-    result << ", value: [" << min_value << ", " << max_value << "]";
-    result << "}";
-    return result.str();
-  }
+  int value = 0;
+  NodeType type = None;
+  int half_move = 0;
 };
 
 // TODO: Will probably roll my own implementation of this once things are more
@@ -43,8 +39,8 @@ class TranspositionTable {
 public:
   size_t size() const noexcept { return m_table.size(); }
   TableEntry query(const hash_t hash) const;
-  void insert(const Board &board, const move_t best_move, const int depth,
-              const int min_value, const int max_value);
+  void insert(const hash_t hash, const move_t best_move, const int depth,
+              const int value, const NodeType type, const int half_move);
   std::vector<move_t> get_pv(const Board &board) const;
   std::string get_pv_string(const Board &board) const;
 };
