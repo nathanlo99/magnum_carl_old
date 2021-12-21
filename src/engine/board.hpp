@@ -83,6 +83,7 @@ public:
   bool king_in_check() const noexcept;
   std::vector<move_t> pseudo_moves(const int spec = MOVEGEN_ALL) const noexcept;
   std::vector<move_t> legal_moves(const int spec = MOVEGEN_ALL) const noexcept;
+  bool has_legal_moves() const noexcept;
   constexpr inline bool is_three_fold() const noexcept {
     // Since the position frequency map is updated with a given position only
     // when that position is _played on_, if we reach a position with frequency

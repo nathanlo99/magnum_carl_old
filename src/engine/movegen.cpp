@@ -282,6 +282,17 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
   return result;
 }
 
+bool Board::has_legal_moves() const noexcept {
+  Board tmp(*this);
+  const auto pseudo_moves = this->pseudo_moves();
+  for (const move_t move : pseudo_moves) {
+    if (tmp.make_move(move))
+      return true;
+    tmp.unmake_move();
+  }
+  return false;
+}
+
 std::vector<move_t> Board::legal_moves(const int spec) const noexcept {
   std::vector<move_t> result;
   Board tmp = *this;

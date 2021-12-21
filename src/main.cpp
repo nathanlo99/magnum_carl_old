@@ -14,8 +14,13 @@
 #include "opening_book.hpp"
 #include "perf_counter.hpp"
 #include "simulate.hpp"
+#include "transposition_table.hpp"
+
+const std::string mate_in_5 =
+    "6k1/3b3r/1p1p4/p1n2p2/1PPNpP1q/P3Q1p1/1R1RB1P1/5K2 b - - 0 1";
 
 void test_position(const std::string &fen) {
+  transposition_table.clear();
   Board test_board(fen);
   const move_t best_move = get_best_move(test_board, 10, 30.0);
   std::cout << test_board << std::endl;
@@ -40,7 +45,7 @@ int main(int argc, char *argv[]) {
 
   // test_position("6k1/8/8/8/8/2Q2q2/8/K7 w - - 0 1");
   // test_position("8/8/3n1k2/1p3r2/8/2KQ2b1/4q3/8 w - - 0 1");
-  test_position("6k1/3b3r/1p1p4/p1n2p2/1PPNpP1q/P3Q1p1/1R1RB1P1/5K2 b - - 0 1");
+  test_position(mate_in_5);
 
   manual_play_white(7, 3.0);
 }

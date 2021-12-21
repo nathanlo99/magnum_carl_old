@@ -2,9 +2,11 @@
 #pragma once
 
 #include "board.hpp"
+#include "evaluate.hpp"
 #include "hash.hpp"
 #include "move.hpp"
 
+#include <map>
 #include <unordered_map>
 
 // The transposition table currently stores a mapping from position hashes, to
@@ -25,9 +27,23 @@ struct TableEntry {
   hash_t hash = 0;
   move_t best_move = 0;
   int depth = 0;
-  int value = 0;
+  int value = -SCORE_INFINITY;
   NodeType type = None;
-  int half_move = 0;
+  size_t half_move = 0;
+
+  std::string to_string() const {
+    std::stringstream result;
+    result << "{";
+    result << " depth: " << depth;
+    result << ", best_move: " << string_from_move(best_move);
+    result << ", value: " << value;
+    const std::string type_string = ((type == Exact)   ? "Exact"
+                                     : (type == Upper) ? "Upper"
+                                                       : "Lower");
+    result << ", type: " << type_string;
+    result << "}";
+    return result.str();
+  }
 };
 
 // TODO: Will probably roll my own implementation of this once things are more
@@ -40,8 +56,8 @@ public:
   void clear() noexcept { m_table.clear(); }
   size_t size() const noexcept { return m_table.size(); }
   TableEntry query(const hash_t hash) const;
-  void insert(const hash_t hash, const move_t best_move, const int depth,
-              const int value, const NodeType type, const int half_move);
+  void insert(const Board &board, const move_t best_move, const int depth,
+              const int value, const NodeType type);
 };
 
 std::vector<move_t> get_pv(const Board &board);
