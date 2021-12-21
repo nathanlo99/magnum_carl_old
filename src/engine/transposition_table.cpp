@@ -7,6 +7,7 @@
 #include <vector>
 
 TranspositionTable transposition_table;
+TranspositionTable quiescence_table;
 
 TableEntry TranspositionTable::query(const hash_t hash) const {
   const auto it = m_table.find(hash);
@@ -30,11 +31,13 @@ void TranspositionTable::insert(const Board &board, const move_t best_move,
     perf_counter.increment("TT_insert_depth_too_low");
     replace = false;
   } else if (previous_entry.depth < depth) {
+    perf_counter.increment("TT_insert_depth_improved");
     replace = true;
   } else if (previous_entry.value > value) {
     perf_counter.increment("TT_insert_value_too_low");
     replace = false;
   }
+
   if (replace) {
     perf_counter.increment("TT_insert_replace");
     m_table[hash] = new_entry;

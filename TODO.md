@@ -1,6 +1,6 @@
 
 Short term:
-- Add a statistics module which tracks common counters (number of alpha-beta calls, number of quiescence_search calls, number of static evaluations, number of transposition_table queries, etc) in debug mode and prints them out periodically
+- Prioritize checks, history heuristic, killer heuristic
 - Add null move pruning, and consider MTD-bi search
 
 

@@ -64,3 +64,4 @@ std::vector<move_t> get_pv(const Board &board);
 std::string get_pv_string(const Board &board);
 
 extern TranspositionTable transposition_table;
+extern TranspositionTable quiescence_table;

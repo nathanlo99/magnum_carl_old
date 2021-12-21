@@ -1,0 +1,69 @@
+Initializing playchess...
+Searching to depth  1...  done! (      1 entries, eval = -3.85, PV = axb4)
+0.0021975s elapsed
+Searching to depth  2...  done! (     38 entries, eval = -3.85, PV = axb4, Rxb4)
+0.00607179s elapsed
+Searching to depth  3...  done! (    112 entries, eval = 4.10, PV = Qxf4, Ke1, Qxe3)
+0.0381344s elapsed
+Searching to depth  4...  done! (   1153 entries, eval = 4.90, PV = Qxf4, Bf3, Qxe3, bxc5)
+0.0837978s elapsed
+Searching to depth  5...  done! (   2220 entries, eval = 6.45, PV = Qxf4, Ke1, Rh1, Qg1, Rxg1)
+0.469277s elapsed
+Searching to depth  6...  done! (  19784 entries, eval = 8.45, PV = Qxf4, Bf3, Qxe3, Bh5, Na4, Nxf5)
+1.11835s elapsed
+Searching to depth  7...  done! (  35158 entries, eval = 10.65, PV = Qxf4, Bf3, Qxe3, Bh5, Rxh5, Nf3, axb4)
+6.15701s elapsed
+Searching to depth  8...  done! ( 239731 entries, eval = #9, PV = Qxf4, Bf3, Qxe3, Bh5, Rxh5, Nf3, Rh1, Ng1)
+13.691s elapsed
+Searching to depth  9...  done! ( 381549 entries, eval = #9, PV = Qxf4, Bf3, Qxe3, Bh5, Rxh5, Nf3, Rh1, Ng1, Rxg1)
+59.36s elapsed
+EV: #9
+PV: Qxf4, Bf3, Qxe3, Bh5, Rxh5, Nf3, Rh1, Ng1, Rxg1
+------------- PERF COUNTER DUMP --------------
+AB: 4943613
+AB_exact_lookup: 1532
+AB_killer_beta_cut: 242064
+AB_lower_lookup: 285170
+AB_no_cut: 184270
+AB_non_killer_beta_cut: 226102
+AB_upper_lookup: 60764
+QS: 4396503
+QS_no_cut: 209834
+QS_non_killer_beta_cut: 14269
+QS_stand_pat_beta_cut: 4044308
+TT_insert: 652436
+TT_insert_replace: 652212
+TT_insert_value_too_low: 51
+get_sorted_legal_moves: 9340116
+static_evaluate_board: 4396503
+static_evaluate_move: 188512478
+----------------------------------------------
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   | b |   |   |   | r |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | p |   | p |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 | p |   | n |   |   | p |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | P | P | N | p | P |   | q |
+   +---+---+---+---+---+---+---+---+
+ 3 | P |   |   |   | Q |   | p |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | R |   | R | B |   | P |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   | K |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 1
+HASH    : bad440c001c7ac0a
+FEN     : 6k1/3b3r/1p1p4/p1n2p2/1PPNpP1q/P3Q1p1/1R1RB1P1/5K2 b - - 0 1
+
+Best move is h4xf4

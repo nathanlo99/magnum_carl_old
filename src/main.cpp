@@ -22,7 +22,7 @@ const std::string mate_in_5 =
 void test_position(const std::string &fen) {
   transposition_table.clear();
   Board test_board(fen);
-  const move_t best_move = get_best_move(test_board, 10, 30.0);
+  const move_t best_move = get_best_move(test_board, 9, 30.0);
   std::cout << test_board << std::endl;
   std::cout << "Best move is " << string_from_move(best_move) << std::endl;
 }
@@ -30,22 +30,22 @@ void test_position(const std::string &fen) {
 int main(int argc, char *argv[]) {
   std::cout << "Initializing playchess..." << std::endl;
   init_hash();
-  const auto book_ns = timeit(
-      [&] { opening_book.read_book("references/book/opening_book.txt"); });
-  std::cout << "Reading processed opening book took " << (book_ns / 1e9)
-            << " seconds" << std::endl;
+  // const auto book_ns = timeit(
+  //     [&] { opening_book.read_book("references/book/opening_book.txt"); });
+  // std::cout << "Reading processed opening book took " << (book_ns / 1e9)
+  //           << " seconds" << std::endl;
 
-  std::string perft_file =
-      (argc > 1) ? argv[1] : "tests/perft_files/skip.perft";
-  const int test_error = run_tests(perft_file, 6);
-  ASSERT_MSG(!test_error, "Tests did not complete successfully");
-  printf("Done testing!\n"
-         "====================================================================="
-         "===\n");
+  // std::string perft_file =
+  //     (argc > 1) ? argv[1] : "tests/perft_files/skip.perft";
+  // const int test_error = run_tests(perft_file, 6);
+  // ASSERT_MSG(!test_error, "Tests did not complete successfully");
+  // printf("Done testing!\n"
+  //        "====================================================================="
+  //        "===\n");
 
   // test_position("6k1/8/8/8/8/2Q2q2/8/K7 w - - 0 1");
   // test_position("8/8/3n1k2/1p3r2/8/2KQ2b1/4q3/8 w - - 0 1");
   test_position(mate_in_5);
 
-  manual_play_white(7, 3.0);
+  // manual_play_white(7, 3.0);
 }
