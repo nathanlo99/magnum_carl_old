@@ -16,36 +16,46 @@
 #include "simulate.hpp"
 #include "transposition_table.hpp"
 
+const std::string explode =
+    "q2k2q1/2nqn2b/1n1P1n1b/2rnr2Q/1NQ1QN1Q/3Q3B/2RQR2B/Q2K2Q1 w - - 0 1";
 const std::string mate_in_5 =
     "6k1/3b3r/1p1p4/p1n2p2/1PPNpP1q/P3Q1p1/1R1RB1P1/5K2 b - - 0 1";
+const std::string mate_in_6 = "q7/n2BNp2/5k1P/1p5P/1p2RP2/1K6/8/8 w - - 0 1";
+const std::string puzzle =
+    "r3kb1r/ppp1qpp1/3p4/4n2p/2Bp2P1/3P2Q1/PPP2PP1/RNB1R1K1 b - - 0 1";
+const std::string behting = "8/8/7p/3KNN1k/2p4p/8/3P2p1/8 w - - 0 1";
 
 void test_position(const std::string &fen) {
   transposition_table.clear();
   Board test_board(fen);
-  const move_t best_move = get_best_move(test_board, 9, 30.0);
+  const move_t best_move = get_best_move(test_board, 20, 60.0);
   std::cout << test_board << std::endl;
-  std::cout << "Best move is " << string_from_move(best_move) << std::endl;
+  std::cout << "Best move is " << test_board.algebraic_notation(best_move)
+            << std::endl;
 }
 
 int main(int argc, char *argv[]) {
   std::cout << "Initializing playchess..." << std::endl;
   init_hash();
-  // const auto book_ns = timeit(
-  //     [&] { opening_book.read_book("references/book/opening_book.txt"); });
-  // std::cout << "Reading processed opening book took " << (book_ns / 1e9)
-  //           << " seconds" << std::endl;
+  const auto book_ns = timeit(
+      [&] { opening_book.read_book("references/book/opening_book.txt"); });
+  std::cout << "Reading processed opening book took " << (book_ns / 1e9)
+            << " seconds" << std::endl;
 
-  // std::string perft_file =
-  //     (argc > 1) ? argv[1] : "tests/perft_files/skip.perft";
-  // const int test_error = run_tests(perft_file, 6);
-  // ASSERT_MSG(!test_error, "Tests did not complete successfully");
-  // printf("Done testing!\n"
-  //        "====================================================================="
-  //        "===\n");
+  test_search_set("tests/search_tests/kaufman.search");
+
+  std::string perft_file =
+      (argc > 1) ? argv[1] : "tests/perft_files/skip.perft";
+  const int test_error = run_tests(perft_file, 6);
+  ASSERT_MSG(!test_error, "Tests did not complete successfully");
+  printf("Done testing!\n"
+         "====================================================================="
+         "===\n");
 
   // test_position("6k1/8/8/8/8/2Q2q2/8/K7 w - - 0 1");
   // test_position("8/8/3n1k2/1p3r2/8/2KQ2b1/4q3/8 w - - 0 1");
-  test_position(mate_in_5);
+  // test_position(mate_in_5);
+  // test_position(mate_in_6);
 
-  // manual_play_white(7, 3.0);
+  // test_position(behting);
 }

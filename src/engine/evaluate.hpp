@@ -11,7 +11,8 @@ enum {
   MATE = 90000,
   MATE_OFFSET = 50,
   SCORE_INFINITY = MATE,
-  MATE_THRESHOLD = MATE - 100 * MATE_OFFSET,
+  MAX_MATE_LENGTH = 100,
+  MATE_THRESHOLD = MATE - MAX_MATE_LENGTH * MATE_OFFSET,
 };
 
 constexpr inline int mate_in(const int num_moves) {
@@ -35,5 +36,5 @@ int evaluate_board(const Board &board, const int depth);
 move_t get_best_move(const Board &board, const int depth, const float seconds);
 
 // For testing only
-int alpha_beta(Board &board, const int ply, const int max_depth,
-               int alpha = -SCORE_INFINITY, const int beta = SCORE_INFINITY);
+int alpha_beta(Board &board, const int ply, int max_depth,
+               int alpha = -SCORE_INFINITY, int beta = SCORE_INFINITY);

@@ -1,0 +1,3150 @@
+Initializing playchess...
+Loading book from 'references/book/opening_book.txt'...
+Catalogued 1887 positions into opening book
+Reading processed opening book took 0.0219825 seconds
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   | r | b | q |   | r | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 | p |   | b |   | n | p | p | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | p |   |   | p |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | B |   | p | N |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 | P |   |   | B |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | P |   |   |   | P | P | P |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   | R | Q |   | R |   | K |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : 1f1461cff2cf8e86
+FEN     : 1rbq1rk1/p1b1nppp/1p2p3/8/1B1pN3/P2B4/1P3PPP/2RQ1R1K w - - 0 1
+
+Best move: Nf6
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -1.75, PV = Kg1)
+0.000307s elapsed
+Searching to depth  2...  done! (     49 entries, eval = -1.85, PV = Qc2, Be5)
+0.00473496s elapsed
+Searching to depth  3...  done! (     79 entries, eval = -1.75, PV = Qc2, Be5, Kg1)
+0.0165903s elapsed
+Searching to depth  4...  done! (   2261 entries, eval = -1.80, PV = Rxc7, Qxc7, Bd6, Qb7)
+0.23525s elapsed
+Searching to depth  5...  done! (   3583 entries, eval = -1.70, PV = Qa4, Bf4, Rce1, Rb7, Kg1)
+0.613539s elapsed
+Searching to depth  6...  done! (  74905 entries, eval = -1.20, PV = Qa4, Bf4, Rcd1, e5, Qxa7, Bb7)
+5.98779s elapsed
+Searching to depth  7...  done! ( 181461 entries, eval = -1.70, PV = Rxc7, Qxc7, Bd6, Qb7, Bxb8, Qxb8, Kg1)
+24.4606s elapsed
+Searching to depth  8...  done! (2378951 entries, eval = -1.25, PV = Ng5, h6, Nf3, Bd6, Bxd6, Qxd6, Qa4, e5)
+223.559s elapsed
+The overall best move was: Ng5 with score -1.25
+------------- PERF COUNTER DUMP --------------
+AB: 12614066
+AB_: 4118216
+AB_cut_beta: 2726915
+AB_cut_beta_move_000: 2445433
+AB_cut_beta_move_001: 128918
+AB_cut_beta_move_002: 37456
+AB_cut_beta_move_003: 19701
+AB_cut_beta_move_004: 8148
+AB_cut_beta_move_005: 7168
+AB_cut_beta_move_006: 12781
+AB_cut_beta_move_007: 11286
+AB_cut_beta_move_008: 4963
+AB_cut_beta_move_009: 2868
+AB_cut_beta_move_010: 3593
+AB_cut_beta_move_011: 2679
+AB_cut_beta_move_012: 2272
+AB_cut_beta_move_013: 2684
+AB_cut_beta_move_014: 2277
+AB_cut_beta_move_015: 1722
+AB_cut_beta_move_016: 1382
+AB_cut_beta_move_017: 1274
+AB_cut_beta_move_018: 1329
+AB_cut_beta_move_019: 1057
+AB_cut_beta_move_020: 937
+AB_cut_beta_move_021: 836
+AB_cut_beta_move_022: 681
+AB_cut_beta_move_023: 788
+AB_cut_beta_move_024: 1302
+AB_cut_beta_move_025: 1566
+AB_cut_beta_move_026: 1753
+AB_cut_beta_move_027: 1561
+AB_cut_beta_move_028: 2229
+AB_cut_beta_move_029: 2118
+AB_cut_beta_move_030: 1719
+AB_cut_beta_move_031: 1913
+AB_cut_beta_move_032: 1749
+AB_cut_beta_move_033: 1322
+AB_cut_beta_move_034: 871
+AB_cut_beta_move_035: 760
+AB_cut_beta_move_036: 601
+AB_cut_beta_move_037: 508
+AB_cut_beta_move_038: 625
+AB_cut_beta_move_039: 428
+AB_cut_beta_move_040: 321
+AB_cut_beta_move_041: 349
+AB_cut_beta_move_042: 321
+AB_cut_beta_move_043: 305
+AB_cut_beta_move_044: 276
+AB_cut_beta_move_045: 301
+AB_cut_beta_move_046: 353
+AB_cut_beta_move_047: 293
+AB_cut_beta_move_048: 294
+AB_cut_beta_move_049: 227
+AB_cut_beta_move_050: 172
+AB_cut_beta_move_051: 137
+AB_cut_beta_move_052: 100
+AB_cut_beta_move_053: 55
+AB_cut_beta_move_054: 53
+AB_cut_beta_move_055: 58
+AB_cut_beta_move_056: 29
+AB_cut_beta_move_057: 8
+AB_cut_beta_move_058: 3
+AB_cut_beta_move_060: 1
+AB_cut_beta_move_061: 1
+AB_cut_none_improved: 11329
+AB_cut_none_not_improved: 268862
+AB_lookup_exact: 784
+AB_lookup_lower: 1110326
+AB_mate_pruned: 4004
+SE: 48549748
+TT_insert: 2738244
+TT_insert_depth_improved: 2515066
+TT_insert_lower_to_lower: 223029
+TT_insert_new_exact: 149
+TT_insert_replace: 2515215
+TT_query: 31564159
+evaluate_move: 160613641
+get_sorted_legal_moves: 3007106
+order_moves: 24707646
+----------------------------------------------
+fail_high_rate: 0.896776
+EV: -1.25
+PV: Ng5, h6, Nf3, Bd6, Bxd6, Qxd6, Qa4, e5
+Found an irrelevant possibility: Ng5
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   | r |   |   | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 | p |   |   | r |   | p |   | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | p |   |   | p |   | p |   |
+   +---+---+---+---+---+---+---+---+
+ 5 | q |   |   |   |   | n |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   | P |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 | P | Q |   |   |   |   |   | P |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | P |   | R | N | P | P |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   | R |   |   | K |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 1
+HASH    : ab4db9a441bf2f7e
+FEN     : 3r2k1/p2r1p1p/1p2p1p1/q4n2/3P4/PQ5P/1P1RNPP1/3R2K1 b - - 0 1
+
+Best move: Nxd4
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -0.25, PV = e5)
+0.000330666s elapsed
+Searching to depth  2...  done! (     40 entries, eval = -0.30, PV = e5, d5)
+0.00549892s elapsed
+Searching to depth  3...  done! (     97 entries, eval = -0.25, PV = e5, d5, g5)
+0.0152983s elapsed
+Searching to depth  4...  done! (   1654 entries, eval = -0.30, PV = e5, d5, g5, Nc3)
+0.206092s elapsed
+Searching to depth  5...  done! (   3164 entries, eval = -0.25, PV = e5, d5, g5, Nc3, Nd4)
+0.466597s elapsed
+Searching to depth  6...  done! (  22877 entries, eval = -0.20, PV = e5, d5, b5, Rd3, e4, Rc3)
+2.47095s elapsed
+Searching to depth  7...  done! (  43408 entries, eval = -0.20, PV = e5, d5, b5, Qf3, b4, axb4, Qxb4)
+5.4262s elapsed
+Searching to depth  8...  done! ( 283706 entries, eval = -0.25, PV = e5, d5, b5, Qf3, b4, axb4, Qxb4, Nc3)
+23.4761s elapsed
+Searching to depth  9...  done! ( 661165 entries, eval = -0.20, PV = e5, d5, Qc5, Qf3, b5, Qe4, Re7, Nc3, Nd4)
+67.2452s elapsed
+Searching to depth 10...  done! (6226407 entries, eval = -0.20, PV = e5, d5, e4, Nc3, e3, Re2, exf2, Kxf2, Qc5, Kf1)
+653.465s elapsed
+The overall best move was: e5 with score -0.20
+------------- PERF COUNTER DUMP --------------
+AB: 39140652
+AB_: 11336612
+AB_cut_beta: 7061434
+AB_cut_beta_move_000: 5739332
+AB_cut_beta_move_001: 664857
+AB_cut_beta_move_002: 247384
+AB_cut_beta_move_003: 112370
+AB_cut_beta_move_004: 55192
+AB_cut_beta_move_005: 34207
+AB_cut_beta_move_006: 20053
+AB_cut_beta_move_007: 14275
+AB_cut_beta_move_008: 13582
+AB_cut_beta_move_009: 11882
+AB_cut_beta_move_010: 10484
+AB_cut_beta_move_011: 8025
+AB_cut_beta_move_012: 5674
+AB_cut_beta_move_013: 4558
+AB_cut_beta_move_014: 3867
+AB_cut_beta_move_015: 3593
+AB_cut_beta_move_016: 2598
+AB_cut_beta_move_017: 1995
+AB_cut_beta_move_018: 2601
+AB_cut_beta_move_019: 2738
+AB_cut_beta_move_020: 2809
+AB_cut_beta_move_021: 3100
+AB_cut_beta_move_022: 3730
+AB_cut_beta_move_023: 5210
+AB_cut_beta_move_024: 6205
+AB_cut_beta_move_025: 5234
+AB_cut_beta_move_026: 5661
+AB_cut_beta_move_027: 4736
+AB_cut_beta_move_028: 4479
+AB_cut_beta_move_029: 5267
+AB_cut_beta_move_030: 6253
+AB_cut_beta_move_031: 6745
+AB_cut_beta_move_032: 6206
+AB_cut_beta_move_033: 5693
+AB_cut_beta_move_034: 5282
+AB_cut_beta_move_035: 5737
+AB_cut_beta_move_036: 4616
+AB_cut_beta_move_037: 3558
+AB_cut_beta_move_038: 3065
+AB_cut_beta_move_039: 2073
+AB_cut_beta_move_040: 1972
+AB_cut_beta_move_041: 1746
+AB_cut_beta_move_042: 1155
+AB_cut_beta_move_043: 672
+AB_cut_beta_move_044: 479
+AB_cut_beta_move_045: 222
+AB_cut_beta_move_046: 116
+AB_cut_beta_move_047: 70
+AB_cut_beta_move_048: 36
+AB_cut_beta_move_049: 29
+AB_cut_beta_move_050: 6
+AB_cut_beta_move_051: 1
+AB_cut_beta_move_052: 3
+AB_cut_beta_move_054: 1
+AB_cut_none_improved: 90767
+AB_cut_none_not_improved: 1187375
+AB_lookup_exact: 10879
+AB_lookup_lower: 2986157
+AB_mate_pruned: 1340
+SE: 136119693
+TT_insert: 7152201
+TT_insert_depth_improved: 6933068
+TT_insert_lower_to_lower: 214832
+TT_insert_new_exact: 4298
+TT_insert_no_replacing_exact: 3
+TT_insert_replace: 6937834
+TT_query: 91454605
+evaluate_move: 452255364
+get_sorted_legal_moves: 8339576
+order_moves: 72965716
+----------------------------------------------
+fail_high_rate: 0.812771
+EV: -0.20
+PV: e5, d5, e4, Nc3, e3, Re2, exf2, Kxf2, Qc5, Kf1
+Found an irrelevant possibility: e5
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   | r |   |   | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   | p |   |   |   | p | p | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   | p | q |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 | p |   | n |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 | P |   |   |   |   |   |   | P |
+   +---+---+---+---+---+---+---+---+
+ 3 |   | P |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | P | B |   |   | Q | P |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   | K |   |   | R |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : db7188492f1cad7c
+FEN     : 3r2k1/1p3ppp/2pq4/p1n5/P6P/1P6/1PB2QP1/1K2R3 w - - 0 1
+
+Best move: 
+Avoid move: Rd1
+Searching to depth  1...  done! (      1 entries, eval = -1.15, PV = h5)
+0.000290458s elapsed
+Searching to depth  2...  done! (     39 entries, eval = -0.45, PV = Rd1, Qxd1)
+0.00503967s elapsed
+Searching to depth  3...  done! (     80 entries, eval = -0.45, PV = Rd1, Qxd1, Bxd1)
+0.00971808s elapsed
+Searching to depth  4...  done! (   1502 entries, eval = -0.45, PV = Rd1, Qxd1, Bxd1, Rxd1)
+0.0990533s elapsed
+Searching to depth  5...  done! (   1844 entries, eval = -0.15, PV = Rd1, Qxd1, Bxd1, Rxd1, Kc2)
+0.172093s elapsed
+Searching to depth  6...  done! (  14402 entries, eval = -0.20, PV = Rd1, Qxd1, Bxd1, Rxd1, Kc2, Ne4)
+0.703755s elapsed
+Searching to depth  7...  done! (  17700 entries, eval = -0.15, PV = Rd1, Qxd1, Bxd1, Rxd1, Kc2, Ne4, Qf5)
+1.55286s elapsed
+Searching to depth  8...  done! ( 122755 entries, eval = -0.25, PV = Rd1, Qxd1, Bxd1, Rxd1, Kc2, Ne4, Qf5, Rd2)
+6.54769s elapsed
+Searching to depth  9...  done! ( 363895 entries, eval = -0.40, PV = Rd1, Qxd1, Bxd1, Rxd1, Ka2, Rd5, Qf4, Rd8, h5)
+25.6804s elapsed
+Searching to depth 10...  done! (6017904 entries, eval = -0.95, PV = Qf5, g6, Qg5, Qd5, Qf6, Ne6, Be4, Qxb3, Bxg6, hxg6)
+369.487s elapsed
+The overall best move was: Qf5 with score -0.95
+------------- PERF COUNTER DUMP --------------
+AB: 44338628
+AB_: 10049264
+AB_cut_beta: 6642306
+AB_cut_beta_move_000: 4409428
+AB_cut_beta_move_001: 1041620
+AB_cut_beta_move_002: 604812
+AB_cut_beta_move_003: 220389
+AB_cut_beta_move_004: 102846
+AB_cut_beta_move_005: 51044
+AB_cut_beta_move_006: 32640
+AB_cut_beta_move_007: 23171
+AB_cut_beta_move_008: 15498
+AB_cut_beta_move_009: 9719
+AB_cut_beta_move_010: 7800
+AB_cut_beta_move_011: 6647
+AB_cut_beta_move_012: 6073
+AB_cut_beta_move_013: 4848
+AB_cut_beta_move_014: 4019
+AB_cut_beta_move_015: 3201
+AB_cut_beta_move_016: 2488
+AB_cut_beta_move_017: 2314
+AB_cut_beta_move_018: 2015
+AB_cut_beta_move_019: 1871
+AB_cut_beta_move_020: 2099
+AB_cut_beta_move_021: 2199
+AB_cut_beta_move_022: 2097
+AB_cut_beta_move_023: 2319
+AB_cut_beta_move_024: 2472
+AB_cut_beta_move_025: 2876
+AB_cut_beta_move_026: 3139
+AB_cut_beta_move_027: 3335
+AB_cut_beta_move_028: 3384
+AB_cut_beta_move_029: 3984
+AB_cut_beta_move_030: 4512
+AB_cut_beta_move_031: 5088
+AB_cut_beta_move_032: 5581
+AB_cut_beta_move_033: 5903
+AB_cut_beta_move_034: 5903
+AB_cut_beta_move_035: 5813
+AB_cut_beta_move_036: 5804
+AB_cut_beta_move_037: 5067
+AB_cut_beta_move_038: 4652
+AB_cut_beta_move_039: 4067
+AB_cut_beta_move_040: 3003
+AB_cut_beta_move_041: 2075
+AB_cut_beta_move_042: 1562
+AB_cut_beta_move_043: 1024
+AB_cut_beta_move_044: 780
+AB_cut_beta_move_045: 484
+AB_cut_beta_move_046: 323
+AB_cut_beta_move_047: 162
+AB_cut_beta_move_048: 81
+AB_cut_beta_move_049: 52
+AB_cut_beta_move_050: 12
+AB_cut_beta_move_051: 11
+AB_cut_none_improved: 107503
+AB_cut_none_not_improved: 1769308
+AB_lookup_exact: 30290
+AB_lookup_lower: 1499857
+AB_mate_pruned: 24861
+SE: 73648192
+TT_insert: 6749809
+TT_insert_depth_improved: 6259731
+TT_insert_lower_to_lower: 486052
+TT_insert_new_exact: 3905
+TT_insert_no_replacing_exact: 121
+TT_insert_replace: 6263831
+TT_query: 51291493
+evaluate_move: 306370975
+get_sorted_legal_moves: 8519117
+order_moves: 34492344
+----------------------------------------------
+fail_high_rate: 0.66384
+EV: -0.95
+PV: Qf5, g6, Qg5, Qd5, Qf6, Ne6, Be4, Qxb3, Bxg6, hxg6
+Found an irrelevant possibility: Qf5
+
+   +---+---+---+---+---+---+---+---+
+ 8 | r |   | b |   | r |   | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   | p | p | n |   | p |   | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   | p | n | q | p |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 | p |   | P |   | P |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   | P |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 | P | b | N | Q | N | B | P | P |
+   +---+---+---+---+---+---+---+---+
+ 1 |   | R |   |   | R | B |   | K |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : 5ca84db3a7aa09ac
+FEN     : r1b1r1k1/1ppn1p1p/3pnqp1/8/p1P1P3/5P2/PbNQNBPP/1R2RB1K w - - 0 1
+
+Best move: Rxb2
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -1.15, PV = Ncd4)
+0.000290917s elapsed
+Searching to depth  2...  done! (     48 entries, eval = -1.15, PV = Bd4, Bxd4)
+0.00719479s elapsed
+Searching to depth  3...  done! (    142 entries, eval = -1.10, PV = Ncd4, a3, Kg1)
+0.016457s elapsed
+Searching to depth  4...  done! (   2206 entries, eval = -1.10, PV = f4, a3, Bd4, Nxd4)
+0.331968s elapsed
+Searching to depth  5...  done! (   4452 entries, eval = -1.10, PV = f4, a3, Bd4, Nxd4, Nexd4)
+0.689101s elapsed
+Searching to depth  6...  done! (  58488 entries, eval = -0.85, PV = Rxb2, Qxb2, Nc3, Ne5, Rb1, Nxf3)
+6.39468s elapsed
+Searching to depth  7...  done! (  89329 entries, eval = -0.85, PV = Rxb2, Qxb2, Nc3, Ne5, Rb1, Nxf3, gxf3)
+14.5097s elapsed
+Searching to depth  8...  done! (1171214 entries, eval = 0.25, PV = Rxb2, Qxb2, Nc3, Ne5, Rb1, Qxb1, Nxb1, Bd7)
+76.757s elapsed
+The overall best move was: Rxb2 with score 0.25
+------------- PERF COUNTER DUMP --------------
+AB: 6359368
+AB_: 2026326
+AB_cut_beta: 1314238
+AB_cut_beta_move_000: 1240334
+AB_cut_beta_move_001: 50153
+AB_cut_beta_move_002: 7769
+AB_cut_beta_move_003: 3251
+AB_cut_beta_move_004: 2045
+AB_cut_beta_move_005: 1534
+AB_cut_beta_move_006: 1300
+AB_cut_beta_move_007: 735
+AB_cut_beta_move_008: 561
+AB_cut_beta_move_009: 259
+AB_cut_beta_move_010: 335
+AB_cut_beta_move_011: 276
+AB_cut_beta_move_012: 296
+AB_cut_beta_move_013: 352
+AB_cut_beta_move_014: 313
+AB_cut_beta_move_015: 256
+AB_cut_beta_move_016: 143
+AB_cut_beta_move_017: 117
+AB_cut_beta_move_018: 102
+AB_cut_beta_move_019: 119
+AB_cut_beta_move_020: 142
+AB_cut_beta_move_021: 192
+AB_cut_beta_move_022: 158
+AB_cut_beta_move_023: 128
+AB_cut_beta_move_024: 154
+AB_cut_beta_move_025: 226
+AB_cut_beta_move_026: 201
+AB_cut_beta_move_027: 92
+AB_cut_beta_move_028: 73
+AB_cut_beta_move_029: 192
+AB_cut_beta_move_030: 83
+AB_cut_beta_move_031: 54
+AB_cut_beta_move_032: 37
+AB_cut_beta_move_033: 50
+AB_cut_beta_move_034: 41
+AB_cut_beta_move_035: 77
+AB_cut_beta_move_036: 74
+AB_cut_beta_move_037: 142
+AB_cut_beta_move_038: 130
+AB_cut_beta_move_039: 241
+AB_cut_beta_move_040: 183
+AB_cut_beta_move_041: 189
+AB_cut_beta_move_042: 133
+AB_cut_beta_move_043: 160
+AB_cut_beta_move_044: 232
+AB_cut_beta_move_045: 127
+AB_cut_beta_move_046: 79
+AB_cut_beta_move_047: 42
+AB_cut_beta_move_048: 94
+AB_cut_beta_move_049: 92
+AB_cut_beta_move_050: 166
+AB_cut_beta_move_051: 2
+AB_cut_beta_move_052: 1
+AB_cut_beta_move_053: 1
+AB_cut_none_improved: 1563
+AB_cut_none_not_improved: 152731
+AB_lookup_exact: 125
+AB_lookup_lower: 557669
+SE: 15845958
+TT_insert: 1315801
+TT_insert_depth_improved: 1313497
+TT_insert_lower_to_lower: 2276
+TT_insert_new_exact: 28
+TT_insert_replace: 1313525
+TT_query: 10482111
+evaluate_move: 84682887
+get_sorted_legal_moves: 1468532
+order_moves: 7139931
+----------------------------------------------
+fail_high_rate: 0.943767
+EV: 0.25
+PV: Rxb2, Qxb2, Nc3, Ne5, Rb1, Qxb1, Nxb1, Bd7
+Correctly found the best move: Rxb2
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   | r |   |   |   |   | k |
+   +---+---+---+---+---+---+---+---+
+ 7 | p | B |   |   |   |   | b | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | p |   |   |   |   | p |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   | q |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | P |   | n |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   | N |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 | P |   |   |   |   | P | P | P |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   | R |   | Q |   | K |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 1
+HASH    : a366aa01382786bb
+FEN     : 2r4k/pB4bp/1p4p1/6q1/1P1n4/2N5/P4PPP/2R1Q1K1 b - - 0 1
+
+Best move: Qxc1
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -1.15, PV = Rd8)
+0.00033975s elapsed
+Searching to depth  2...  done! (     49 entries, eval = -1.25, PV = Rd8, Ne4)
+0.00233108s elapsed
+Searching to depth  3...  done! (     88 entries, eval = -1.20, PV = Rd8, Ne4, Qf5)
+0.00901867s elapsed
+Searching to depth  4...  done! (   2461 entries, eval = -1.20, PV = Rd8, Be4, Kg8, Rd1)
+0.118166s elapsed
+Searching to depth  5...  done! (   4503 entries, eval = -1.25, PV = Rd8, Qe3, Qxe3, fxe3, Ne6)
+0.343188s elapsed
+Searching to depth  6...  done! (  28647 entries, eval = -0.85, PV = Bh6, Rd1, Nc2, Bxc8, Nxe1, Rxe1)
+1.283s elapsed
+Searching to depth  7...  done! (  78686 entries, eval = -0.85, PV = Bh6, h4, Nf3, Kf1, Qxg2, Kxg2, Nxe1)
+5.29642s elapsed
+Searching to depth  8...  done! ( 416304 entries, eval = 1.45, PV = Qxc1, Qxc1, Rxc3, Qg5, Rc1, Qxc1, Ne2, Kf1)
+16.4799s elapsed
+Searching to depth  9...  done! ( 425884 entries, eval = 1.45, PV = Qxc1, Qxc1, Rxc3, Qg5, Rc1, Qxc1, Ne2, Kf1, Nxc1)
+35.4514s elapsed
+Searching to depth 10...  done! (4470924 entries, eval = 1.35, PV = Qxc1, Qxc1, Rxc3, Qg5, Rc1, Qxc1, Ne2, Kf1, Nxc1, Bd5)
+192.487s elapsed
+The overall best move was: Qxc1 with score 1.35
+------------- PERF COUNTER DUMP --------------
+AB: 21617331
+AB_: 8910907
+AB_cut_beta: 5553251
+AB_cut_beta_move_000: 4897776
+AB_cut_beta_move_001: 422716
+AB_cut_beta_move_002: 133241
+AB_cut_beta_move_003: 42872
+AB_cut_beta_move_004: 18941
+AB_cut_beta_move_005: 7528
+AB_cut_beta_move_006: 4611
+AB_cut_beta_move_007: 3140
+AB_cut_beta_move_008: 2633
+AB_cut_beta_move_009: 1979
+AB_cut_beta_move_010: 2011
+AB_cut_beta_move_011: 1562
+AB_cut_beta_move_012: 1010
+AB_cut_beta_move_013: 863
+AB_cut_beta_move_014: 853
+AB_cut_beta_move_015: 855
+AB_cut_beta_move_016: 727
+AB_cut_beta_move_017: 688
+AB_cut_beta_move_018: 557
+AB_cut_beta_move_019: 577
+AB_cut_beta_move_020: 541
+AB_cut_beta_move_021: 520
+AB_cut_beta_move_022: 426
+AB_cut_beta_move_023: 303
+AB_cut_beta_move_024: 240
+AB_cut_beta_move_025: 252
+AB_cut_beta_move_026: 322
+AB_cut_beta_move_027: 285
+AB_cut_beta_move_028: 330
+AB_cut_beta_move_029: 299
+AB_cut_beta_move_030: 427
+AB_cut_beta_move_031: 319
+AB_cut_beta_move_032: 237
+AB_cut_beta_move_033: 268
+AB_cut_beta_move_034: 300
+AB_cut_beta_move_035: 282
+AB_cut_beta_move_036: 282
+AB_cut_beta_move_037: 355
+AB_cut_beta_move_038: 329
+AB_cut_beta_move_039: 265
+AB_cut_beta_move_040: 234
+AB_cut_beta_move_041: 220
+AB_cut_beta_move_042: 188
+AB_cut_beta_move_043: 230
+AB_cut_beta_move_044: 166
+AB_cut_beta_move_045: 127
+AB_cut_beta_move_046: 111
+AB_cut_beta_move_047: 97
+AB_cut_beta_move_048: 57
+AB_cut_beta_move_049: 50
+AB_cut_beta_move_050: 30
+AB_cut_beta_move_051: 4
+AB_cut_beta_move_052: 3
+AB_cut_beta_move_053: 10
+AB_cut_beta_move_054: 2
+AB_cut_none_improved: 29970
+AB_cut_none_not_improved: 880316
+AB_lookup_exact: 3945
+AB_lookup_lower: 2443425
+AB_mate_pruned: 26105
+SE: 30709282
+TT_insert: 5583221
+TT_insert_depth_improved: 5125727
+TT_insert_lower_to_lower: 457066
+TT_insert_new_exact: 427
+TT_insert_no_replacing_exact: 1
+TT_insert_replace: 5126385
+TT_query: 32152267
+evaluate_move: 256069767
+get_sorted_legal_moves: 6463537
+order_moves: 17658063
+----------------------------------------------
+fail_high_rate: 0.881966
+EV: 1.35
+PV: Qxc1, Qxc1, Rxc3, Qg5, Rc1, Qxc1, Ne2, Kf1, Nxc1, Bd5
+Correctly found the best move: Qxc1
+
+   +---+---+---+---+---+---+---+---+
+ 8 | r |   |   |   |   |   | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   | n |   | p | p | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | p |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   | p |   | p |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   | P |   | B |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 | r |   |   |   | P |   |   | P |
+   +---+---+---+---+---+---+---+---+
+ 2 | P | R |   |   |   | P | P |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   | R |   |   |   | K |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 1
+HASH    : 19603d0d6ae41c4f
+FEN     : r5k1/3n1ppp/1p6/3p1p2/3P1B2/r3P2P/PR3PP1/2R3K1 b - - 0 1
+
+Best move: 
+Avoid move: Rxa2
+Searching to depth  1...  done! (      1 entries, eval = 0.85, PV = Rxa2)
+0.000214916s elapsed
+Searching to depth  2...  done! (     32 entries, eval = 0.85, PV = Rxa2, Rc8)
+0.00135029s elapsed
+Searching to depth  3...  done! (     69 entries, eval = 0.80, PV = Rxa2, Rb5, R8a5)
+0.00475588s elapsed
+Searching to depth  4...  done! (    694 entries, eval = 0.75, PV = Rxa2, Rxa2, Rxa2, Rc7)
+0.0369002s elapsed
+Searching to depth  5...  done! (   2084 entries, eval = 0.50, PV = Rxa2, Rxa2, Rxa2, Rc8, Nf8)
+0.178497s elapsed
+Searching to depth  6...  done! (   8966 entries, eval = 0.40, PV = Rxa2, Rxa2, Rxa2, Rc8, Nf8, Rc7)
+0.567041s elapsed
+Searching to depth  7...  done! (  19000 entries, eval = 0.45, PV = Rxa2, Rxa2, Rxa2, Rc8, Nf8, Bd6, Ra1)
+1.71859s elapsed
+Searching to depth  8...  done! (  87130 entries, eval = 0.45, PV = Rxa2, Rxa2, Rxa2, Rc8, Nf8, Bd6, Ra1, Kh2)
+5.81134s elapsed
+Searching to depth  9...  done! ( 942867 entries, eval = -0.15, PV = Nf6, Rcc2, Ne4, Kh2, Kf8)
+99.7749s elapsed
+The overall best move was: Nf6 with score -0.15
+------------- PERF COUNTER DUMP --------------
+AB: 8468359
+AB_: 1630537
+AB_cut_beta: 1067405
+AB_cut_beta_move_000: 768331
+AB_cut_beta_move_001: 119354
+AB_cut_beta_move_002: 45554
+AB_cut_beta_move_003: 13584
+AB_cut_beta_move_004: 6082
+AB_cut_beta_move_005: 3767
+AB_cut_beta_move_006: 3557
+AB_cut_beta_move_007: 2475
+AB_cut_beta_move_008: 2215
+AB_cut_beta_move_009: 2151
+AB_cut_beta_move_010: 1852
+AB_cut_beta_move_011: 1543
+AB_cut_beta_move_012: 1277
+AB_cut_beta_move_013: 933
+AB_cut_beta_move_014: 1172
+AB_cut_beta_move_015: 1420
+AB_cut_beta_move_016: 1632
+AB_cut_beta_move_017: 1850
+AB_cut_beta_move_018: 2084
+AB_cut_beta_move_019: 2344
+AB_cut_beta_move_020: 2243
+AB_cut_beta_move_021: 2751
+AB_cut_beta_move_022: 3361
+AB_cut_beta_move_023: 3284
+AB_cut_beta_move_024: 4500
+AB_cut_beta_move_025: 4941
+AB_cut_beta_move_026: 6077
+AB_cut_beta_move_027: 7505
+AB_cut_beta_move_028: 8785
+AB_cut_beta_move_029: 9550
+AB_cut_beta_move_030: 9435
+AB_cut_beta_move_031: 8179
+AB_cut_beta_move_032: 5729
+AB_cut_beta_move_033: 2599
+AB_cut_beta_move_034: 1650
+AB_cut_beta_move_035: 1498
+AB_cut_beta_move_036: 1283
+AB_cut_beta_move_037: 416
+AB_cut_beta_move_038: 136
+AB_cut_beta_move_039: 124
+AB_cut_beta_move_040: 73
+AB_cut_beta_move_041: 54
+AB_cut_beta_move_042: 40
+AB_cut_beta_move_043: 14
+AB_cut_beta_move_044: 1
+AB_cut_none_improved: 18031
+AB_cut_none_not_improved: 218312
+AB_lookup_exact: 5208
+AB_lookup_lower: 321581
+AB_mate_pruned: 1124
+SE: 23776543
+TT_insert: 1085436
+TT_insert_depth_improved: 1023758
+TT_insert_lower_to_lower: 60651
+TT_insert_new_exact: 1024
+TT_insert_no_replacing_exact: 3
+TT_insert_replace: 1024821
+TT_query: 15166537
+evaluate_move: 59940370
+get_sorted_legal_moves: 1303748
+order_moves: 12450504
+----------------------------------------------
+fail_high_rate: 0.719812
+EV: -0.15
+PV: Nf6, Rcc2, Ne4, Kh2, Kf8
+Found an irrelevant possibility: Nf6
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   | r |   |   | r | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   | b | q | n | b | p | p |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | p |   | p | p | n |   | p |
+   +---+---+---+---+---+---+---+---+
+ 5 | p | P |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 | N |   | P |   | P |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 | P |   |   | B |   | N |   | P |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | B |   |   | Q | P | P |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | R |   |   | R |   |   | K |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 1
+HASH    : 9a5c352256fb159b
+FEN     : 2r2rk1/1bqnbpp1/1p1ppn1p/pP6/N1P1P3/P2B1N1P/1B2QPP1/R2R2K1 b - - 0 1
+
+Best move: Bxe4 id "position 07"
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = 0.10, PV = e5)
+0.000800583s elapsed
+Searching to depth  2...  done! (     34 entries, eval = 0.10, PV = Ne5, Nd2)
+0.0152854s elapsed
+Searching to depth  3...  done! (     70 entries, eval = 0.15, PV = Ne5, Nd2, Rfe8)
+0.0472972s elapsed
+Searching to depth  4...  done! (   1459 entries, eval = -0.25, PV = Ne5, Nxe5, dxe5, Nc3)
+0.464981s elapsed
+Searching to depth  5...  done! (   3719 entries, eval = -0.10, PV = Rfe8, Nc3, Nc5, Nd2, e5)
+1.43075s elapsed
+Searching to depth  6...  done! (  30870 entries, eval = -0.20, PV = Rfe8, Qc2, e5, Re1, Nc5, Nxc5)
+9.58773s elapsed
+Searching to depth  7...  done! (  66896 entries, eval = -0.15, PV = Rfe8, Qc2, e5, Re1, Rcd8, Nc3, Nc5)
+30.3632s elapsed
+Searching to depth  8...  done! ( 554146 entries, eval = 0.75, PV = Bxe4, Bxe4, Qxc4, Qxc4, Rxc4, Nxb6, Rxe4, Nxd7)
+156.623s elapsed
+The overall best move was: Bxe4 with score 0.75
+------------- PERF COUNTER DUMP --------------
+AB: 5082084
+AB_: 1023142
+AB_cut_beta: 678300
+AB_cut_beta_move_000: 575950
+AB_cut_beta_move_001: 43526
+AB_cut_beta_move_002: 21499
+AB_cut_beta_move_003: 16151
+AB_cut_beta_move_004: 6603
+AB_cut_beta_move_005: 2568
+AB_cut_beta_move_006: 1270
+AB_cut_beta_move_007: 1543
+AB_cut_beta_move_008: 926
+AB_cut_beta_move_009: 1097
+AB_cut_beta_move_010: 375
+AB_cut_beta_move_011: 495
+AB_cut_beta_move_012: 274
+AB_cut_beta_move_013: 152
+AB_cut_beta_move_014: 131
+AB_cut_beta_move_015: 71
+AB_cut_beta_move_016: 76
+AB_cut_beta_move_017: 67
+AB_cut_beta_move_018: 262
+AB_cut_beta_move_019: 340
+AB_cut_beta_move_020: 189
+AB_cut_beta_move_021: 324
+AB_cut_beta_move_022: 305
+AB_cut_beta_move_023: 425
+AB_cut_beta_move_024: 355
+AB_cut_beta_move_025: 178
+AB_cut_beta_move_026: 76
+AB_cut_beta_move_027: 74
+AB_cut_beta_move_028: 110
+AB_cut_beta_move_029: 75
+AB_cut_beta_move_030: 70
+AB_cut_beta_move_031: 109
+AB_cut_beta_move_032: 110
+AB_cut_beta_move_033: 151
+AB_cut_beta_move_034: 166
+AB_cut_beta_move_035: 199
+AB_cut_beta_move_036: 204
+AB_cut_beta_move_037: 469
+AB_cut_beta_move_038: 393
+AB_cut_beta_move_039: 384
+AB_cut_beta_move_040: 105
+AB_cut_beta_move_041: 177
+AB_cut_beta_move_042: 75
+AB_cut_beta_move_043: 99
+AB_cut_beta_move_044: 34
+AB_cut_beta_move_045: 51
+AB_cut_beta_move_046: 9
+AB_cut_beta_move_047: 6
+AB_cut_beta_move_048: 2
+AB_cut_none_improved: 3276
+AB_cut_none_not_improved: 130655
+AB_lookup_exact: 195
+AB_lookup_lower: 210716
+SE: 35944774
+TT_insert: 681576
+TT_insert_depth_improved: 632114
+TT_insert_lower_to_lower: 49429
+TT_insert_new_exact: 33
+TT_insert_replace: 632147
+TT_query: 19950836
+evaluate_move: 83056729
+get_sorted_legal_moves: 812231
+order_moves: 18246065
+----------------------------------------------
+fail_high_rate: 0.849108
+EV: 0.75
+PV: Bxe4, Bxe4, Qxc4, Qxc4, Rxc4, Nxb6, Rxe4, Nxd7
+Found an irrelevant possibility: Bxe4
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   | r |   | k |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   |   | p | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | n |   |   | Q |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   | p |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   | P |
+   +---+---+---+---+---+---+---+---+
+ 2 | P | P |   |   |   |   | P | K |
+   +---+---+---+---+---+---+---+---+
+ 1 | R |   | B |   | q |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 1
+HASH    : 1273de63a22a7a7f
+FEN     : 5r1k/6pp/1n2Q3/4p3/8/7P/PP4PK/R1B1q3 b - - 0 1
+
+Best move: h6
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -0.95, PV = Qa5)
+0.000200541s elapsed
+Searching to depth  2...  done! (     40 entries, eval = -1.00, PV = Rb8, a3)
+0.00658579s elapsed
+Searching to depth  3...  done! (    170 entries, eval = -1.00, PV = Rb8, Qd6, Rb7)
+0.0175922s elapsed
+Searching to depth  4...  done! (   1735 entries, eval = -1.25, PV = Rb8, Qd6, Rc8, Qxb6)
+0.0975939s elapsed
+Searching to depth  5...  done! (   4232 entries, eval = -1.20, PV = Qa5, Be3, Rb8, Kg1, Qd5)
+0.266084s elapsed
+Searching to depth  6...  done! (  28455 entries, eval = -1.25, PV = Na4, Qc6, Qa5, Qd6, Rd8, Qe6)
+1.32877s elapsed
+Searching to depth  7...  done! (  53615 entries, eval = -1.15, PV = Qa5, Be3, Rb8, Qd6, Qa7, Qxe5)
+3.04858s elapsed
+Searching to depth  8...  done! ( 174092 entries, eval = -1.30, PV = Na4, Qc6, Qb4, Qe6, e4, Qb3)
+8.84493s elapsed
+Searching to depth  9...  done! ( 505601 entries, eval = -1.20, PV = Na4, Qc6, Qb4, Qd5, Rf2, Be3, Rf5, Qd8, Rf8)
+28.5418s elapsed
+Searching to depth 10...  done! (1093049 entries, eval = -1.25, PV = Na4, Qd6, Kg8, Qd5, Rf7, a3)
+61.4114s elapsed
+Searching to depth 11...  done! (10514048 entries, eval = -0.85, PV = h6, a4, Rf6, Qe8, Kh7, Qb5)
+636.514s elapsed
+The overall best move was: h6 with score -0.85
+------------- PERF COUNTER DUMP --------------
+AB: 77866132
+AB_: 17501228
+AB_cut_beta: 11246365
+AB_cut_beta_move_000: 6699660
+AB_cut_beta_move_001: 1577487
+AB_cut_beta_move_002: 1185691
+AB_cut_beta_move_003: 621504
+AB_cut_beta_move_004: 396980
+AB_cut_beta_move_005: 188938
+AB_cut_beta_move_006: 105356
+AB_cut_beta_move_007: 60991
+AB_cut_beta_move_008: 39525
+AB_cut_beta_move_009: 27319
+AB_cut_beta_move_010: 21837
+AB_cut_beta_move_011: 17666
+AB_cut_beta_move_012: 14181
+AB_cut_beta_move_013: 11274
+AB_cut_beta_move_014: 10210
+AB_cut_beta_move_015: 8389
+AB_cut_beta_move_016: 7872
+AB_cut_beta_move_017: 6851
+AB_cut_beta_move_018: 6633
+AB_cut_beta_move_019: 6210
+AB_cut_beta_move_020: 6048
+AB_cut_beta_move_021: 5795
+AB_cut_beta_move_022: 6399
+AB_cut_beta_move_023: 5990
+AB_cut_beta_move_024: 6356
+AB_cut_beta_move_025: 6565
+AB_cut_beta_move_026: 6638
+AB_cut_beta_move_027: 8030
+AB_cut_beta_move_028: 9144
+AB_cut_beta_move_029: 11304
+AB_cut_beta_move_030: 12303
+AB_cut_beta_move_031: 13526
+AB_cut_beta_move_032: 15014
+AB_cut_beta_move_033: 14393
+AB_cut_beta_move_034: 14327
+AB_cut_beta_move_035: 14672
+AB_cut_beta_move_036: 14098
+AB_cut_beta_move_037: 12710
+AB_cut_beta_move_038: 11294
+AB_cut_beta_move_039: 9624
+AB_cut_beta_move_040: 8413
+AB_cut_beta_move_041: 6411
+AB_cut_beta_move_042: 4479
+AB_cut_beta_move_043: 3185
+AB_cut_beta_move_044: 1966
+AB_cut_beta_move_045: 1259
+AB_cut_beta_move_046: 751
+AB_cut_beta_move_047: 460
+AB_cut_beta_move_048: 258
+AB_cut_beta_move_049: 172
+AB_cut_beta_move_050: 83
+AB_cut_beta_move_051: 58
+AB_cut_beta_move_052: 39
+AB_cut_beta_move_053: 19
+AB_cut_beta_move_054: 7
+AB_cut_beta_move_057: 1
+AB_cut_none_improved: 222720
+AB_cut_none_not_improved: 2914586
+AB_lookup_exact: 49974
+AB_lookup_lower: 3067583
+AB_mate_pruned: 13851
+SE: 119708851
+TT_insert: 11469085
+TT_insert_depth_improved: 10889552
+TT_insert_lower_to_lower: 569932
+TT_insert_new_exact: 9408
+TT_insert_no_replacing_exact: 193
+TT_insert_replace: 10899367
+TT_query: 85830061
+evaluate_move: 475906030
+get_sorted_legal_moves: 14383671
+order_moves: 56859671
+----------------------------------------------
+fail_high_rate: 0.595718
+EV: -0.85
+PV: h6, a4, Rf6, Qe8, Kh7, Qb5
+Correctly found the best move: h6
+
+   +---+---+---+---+---+---+---+---+
+ 8 | r |   |   |   | k |   |   | r |
+   +---+---+---+---+---+---+---+---+
+ 7 | p | b | n |   |   | p | p | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   | P |   | p | P |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 | P |   | q | P |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   | B |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   | Q |   | P | P | P |
+   +---+---+---+---+---+---+---+---+
+ 1 | R |   |   |   | K |   |   | R |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : ef62715f15572d68
+FEN     : r3k2r/pbn2ppp/8/1P1pP3/P1qP4/5B2/3Q1PPP/R3K2R w KQkq - 0 1
+
+Best move: Be2
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -0.90, PV = Qf4)
+0.000349667s elapsed
+Searching to depth  2...  done! (     36 entries, eval = 0.35, PV = Rc1, Qxa4)
+0.0027965s elapsed
+Searching to depth  3...  done! (     75 entries, eval = 0.35, PV = Rc1, Qxa4, Rxc7)
+0.00625233s elapsed
+Searching to depth  4...  done! (   1064 entries, eval = 0.35, PV = Rc1, Qxa4, Rxc7, Qxb5)
+0.0696058s elapsed
+Searching to depth  5...  done! (   1887 entries, eval = 0.40, PV = Rc1, Qxa4, Rxc7, Qxb5, Qf4)
+0.142063s elapsed
+Searching to depth  6...  done! (  14739 entries, eval = 2.70, PV = Be2, Qb3, Bd1, Qc4, Rc1, O-O)
+1.25287s elapsed
+Searching to depth  7...  done! (  25117 entries, eval = 2.70, PV = Be2, Qb3, Bd1, Qc4, Rc1, O-O, Rxc4)
+2.17927s elapsed
+Searching to depth  8...  done! ( 110740 entries, eval = 2.65, PV = Be2, Qb3, Bd1, Qc4, Rc1, Qxc1, Qxc1, Ne6)
+8.79132s elapsed
+Searching to depth  9...  done! ( 215121 entries, eval = 2.80, PV = Be2, Qb3, Bd1, Qc4, Rc1, Qxc1, Qxc1, Ne6, Qe3)
+17.3956s elapsed
+Searching to depth 10...  done! ( 931194 entries, eval = 2.50, PV = Be2, Qb3, Bd1, Qc4, Rc1, Qxc1, Qxc1, Ne6, Qe3, O-O)
+81.892s elapsed
+The overall best move was: Be2 with score 2.50
+------------- PERF COUNTER DUMP --------------
+AB: 7266596
+AB_: 2327585
+AB_cut_beta: 1264599
+AB_cut_beta_move_000: 975062
+AB_cut_beta_move_001: 101496
+AB_cut_beta_move_002: 66332
+AB_cut_beta_move_003: 63247
+AB_cut_beta_move_004: 16613
+AB_cut_beta_move_005: 23046
+AB_cut_beta_move_006: 4899
+AB_cut_beta_move_007: 3085
+AB_cut_beta_move_008: 1750
+AB_cut_beta_move_009: 314
+AB_cut_beta_move_010: 317
+AB_cut_beta_move_011: 492
+AB_cut_beta_move_012: 509
+AB_cut_beta_move_013: 460
+AB_cut_beta_move_014: 508
+AB_cut_beta_move_015: 503
+AB_cut_beta_move_016: 368
+AB_cut_beta_move_017: 243
+AB_cut_beta_move_018: 220
+AB_cut_beta_move_019: 429
+AB_cut_beta_move_020: 485
+AB_cut_beta_move_021: 582
+AB_cut_beta_move_022: 258
+AB_cut_beta_move_023: 221
+AB_cut_beta_move_024: 226
+AB_cut_beta_move_025: 215
+AB_cut_beta_move_026: 375
+AB_cut_beta_move_027: 187
+AB_cut_beta_move_028: 156
+AB_cut_beta_move_029: 161
+AB_cut_beta_move_030: 139
+AB_cut_beta_move_031: 118
+AB_cut_beta_move_032: 114
+AB_cut_beta_move_033: 88
+AB_cut_beta_move_034: 44
+AB_cut_beta_move_035: 168
+AB_cut_beta_move_036: 292
+AB_cut_beta_move_037: 589
+AB_cut_beta_move_038: 104
+AB_cut_beta_move_039: 114
+AB_cut_beta_move_040: 24
+AB_cut_beta_move_041: 41
+AB_cut_beta_move_042: 3
+AB_cut_beta_move_047: 2
+AB_cut_none_improved: 6898
+AB_cut_none_not_improved: 343798
+AB_lookup_exact: 974
+AB_lookup_lower: 711316
+AB_mate_pruned: 158
+SE: 16691488
+TT_insert: 1271497
+TT_insert_depth_improved: 1269138
+TT_insert_lower_to_lower: 2346
+TT_insert_new_exact: 13
+TT_insert_replace: 1269507
+TT_query: 13083027
+evaluate_move: 70866041
+get_sorted_legal_moves: 1615295
+order_moves: 9483869
+----------------------------------------------
+fail_high_rate: 0.771044
+EV: 2.50
+PV: Be2, Qb3, Bd1, Qc4, Rc1, Qxc1, Qxc1, Ne6, Qe3, O-O
+Correctly found the best move: Be2
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   | r |   |   | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 | p | p | q |   |   | p | p |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   | p |   |   | p |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   | n |   |   |   | P |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   | N |   |   | P |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   | P |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 | P | P |   |   | Q | P |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | K |   |   | R |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 1
+HASH    : fcb14d14d51579c1
+FEN     : 3r2k1/ppq2pp1/4p2p/3n3P/3N2P1/2P5/PP2QP2/K2R4 b - - 0 1
+
+Best move: Nxc3
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = 0.55, PV = e5)
+0.000108375s elapsed
+Searching to depth  2...  done! (     42 entries, eval = 0.60, PV = e5, Nf5)
+0.00194983s elapsed
+Searching to depth  3...  done! (     78 entries, eval = 0.45, PV = e5, Nf3, f6)
+0.00922221s elapsed
+Searching to depth  4...  done! (   1462 entries, eval = 0.70, PV = Nf4, Qf3, e5, Nf5)
+0.10727s elapsed
+Searching to depth  5...  done! (   2107 entries, eval = 0.70, PV = Nf4, Qf3, e5, Nf5, Rxd1)
+0.234814s elapsed
+Searching to depth  6...  done! (  30012 entries, eval = 0.70, PV = Nf4, Qf3, e5, Nf5, Rxd1, Qxd1)
+3.10264s elapsed
+Searching to depth  7...  done! (  36128 entries, eval = 0.75, PV = Nf4, Qf3, e5, Nf5, Rxd1, Qxd1, e4)
+5.32655s elapsed
+Searching to depth  8...  done! ( 414185 entries, eval = 0.75, PV = Nxc3, bxc3, Qxc3, Qb2, Qxb2, Kxb2, e5, Kc3)
+43.9452s elapsed
+Searching to depth  9...  done! ( 501391 entries, eval = 0.75, PV = Nxc3, bxc3, Qxc3, Qb2, Qxb2, Kxb2, e5, Kc3, exd4)
+73.4831s elapsed
+Searching to depth 10...  done! (4868954 entries, eval = 0.75, PV = Nxc3, bxc3, Qxc3, Qb2, Qxb2, Kxb2, e5, Kc3, exd4, Rxd4)
+468.798s elapsed
+The overall best move was: Nxc3 with score 0.75
+------------- PERF COUNTER DUMP --------------
+AB: 32618321
+AB_: 9602903
+AB_cut_beta: 5820870
+AB_cut_beta_move_000: 4277572
+AB_cut_beta_move_001: 913918
+AB_cut_beta_move_002: 253677
+AB_cut_beta_move_003: 103150
+AB_cut_beta_move_004: 47799
+AB_cut_beta_move_005: 24434
+AB_cut_beta_move_006: 18961
+AB_cut_beta_move_007: 14562
+AB_cut_beta_move_008: 13470
+AB_cut_beta_move_009: 12288
+AB_cut_beta_move_010: 10116
+AB_cut_beta_move_011: 8672
+AB_cut_beta_move_012: 7496
+AB_cut_beta_move_013: 7186
+AB_cut_beta_move_014: 4935
+AB_cut_beta_move_015: 4440
+AB_cut_beta_move_016: 3570
+AB_cut_beta_move_017: 3060
+AB_cut_beta_move_018: 2696
+AB_cut_beta_move_019: 2666
+AB_cut_beta_move_020: 2658
+AB_cut_beta_move_021: 2752
+AB_cut_beta_move_022: 2581
+AB_cut_beta_move_023: 2604
+AB_cut_beta_move_024: 2639
+AB_cut_beta_move_025: 2647
+AB_cut_beta_move_026: 2850
+AB_cut_beta_move_027: 3514
+AB_cut_beta_move_028: 3573
+AB_cut_beta_move_029: 3929
+AB_cut_beta_move_030: 4036
+AB_cut_beta_move_031: 4597
+AB_cut_beta_move_032: 4723
+AB_cut_beta_move_033: 5467
+AB_cut_beta_move_034: 5078
+AB_cut_beta_move_035: 5663
+AB_cut_beta_move_036: 5366
+AB_cut_beta_move_037: 5042
+AB_cut_beta_move_038: 4259
+AB_cut_beta_move_039: 4036
+AB_cut_beta_move_040: 3235
+AB_cut_beta_move_041: 2419
+AB_cut_beta_move_042: 1014
+AB_cut_beta_move_043: 946
+AB_cut_beta_move_044: 412
+AB_cut_beta_move_045: 96
+AB_cut_beta_move_046: 50
+AB_cut_beta_move_047: 10
+AB_cut_beta_move_048: 5
+AB_cut_beta_move_049: 1
+AB_cut_none_improved: 47488
+AB_cut_none_not_improved: 950219
+AB_lookup_exact: 6257
+AB_lookup_lower: 2778069
+AB_mate_pruned: 2711
+SE: 99601672
+TT_insert: 5868358
+TT_insert_depth_improved: 5472659
+TT_insert_lower_to_lower: 394338
+TT_insert_new_exact: 1359
+TT_insert_no_replacing_exact: 2
+TT_insert_replace: 5474095
+TT_query: 69546793
+evaluate_move: 348164579
+get_sorted_legal_moves: 6818577
+order_moves: 54075456
+----------------------------------------------
+fail_high_rate: 0.734868
+EV: 0.75
+PV: Nxc3, bxc3, Qxc3, Qb2, Qxb2, Kxb2, e5, Kc3, exd4, Rxd4
+Correctly found the best move: Nxc3
+
+   +---+---+---+---+---+---+---+---+
+ 8 | q |   |   |   | r | n |   | k |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   | Q | R |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 6 | p | p |   |   | p | p |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 | P |   | P |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   | P |   |   |   |   | N |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   | n |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   | K |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : 52dcdf16ea2ed2ef
+FEN     : q3rn1k/2QR4/pp2pp2/8/P1P5/1P4N1/6n1/6K1 w - - 0 1
+
+Best move: Nf5
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -3.25, PV = Rg7)
+0.000230459s elapsed
+Searching to depth  2...  done! (     36 entries, eval = -2.75, PV = Rd6, Ng6)
+0.00157871s elapsed
+Searching to depth  3...  done! (     61 entries, eval = -2.75, PV = Rd6, Ng6, Rxb6)
+0.00765458s elapsed
+Searching to depth  4...  done! (   1665 entries, eval = -2.70, PV = Rd2, Rc8, Qf7, Nf4)
+0.0623119s elapsed
+Searching to depth  5...  done! (   2213 entries, eval = -2.70, PV = Rd2, Nh4, Rh2, Ng6, Qxb6)
+0.11807s elapsed
+Searching to depth  6...  done! (  11355 entries, eval = -2.90, PV = Rd2, Ne1, Rh2, Kg8, Qxb6, Nd3)
+0.360699s elapsed
+Searching to depth  7...  done! (  15778 entries, eval = -3.20, PV = Rd2, Ne1, Kf2, Nf3, Nh5, Re7, Qxe7)
+0.885899s elapsed
+Searching to depth  8...  done! (  71074 entries, eval = -3.20, PV = Rd2, Ne1, Kf2, Nf3, Nh5, Re7, Qxe7, Nxd2)
+2.44575s elapsed
+Searching to depth  9...  done! (  93993 entries, eval = -0.70, PV = Nf5, exf5, Qh2, Nh4, Qxh4, Kg8, Qg3, Ng6, Qxg6)
+5.35362s elapsed
+Searching to depth 10...  done! ( 364509 entries, eval = 0.45, PV = Nf5, exf5, Qh2, Nh4, Qxh4, Kg8, Qg3, Ng6, Qxg6, Kh8)
+12.2282s elapsed
+Searching to depth 11...  done! ( 382953 entries, eval = #11, PV = Nf5, exf5, Qh2, Nh4, Qxh4, Kg8, Qg3, Ng6, Qxg6, Kh8, Qg7)
+18.0408s elapsed
+Searching to depth 12...  done! (1662342 entries, eval = 11.05, PV = Nf5, Qa7, Qh2, Kg8, Qg3, Ng6, Qxg6, Kf8, Qg7)
+47.9531s elapsed
+Searching to depth 13...  done! (1662896 entries, eval = #11, PV = Nf5, exf5, Qh2, Nh4, Qxh4, Kg8, Qg3, Ng6, Qxg6, Kh8, Qg7)
+53.0416s elapsed
+Searching to depth 14...  done! (1662896 entries, eval = #11, PV = Nf5, exf5, Qh2, Nh4, Qxh4, Kg8, Qg3, Ng6, Qxg6, Kh8, Qg7)
+58.0196s elapsed
+Searching to depth 15...  done! (1662896 entries, eval = #11, PV = Nf5, exf5, Qh2, Nh4, Qxh4, Kg8, Qg3, Ng6, Qxg6, Kh8, Qg7)
+63.0044s elapsed
+Searching to depth 16...  done! (1662896 entries, eval = #11, PV = Nf5, exf5, Qh2, Nh4, Qxh4, Kg8, Qg3, Ng6, Qxg6, Kh8, Qg7)
+67.9826s elapsed
+Searching to depth 17...  done! (1662896 entries, eval = #11, PV = Nf5, exf5, Qh2, Nh4, Qxh4, Kg8, Qg3, Ng6, Qxg6, Kh8, Qg7)
+72.9686s elapsed
+Searching to depth 18...  done! (1662896 entries, eval = #11, PV = Nf5, exf5, Qh2, Nh4, Qxh4, Kg8, Qg3, Ng6, Qxg6, Kh8, Qg7)
+77.941s elapsed
+The overall best move was: Nf5 with score #11
+------------- PERF COUNTER DUMP --------------
+AB: 20199091
+AB_: 7739733
+AB_cut_beta: 4215757
+AB_cut_beta_move_000: 4158814
+AB_cut_beta_move_001: 25445
+AB_cut_beta_move_002: 15095
+AB_cut_beta_move_003: 6164
+AB_cut_beta_move_004: 3102
+AB_cut_beta_move_005: 1683
+AB_cut_beta_move_006: 1079
+AB_cut_beta_move_007: 627
+AB_cut_beta_move_008: 406
+AB_cut_beta_move_009: 301
+AB_cut_beta_move_010: 131
+AB_cut_beta_move_011: 110
+AB_cut_beta_move_012: 78
+AB_cut_beta_move_013: 79
+AB_cut_beta_move_014: 58
+AB_cut_beta_move_015: 68
+AB_cut_beta_move_016: 71
+AB_cut_beta_move_017: 104
+AB_cut_beta_move_018: 59
+AB_cut_beta_move_019: 86
+AB_cut_beta_move_020: 108
+AB_cut_beta_move_021: 159
+AB_cut_beta_move_022: 124
+AB_cut_beta_move_023: 110
+AB_cut_beta_move_024: 143
+AB_cut_beta_move_025: 116
+AB_cut_beta_move_026: 112
+AB_cut_beta_move_027: 141
+AB_cut_beta_move_028: 111
+AB_cut_beta_move_029: 116
+AB_cut_beta_move_030: 81
+AB_cut_beta_move_031: 76
+AB_cut_beta_move_032: 94
+AB_cut_beta_move_033: 114
+AB_cut_beta_move_034: 89
+AB_cut_beta_move_035: 106
+AB_cut_beta_move_036: 73
+AB_cut_beta_move_037: 55
+AB_cut_beta_move_038: 41
+AB_cut_beta_move_039: 79
+AB_cut_beta_move_040: 62
+AB_cut_beta_move_041: 51
+AB_cut_beta_move_042: 15
+AB_cut_beta_move_043: 14
+AB_cut_beta_move_044: 7
+AB_cut_none_improved: 5277
+AB_cut_none_not_improved: 2333649
+AB_lookup_exact: 260
+AB_lookup_lower: 1184790
+AB_mate_pruned: 9710418
+SE: 4497332
+TT_insert: 4221034
+TT_insert_depth_improved: 4132819
+TT_insert_lower_to_lower: 88098
+TT_insert_new_exact: 56
+TT_insert_no_replacing_exact: 61
+TT_insert_replace: 4135274
+TT_query: 19854505
+evaluate_move: 150014386
+get_sorted_legal_moves: 6554683
+order_moves: 7893560
+----------------------------------------------
+fail_high_rate: 0.986493
+EV: #11
+PV: Nf5, exf5, Qh2, Nh4, Qxh4, Kg8, Qg3, Ng6, Qxg6, Kh8, Qg7
+Correctly found the best move: Nf5
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 | p |   |   |   | q |   |   | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | n | r |   |   |   | p | B |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   | Q |   | P |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   | P |   |
+   +---+---+---+---+---+---+---+---+
+ 2 | P | P |   |   |   |   |   | P |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   | R |   |   | K |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 1
+HASH    : 74aff4b736c05d90
+FEN     : 6k1/p3q2p/1nr3pB/8/3Q1P2/6P1/PP5P/3R2K1 b - - 0 1
+
+Best move: Rd6
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -2.05, PV = Nc4)
+0.000114084s elapsed
+Searching to depth  2...  done! (     42 entries, eval = -2.15, PV = Rc4, Qe5)
+0.00232783s elapsed
+Searching to depth  3...  done! (     83 entries, eval = -2.10, PV = Rc4, Qe5, Qc5)
+0.00594971s elapsed
+Searching to depth  4...  done! (   1058 entries, eval = -2.10, PV = Rc2, Bg5, Qe2, Qd8)
+0.0485411s elapsed
+Searching to depth  5...  done! (   2180 entries, eval = -2.10, PV = Qc5, Qxc5, Rxc5, Kf2, Kf7)
+0.114135s elapsed
+Searching to depth  6...  done! (   9242 entries, eval = -2.10, PV = Rc2, Bg5, Qe8, g4, Qe6, Qd8)
+0.417611s elapsed
+Searching to depth  7...  done! (  49727 entries, eval = -2.00, PV = Qc5, Bg7, Qxd4, Bxd4, Kf7, Kf2, Ke6)
+2.43246s elapsed
+Searching to depth  8...  done! (  96963 entries, eval = -2.05, PV = Qc5, Bg7, Kf7, Qxc5, Rxc5, Bd4, Rc2, g4)
+4.63768s elapsed
+Searching to depth  9...  done! ( 204904 entries, eval = -1.95, PV = Qc5, Qxc5, Rxc5, Rd8, Kf7, Rh8, Rc1, Kf2, Rc2)
+9.97312s elapsed
+Searching to depth 10...  done! ( 975412 entries, eval = -2.15, PV = Rc2, Bg5, Qe6, Qd8, Kg7, Qd4, Kf7, a3, Kg8, Bf6, Nc4, Qd8)
+49.9991s elapsed
+Searching to depth 11...  done! (6049751 entries, eval = -2.00, PV = Rc2, Bg5, Qc5, Qxc5, Rxc5, Re1, Ra5, a3, Kf7)
+330.414s elapsed
+The overall best move was: Rc2 with score -2.00
+------------- PERF COUNTER DUMP --------------
+AB: 33461155
+AB_: 9579584
+AB_cut_beta: 6755614
+AB_cut_beta_move_000: 4695153
+AB_cut_beta_move_001: 880000
+AB_cut_beta_move_002: 497408
+AB_cut_beta_move_003: 224889
+AB_cut_beta_move_004: 121500
+AB_cut_beta_move_005: 76576
+AB_cut_beta_move_006: 38510
+AB_cut_beta_move_007: 24778
+AB_cut_beta_move_008: 20774
+AB_cut_beta_move_009: 18170
+AB_cut_beta_move_010: 17898
+AB_cut_beta_move_011: 16773
+AB_cut_beta_move_012: 12373
+AB_cut_beta_move_013: 7949
+AB_cut_beta_move_014: 5887
+AB_cut_beta_move_015: 4516
+AB_cut_beta_move_016: 3959
+AB_cut_beta_move_017: 3184
+AB_cut_beta_move_018: 3039
+AB_cut_beta_move_019: 3061
+AB_cut_beta_move_020: 3284
+AB_cut_beta_move_021: 3261
+AB_cut_beta_move_022: 3567
+AB_cut_beta_move_023: 3490
+AB_cut_beta_move_024: 3439
+AB_cut_beta_move_025: 2990
+AB_cut_beta_move_026: 2387
+AB_cut_beta_move_027: 2015
+AB_cut_beta_move_028: 1819
+AB_cut_beta_move_029: 1838
+AB_cut_beta_move_030: 2252
+AB_cut_beta_move_031: 2566
+AB_cut_beta_move_032: 3379
+AB_cut_beta_move_033: 3725
+AB_cut_beta_move_034: 4476
+AB_cut_beta_move_035: 4895
+AB_cut_beta_move_036: 4974
+AB_cut_beta_move_037: 4943
+AB_cut_beta_move_038: 4377
+AB_cut_beta_move_039: 3790
+AB_cut_beta_move_040: 3168
+AB_cut_beta_move_041: 2517
+AB_cut_beta_move_042: 1765
+AB_cut_beta_move_043: 1396
+AB_cut_beta_move_044: 1074
+AB_cut_beta_move_045: 692
+AB_cut_beta_move_046: 458
+AB_cut_beta_move_047: 239
+AB_cut_beta_move_048: 153
+AB_cut_beta_move_049: 113
+AB_cut_beta_move_050: 63
+AB_cut_beta_move_051: 47
+AB_cut_beta_move_052: 37
+AB_cut_beta_move_053: 12
+AB_cut_beta_move_054: 11
+AB_cut_beta_move_055: 5
+AB_cut_none_improved: 116256
+AB_cut_none_not_improved: 1450123
+AB_lookup_exact: 14147
+AB_lookup_lower: 1243444
+AB_mate_pruned: 11958
+SE: 60258943
+TT_insert: 6871870
+TT_insert_depth_improved: 6471566
+TT_insert_lower_to_lower: 395946
+TT_insert_new_exact: 4262
+TT_insert_no_replacing_exact: 96
+TT_insert_replace: 6476508
+TT_query: 48889784
+evaluate_move: 290722921
+get_sorted_legal_moves: 8321993
+order_moves: 32438241
+----------------------------------------------
+fail_high_rate: 0.695
+EV: -2.00
+PV: Rc2, Bg5, Qc5, Qxc5, Rxc5, Re1, Ra5, a3, Kf7
+Found an irrelevant possibility: Rc2
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   | r |   |   |   |   | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   |   |   | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   | n | p |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   | p |   |   |   | n |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   | N | B |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   |   | P |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   | N |   | R | K |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : 2b035d8cf1aa46af
+FEN     : 1r4k1/7p/5np1/3p3n/8/2NB4/7P/3N1RK1 w - - 0 1
+
+Best move: Nxd5
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = 1.70, PV = Ne3)
+9.7333e-05s elapsed
+Searching to depth  2...  done! (     31 entries, eval = 1.65, PV = Ne3, d4)
+0.00173196s elapsed
+Searching to depth  3...  done! (     64 entries, eval = 1.65, PV = Ne3, d4, Bc4)
+0.00556208s elapsed
+Searching to depth  4...  done! (   1419 entries, eval = 1.25, PV = Ne3, Rb3, Rc1, Nf4)
+0.058969s elapsed
+Searching to depth  5...  done! (   2884 entries, eval = 1.55, PV = Kg2, g5, Kf3, Nf4, Nf2)
+0.16294s elapsed
+Searching to depth  6...  done! (  18947 entries, eval = 1.95, PV = Nxd5, Nxd5, Bc4, Nf4, Rxf4, Rd8)
+0.620788s elapsed
+Searching to depth  7...  done! (  20055 entries, eval = 2.25, PV = Nxd5, Nxd5, Bc4, Nf6, Ne3, Kf7, Nxd5)
+1.35184s elapsed
+Searching to depth  8...  done! ( 168821 entries, eval = 2.40, PV = Nxd5, Nxd5, Bc4, Nf6, Ne3, Rb2, Rxf6, Rb1)
+4.68875s elapsed
+Searching to depth  9...  done! ( 179161 entries, eval = 2.40, PV = Nxd5, Nxd5, Bc4, Kg7, Bxd5, Nf6, Bc4, Ne4, Ne3)
+11.8245s elapsed
+Searching to depth 10...  done! (1218714 entries, eval = 2.25, PV = Nxd5, Nxd5, Bc4, Kg7, Bxd5, Nf6, Bc4, g5, Ne3, Kg6)
+37.3571s elapsed
+Searching to depth 11...  done! (1316565 entries, eval = 2.40, PV = Nxd5, Nxd5, Bc4, Kg7, Bxd5, Nf6, Bc4, g5, Ne3, Rb2, Re1)
+94.1144s elapsed
+The overall best move was: Nxd5 with score 2.40
+------------- PERF COUNTER DUMP --------------
+AB: 19947743
+AB_: 5436051
+AB_cut_beta: 2789439
+AB_cut_beta_move_000: 2603230
+AB_cut_beta_move_001: 123007
+AB_cut_beta_move_002: 39239
+AB_cut_beta_move_003: 10455
+AB_cut_beta_move_004: 4206
+AB_cut_beta_move_005: 1517
+AB_cut_beta_move_006: 1063
+AB_cut_beta_move_007: 753
+AB_cut_beta_move_008: 477
+AB_cut_beta_move_009: 443
+AB_cut_beta_move_010: 343
+AB_cut_beta_move_011: 280
+AB_cut_beta_move_012: 234
+AB_cut_beta_move_013: 290
+AB_cut_beta_move_014: 240
+AB_cut_beta_move_015: 204
+AB_cut_beta_move_016: 136
+AB_cut_beta_move_017: 111
+AB_cut_beta_move_018: 114
+AB_cut_beta_move_019: 172
+AB_cut_beta_move_020: 184
+AB_cut_beta_move_021: 195
+AB_cut_beta_move_022: 250
+AB_cut_beta_move_023: 159
+AB_cut_beta_move_024: 152
+AB_cut_beta_move_025: 248
+AB_cut_beta_move_026: 864
+AB_cut_beta_move_027: 142
+AB_cut_beta_move_028: 111
+AB_cut_beta_move_029: 94
+AB_cut_beta_move_030: 109
+AB_cut_beta_move_031: 73
+AB_cut_beta_move_032: 57
+AB_cut_beta_move_033: 72
+AB_cut_beta_move_034: 37
+AB_cut_beta_move_035: 88
+AB_cut_beta_move_036: 34
+AB_cut_beta_move_037: 22
+AB_cut_beta_move_038: 16
+AB_cut_beta_move_039: 8
+AB_cut_beta_move_040: 6
+AB_cut_beta_move_041: 1
+AB_cut_beta_move_042: 2
+AB_cut_beta_move_043: 1
+AB_cut_none_improved: 9565
+AB_cut_none_not_improved: 1487695
+AB_lookup_exact: 668
+AB_lookup_lower: 1148684
+AB_mate_pruned: 4532
+SE: 17579099
+TT_insert: 2799004
+TT_insert_depth_improved: 2785474
+TT_insert_lower_to_lower: 13499
+TT_insert_new_exact: 31
+TT_insert_replace: 2785870
+TT_query: 14798889
+evaluate_move: 97825857
+get_sorted_legal_moves: 4286699
+order_moves: 6563745
+----------------------------------------------
+fail_high_rate: 0.933245
+EV: 2.40
+PV: Nxd5, Nxd5, Bc4, Kg7, Bxd5, Nf6, Bc4, g5, Ne3, Rb2, Re1
+Correctly found the best move: Nxd5
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   | r |   |   | r |   | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 | p |   |   |   |   | p |   | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   |   | p | B |
+   +---+---+---+---+---+---+---+---+
+ 5 | q |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   | Q |   |   | P |   |
+   +---+---+---+---+---+---+---+---+
+ 2 | P | b | P |   |   | P | K | P |
+   +---+---+---+---+---+---+---+---+
+ 1 |   | R |   |   |   | R |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : bec0902ca4bf5679
+FEN     : 1r2r1k1/p4p1p/6pB/q7/8/3Q2P1/PbP2PKP/1R3R2 w - - 0 1
+
+Best move: Rxb2
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = 1.10, PV = Bf4)
+0.000190875s elapsed
+Searching to depth  2...  done! (     50 entries, eval = 1.05, PV = Bf4, Be5)
+0.00347808s elapsed
+Searching to depth  3...  done! (    104 entries, eval = 1.05, PV = Bf4, Be5, Rxb8)
+0.0153646s elapsed
+Searching to depth  4...  done! (   2454 entries, eval = 0.95, PV = Bf4, Rbd8, Qc4, Bf6)
+0.14592s elapsed
+Searching to depth  5...  done! (   4936 entries, eval = 1.05, PV = Bf4, Rbd8, Qc4, Bf6, Kg1)
+0.482928s elapsed
+Searching to depth  6...  done! (  48315 entries, eval = 1.00, PV = Bf4, Rbd8, Qc4, Bd4, Kg1, g5)
+2.5473s elapsed
+Searching to depth  7...  done! (  77155 entries, eval = 3.25, PV = Rxb2, Rxb2, Qd4, Qe5, Re1, Qd5, Qxd5)
+6.90546s elapsed
+Searching to depth  8...  done! ( 558717 entries, eval = 3.25, PV = Rxb2, Rxb2, Qd4, Qe5, Re1, Qd5, Qxd5, Rxe1)
+24.8903s elapsed
+Searching to depth  9...  done! ( 669512 entries, eval = 3.35, PV = Rxb2, Rxb2, Qd4, Qe5, Re1, Qd5, Qxd5, Rxe1, Bd2)
+57.7788s elapsed
+Searching to depth 10...  done! (4441833 entries, eval = 4.10, PV = Rxb2, Rxb2, Qd4, Qe5, Re1, Rb5, Rxe5, Rbxe5, Qxa7, Re2)
+212.045s elapsed
+The overall best move was: Rxb2 with score 4.10
+------------- PERF COUNTER DUMP --------------
+AB: 23716731
+AB_: 9188711
+AB_cut_beta: 5634776
+AB_cut_beta_move_000: 4841647
+AB_cut_beta_move_001: 531607
+AB_cut_beta_move_002: 152774
+AB_cut_beta_move_003: 41906
+AB_cut_beta_move_004: 17289
+AB_cut_beta_move_005: 9817
+AB_cut_beta_move_006: 4579
+AB_cut_beta_move_007: 2953
+AB_cut_beta_move_008: 1790
+AB_cut_beta_move_009: 1558
+AB_cut_beta_move_010: 1278
+AB_cut_beta_move_011: 1005
+AB_cut_beta_move_012: 649
+AB_cut_beta_move_013: 569
+AB_cut_beta_move_014: 432
+AB_cut_beta_move_015: 365
+AB_cut_beta_move_016: 325
+AB_cut_beta_move_017: 332
+AB_cut_beta_move_018: 338
+AB_cut_beta_move_019: 258
+AB_cut_beta_move_020: 292
+AB_cut_beta_move_021: 268
+AB_cut_beta_move_022: 248
+AB_cut_beta_move_023: 370
+AB_cut_beta_move_024: 470
+AB_cut_beta_move_025: 569
+AB_cut_beta_move_026: 707
+AB_cut_beta_move_027: 851
+AB_cut_beta_move_028: 1200
+AB_cut_beta_move_029: 1837
+AB_cut_beta_move_030: 2150
+AB_cut_beta_move_031: 2475
+AB_cut_beta_move_032: 1785
+AB_cut_beta_move_033: 1670
+AB_cut_beta_move_034: 1458
+AB_cut_beta_move_035: 1455
+AB_cut_beta_move_036: 1464
+AB_cut_beta_move_037: 990
+AB_cut_beta_move_038: 730
+AB_cut_beta_move_039: 452
+AB_cut_beta_move_040: 435
+AB_cut_beta_move_041: 388
+AB_cut_beta_move_042: 246
+AB_cut_beta_move_043: 193
+AB_cut_beta_move_044: 184
+AB_cut_beta_move_045: 94
+AB_cut_beta_move_046: 79
+AB_cut_beta_move_047: 48
+AB_cut_beta_move_048: 44
+AB_cut_beta_move_049: 29
+AB_cut_beta_move_050: 38
+AB_cut_beta_move_051: 16
+AB_cut_beta_move_052: 30
+AB_cut_beta_move_053: 21
+AB_cut_beta_move_054: 4
+AB_cut_beta_move_055: 5
+AB_cut_beta_move_056: 4
+AB_cut_beta_move_057: 4
+AB_cut_beta_move_060: 1
+AB_cut_beta_move_066: 1
+AB_cut_none_improved: 17205
+AB_cut_none_not_improved: 1221776
+AB_lookup_exact: 2553
+AB_lookup_lower: 2312401
+AB_mate_pruned: 59254
+SE: 32361281
+TT_insert: 5651981
+TT_insert_depth_improved: 5625193
+TT_insert_lower_to_lower: 26395
+TT_insert_new_exact: 393
+TT_insert_replace: 5625954
+TT_query: 33743936
+evaluate_move: 298816363
+get_sorted_legal_moves: 6873757
+order_moves: 18903168
+----------------------------------------------
+fail_high_rate: 0.859244
+EV: 4.10
+PV: Rxb2, Rxb2, Qd4, Qe5, Re1, Rb5, Rxe5, Rbxe5, Qxa7, Re2
+Correctly found the best move: Rxb2
+
+   +---+---+---+---+---+---+---+---+
+ 8 | r |   |   | q |   | r |   | k |
+   +---+---+---+---+---+---+---+---+
+ 7 | p | b |   |   |   | p |   | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   | n |   | p |   |   | Q |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   | p |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   | B |   |   | N |   |
+   +---+---+---+---+---+---+---+---+
+ 2 | P | P |   |   |   | P | P | P |
+   +---+---+---+---+---+---+---+---+
+ 1 | R |   |   |   | R |   | K |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : a6d8c38e676f7262
+FEN     : r2q1r1k/pb3p1p/2n1p2Q/5p2/8/3B2N1/PP3PPP/R3R1K1 w - - 0 1
+
+Best move: Bxf5
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = 0.45, PV = Qe3)
+0.00035175s elapsed
+Searching to depth  2...  done! (     52 entries, eval = 0.35, PV = Qe3, Kg8)
+0.00785383s elapsed
+Searching to depth  3...  done! (    136 entries, eval = 0.40, PV = Rad1, Nd4, Qf4)
+0.0280617s elapsed
+Searching to depth  4...  done! (   2340 entries, eval = 1.45, PV = Nxf5, Rg8, Nd4, Rg7)
+0.338383s elapsed
+Searching to depth  5...  done! (   2801 entries, eval = 1.55, PV = Nxf5, Rg8, Nd6, Rg7, Qf4)
+0.57511s elapsed
+Searching to depth  6...  done! ( 101133 entries, eval = 1.45, PV = Nxf5, Rg8, Nd6, Rg7, Qf4, Qc7)
+6.74262s elapsed
+Searching to depth  7...  done! ( 124898 entries, eval = 1.50, PV = Nxf5, Rg8, Nd6, Rg7, Qf4, Qc7, Rad1)
+12.9577s elapsed
+Searching to depth  8...  done! (1402462 entries, eval = 2.90, PV = Bxf5, exf5, Nxf5, Rg8, Re8, Qd1, Rxd1, Rgxe8)
+117.191s elapsed
+The overall best move was: Bxf5 with score 2.90
+------------- PERF COUNTER DUMP --------------
+AB: 6965345
+AB_: 2383728
+AB_cut_beta: 1586411
+AB_cut_beta_move_000: 1231860
+AB_cut_beta_move_001: 169531
+AB_cut_beta_move_002: 106034
+AB_cut_beta_move_003: 31357
+AB_cut_beta_move_004: 12878
+AB_cut_beta_move_005: 7832
+AB_cut_beta_move_006: 4627
+AB_cut_beta_move_007: 2038
+AB_cut_beta_move_008: 1271
+AB_cut_beta_move_009: 1104
+AB_cut_beta_move_010: 627
+AB_cut_beta_move_011: 1179
+AB_cut_beta_move_012: 634
+AB_cut_beta_move_013: 631
+AB_cut_beta_move_014: 402
+AB_cut_beta_move_015: 363
+AB_cut_beta_move_016: 248
+AB_cut_beta_move_017: 315
+AB_cut_beta_move_018: 414
+AB_cut_beta_move_019: 413
+AB_cut_beta_move_020: 515
+AB_cut_beta_move_021: 290
+AB_cut_beta_move_022: 404
+AB_cut_beta_move_023: 394
+AB_cut_beta_move_024: 332
+AB_cut_beta_move_025: 344
+AB_cut_beta_move_026: 248
+AB_cut_beta_move_027: 345
+AB_cut_beta_move_028: 535
+AB_cut_beta_move_029: 817
+AB_cut_beta_move_030: 1003
+AB_cut_beta_move_031: 1062
+AB_cut_beta_move_032: 868
+AB_cut_beta_move_033: 740
+AB_cut_beta_move_034: 516
+AB_cut_beta_move_035: 507
+AB_cut_beta_move_036: 509
+AB_cut_beta_move_037: 375
+AB_cut_beta_move_038: 235
+AB_cut_beta_move_039: 259
+AB_cut_beta_move_040: 268
+AB_cut_beta_move_041: 305
+AB_cut_beta_move_042: 325
+AB_cut_beta_move_043: 219
+AB_cut_beta_move_044: 173
+AB_cut_beta_move_045: 185
+AB_cut_beta_move_046: 168
+AB_cut_beta_move_047: 152
+AB_cut_beta_move_048: 100
+AB_cut_beta_move_049: 90
+AB_cut_beta_move_050: 82
+AB_cut_beta_move_051: 79
+AB_cut_beta_move_052: 78
+AB_cut_beta_move_053: 38
+AB_cut_beta_move_054: 29
+AB_cut_beta_move_055: 23
+AB_cut_beta_move_056: 17
+AB_cut_beta_move_057: 14
+AB_cut_beta_move_058: 8
+AB_cut_beta_move_060: 2
+AB_cut_none_improved: 14379
+AB_cut_none_not_improved: 165598
+AB_lookup_exact: 1326
+AB_lookup_lower: 616014
+AB_mate_pruned: 20187
+SE: 24878768
+TT_insert: 1600790
+TT_insert_depth_improved: 1516430
+TT_insert_lower_to_lower: 83908
+TT_insert_new_exact: 452
+TT_insert_replace: 1516884
+TT_query: 16926559
+evaluate_move: 86901864
+get_sorted_legal_moves: 1766388
+order_moves: 12941988
+----------------------------------------------
+fail_high_rate: 0.776507
+EV: 2.90
+PV: Bxf5, exf5, Nxf5, Rg8, Re8, Qd1, Rxd1, Rgxe8
+Correctly found the best move: Bxf5
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   | p |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 6 | p |   |   | p |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   | p | P |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   | P |   | P |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   | P |   |   |   |   | k |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | P |   | K |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : 3ad342764795bbf1
+FEN     : 8/4p3/p2p4/2pP4/2P1P3/1P4k1/1P1K4/8 w - - 0 1
+
+Best move: b4
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = 2.05, PV = Ke3)
+2.5791e-05s elapsed
+Searching to depth  2...  done! (     11 entries, eval = 2.05, PV = Ke3, Kg4)
+0.000111083s elapsed
+Searching to depth  3...  done! (     19 entries, eval = 2.05, PV = Ke3, Kg4, Kd3)
+0.000380916s elapsed
+Searching to depth  4...  done! (     70 entries, eval = 1.65, PV = Ke3, Kg4, Kd3, Kf4)
+0.00101433s elapsed
+Searching to depth  5...  done! (    172 entries, eval = 1.65, PV = Ke3, Kg4, Ke2, Kf4, Kd3, Ke5)
+0.00299696s elapsed
+Searching to depth  6...  done! (    318 entries, eval = 1.65, PV = Ke3, Kg4, e5, Kf5, e6, Ke5)
+0.00639946s elapsed
+Searching to depth  7...  done! (    571 entries, eval = 1.65, PV = Ke3, Kg4, e5, Kf5, e6, Ke5, Kd3)
+0.0146171s elapsed
+Searching to depth  8...  done! (   1319 entries, eval = 1.60, PV = Ke3, a5, e5, dxe5, Ke4, Kf2, Kxe5, Ke3)
+0.0328307s elapsed
+Searching to depth  9...  done! (   2939 entries, eval = 1.60, PV = Ke3, a5, e5, dxe5, Ke4, Kf2, Kf5, Ke3, Kxe5)
+0.0748383s elapsed
+Searching to depth 10...  done! (   5891 entries, eval = 1.65, PV = Ke3, Kg4, e5, Kf5, e6, Ke5, Kf3, Kf5, Ke3, ...)
+0.152676s elapsed
+Searching to depth 11...  done! (   8276 entries, eval = 1.65, PV = Ke3, Kg4, e5, Kf5, e6, Ke5, Kd3, Kf4, Kc3, Ke5, Kd3, ...)
+0.250456s elapsed
+Searching to depth 12...  done! (  17227 entries, eval = 1.60, PV = Ke3, Kg4, e5, Kf5, e6, Ke5, Kd3, a5, Ke3, Kf5, Kf3, Ke5, Ke3, ...)
+0.576761s elapsed
+Searching to depth 13...  done! (  40419 entries, eval = 1.50, PV = Ke3, a5, e5, dxe5, Ke4, Kf2, Kxe5, Ke3, Ke6, Ke4, Kxe7)
+2.24083s elapsed
+Searching to depth 14...  done! (  77464 entries, eval = 1.55, PV = Ke3, Kg4, e5, Kf5, e6, Ke5, Kd3, Kf4, Kc3, Ke4, Kd2, Kd4, Ke2, Ke4)
+3.61416s elapsed
+Searching to depth 15...  done! ( 102233 entries, eval = 1.55, PV = Ke3, Kg4, e5, Kf5, e6, Ke5, Kd3, Kf4, Kd2, Ke4, Kc3, Ke5, Kd3, ...)
+4.90092s elapsed
+Searching to depth 16...  done! ( 548151 entries, eval = 0.80, PV = Ke3, a5, e5, dxe5, Ke4, Kf2, Kf5, Kg2, Ke6, e4, d6, exd6, Kxd6, Kf3, Kd5, Kf4, Kd6, e3)
+37.3311s elapsed
+Searching to depth 17...  done! (1094964 entries, eval = 1.75, PV = b4, cxb4, c5, dxc5, e5, Kf2, Kd3, c4, Kxc4, Ke2, Kxb4, Ke3, Kc5)
+63.4116s elapsed
+Searching to depth 18...  done! (2483766 entries, eval = 6.15, PV = b4, cxb4, c5, dxc5, e5, c4, d6, c3, Kc2, exd6, exd6, cxb2, d7, b1=Q, Kxb1, Kf3, d8=Q, Ke4)
+171.628s elapsed
+The overall best move was: b4 with score 6.15
+------------- PERF COUNTER DUMP --------------
+AB: 37961179
+AB_: 21571294
+AB_cut_beta: 8679588
+AB_cut_beta_move_000: 7943116
+AB_cut_beta_move_001: 277375
+AB_cut_beta_move_002: 171633
+AB_cut_beta_move_003: 86776
+AB_cut_beta_move_004: 60603
+AB_cut_beta_move_005: 52710
+AB_cut_beta_move_006: 36232
+AB_cut_beta_move_007: 22423
+AB_cut_beta_move_008: 12580
+AB_cut_beta_move_009: 6206
+AB_cut_beta_move_010: 2405
+AB_cut_beta_move_011: 1098
+AB_cut_beta_move_012: 723
+AB_cut_beta_move_013: 631
+AB_cut_beta_move_014: 537
+AB_cut_beta_move_015: 378
+AB_cut_beta_move_016: 321
+AB_cut_beta_move_017: 241
+AB_cut_beta_move_018: 267
+AB_cut_beta_move_019: 254
+AB_cut_beta_move_020: 317
+AB_cut_beta_move_021: 316
+AB_cut_beta_move_022: 377
+AB_cut_beta_move_023: 514
+AB_cut_beta_move_024: 462
+AB_cut_beta_move_025: 416
+AB_cut_beta_move_026: 360
+AB_cut_beta_move_027: 152
+AB_cut_beta_move_028: 91
+AB_cut_beta_move_029: 55
+AB_cut_beta_move_030: 15
+AB_cut_beta_move_031: 3
+AB_cut_beta_move_032: 1
+AB_cut_none_improved: 108703
+AB_cut_none_not_improved: 4063745
+AB_lookup_exact: 157130
+AB_lookup_lower: 8562128
+AB_mate_pruned: 176
+SE: 23094087
+TT_insert: 8788291
+TT_insert_depth_improved: 3076294
+TT_insert_lower_to_lower: 5698862
+TT_insert_new_exact: 12962
+TT_insert_no_replacing_exact: 173
+TT_insert_replace: 3090508
+TT_query: 48624228
+evaluate_move: 138407810
+get_sorted_legal_moves: 12852036
+order_moves: 18264444
+----------------------------------------------
+fail_high_rate: 0.915149
+EV: 6.15
+PV: b4, cxb4, c5, dxc5, e5, c4, d6, c3, Kc2, exd6, exd6, cxb2, d7, b1=Q, Kxb1, Kf3, d8=Q, Ke4
+Correctly found the best move: b4
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   | r |   | q |   | r | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 | p |   | p |   |   | p | b | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   | p | p |   | n | p |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   | B |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   | P |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   | N | Q |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 | P | P | P |   |   | P | P | P |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   | R |   | R | K |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : e17a277a4200a47f
+FEN     : 1r1q1rk1/p1p2pbp/2pp1np1/6B1/4P3/2NQ4/PPP2PPP/3R1RK1 w - - 0 1
+
+Best move: e5
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = 0.65, PV = Rb1)
+0.000972791s elapsed
+Searching to depth  2...  done! (     43 entries, eval = 0.55, PV = Rb1, c5)
+0.0280199s elapsed
+Searching to depth  3...  done! (     71 entries, eval = 0.65, PV = Rb1, c5, Nd5)
+0.0441097s elapsed
+Searching to depth  4...  done! (   2606 entries, eval = 0.55, PV = Rb1, Qe7, Be3, c5)
+1.19745s elapsed
+Searching to depth  5...  done! (   3733 entries, eval = 0.60, PV = Rb1, Qd7, Be3, c5, Rfe1)
+1.79419s elapsed
+Searching to depth  6...  done! (  50757 entries, eval = 1.35, PV = e5, dxe5, Qf3, Qe7, Ne4, Rxb2)
+8.96242s elapsed
+Searching to depth  7...  done! (  60413 entries, eval = 1.35, PV = e5, dxe5, Qf3, Qe7, Ne4, Rxb2, Nxf6)
+15.6849s elapsed
+Searching to depth  8...  done! (1210795 entries, eval = 1.40, PV = e5, dxe5, Qf3, Qe7, Ne4, Rxb2, Nxf6, Bxf6)
+139.709s elapsed
+The overall best move was: e5 with score 1.40
+------------- PERF COUNTER DUMP --------------
+AB: 6609103
+AB_: 2367861
+AB_cut_beta: 1501949
+AB_cut_beta_move_000: 1321112
+AB_cut_beta_move_001: 108360
+AB_cut_beta_move_002: 40143
+AB_cut_beta_move_003: 7811
+AB_cut_beta_move_004: 3432
+AB_cut_beta_move_005: 1444
+AB_cut_beta_move_006: 1003
+AB_cut_beta_move_007: 1100
+AB_cut_beta_move_008: 2784
+AB_cut_beta_move_009: 2222
+AB_cut_beta_move_010: 1226
+AB_cut_beta_move_011: 429
+AB_cut_beta_move_012: 246
+AB_cut_beta_move_013: 329
+AB_cut_beta_move_014: 340
+AB_cut_beta_move_015: 602
+AB_cut_beta_move_016: 749
+AB_cut_beta_move_017: 760
+AB_cut_beta_move_018: 525
+AB_cut_beta_move_019: 365
+AB_cut_beta_move_020: 213
+AB_cut_beta_move_021: 257
+AB_cut_beta_move_022: 202
+AB_cut_beta_move_023: 234
+AB_cut_beta_move_024: 141
+AB_cut_beta_move_025: 106
+AB_cut_beta_move_026: 199
+AB_cut_beta_move_027: 318
+AB_cut_beta_move_028: 650
+AB_cut_beta_move_029: 654
+AB_cut_beta_move_030: 714
+AB_cut_beta_move_031: 1085
+AB_cut_beta_move_032: 611
+AB_cut_beta_move_033: 293
+AB_cut_beta_move_034: 200
+AB_cut_beta_move_035: 190
+AB_cut_beta_move_036: 143
+AB_cut_beta_move_037: 162
+AB_cut_beta_move_038: 145
+AB_cut_beta_move_039: 122
+AB_cut_beta_move_040: 92
+AB_cut_beta_move_041: 76
+AB_cut_beta_move_042: 55
+AB_cut_beta_move_043: 39
+AB_cut_beta_move_044: 31
+AB_cut_beta_move_045: 15
+AB_cut_beta_move_046: 8
+AB_cut_beta_move_047: 6
+AB_cut_beta_move_048: 4
+AB_cut_beta_move_049: 1
+AB_cut_beta_move_050: 1
+AB_cut_none_improved: 4385
+AB_cut_none_not_improved: 135099
+AB_lookup_exact: 531
+AB_lookup_lower: 725897
+SE: 33019939
+TT_insert: 1506334
+TT_insert_depth_improved: 1314618
+TT_insert_lower_to_lower: 191554
+TT_insert_new_exact: 162
+TT_insert_replace: 1314780
+TT_query: 20395523
+evaluate_move: 97269529
+get_sorted_legal_moves: 1641433
+order_moves: 16521275
+----------------------------------------------
+fail_high_rate: 0.879598
+EV: 1.40
+PV: e5, dxe5, Qf3, Qe7, Ne4, Rxb2, Nxf6, Bxf6
+Correctly found the best move: e5
+
+   +---+---+---+---+---+---+---+---+
+ 8 | q |   |   |   |   | r | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   | n |   | Q | b | p | p | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   | p |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   | p |   |   | p |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | P |   |   | P |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   | P |   |   |   |   | P |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   | P |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   | B |   | N | R | K |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 1
+HASH    : fd11328bd942d79b
+FEN     : q4rk1/1n1Qbppp/2p5/1p2p3/1P2P3/2P4P/6P1/2B1NRK1 b - - 0 1
+
+Best move: Qc8
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = 1.20, PV = Qa7)
+0.00020875s elapsed
+Searching to depth  2...  done! (     35 entries, eval = 1.20, PV = Qa7, Rf2)
+0.002364s elapsed
+Searching to depth  3...  done! (    579 entries, eval = 0.55, PV = Re8, Qxc6, Nd6)
+0.0604834s elapsed
+Searching to depth  4...  done! (   1464 entries, eval = 0.75, PV = Re8, Qxc6, Nd6, Qxa8)
+0.137088s elapsed
+Searching to depth  5...  done! (   5549 entries, eval = 0.45, PV = Bf6, Qxc6, Qc8, Qxb5, Qxc3)
+0.851878s elapsed
+Searching to depth  6...  done! (  23116 entries, eval = 0.75, PV = Bf6, Be3, Qc8, Qxc8, Rxc8, Nd3)
+2.78631s elapsed
+Searching to depth  7...  done! (  43058 entries, eval = 0.85, PV = Bf6, Qxc6, Rc8, Qxb5, Nd6, Qd5, Nxe4)
+6.13226s elapsed
+Searching to depth  8...  done! ( 250759 entries, eval = 1.00, PV = Qc8, Qxe7, f6, Nd3, Re8, Qxe8, Qxe8, Kf2)
+34.821s elapsed
+Searching to depth  9...  done! ( 344984 entries, eval = 1.10, PV = Qc8, Qxc8, Rxc8, Nd3, Nd6, Nc5, Bh4, Be3, Bf6)
+56.8447s elapsed
+Searching to depth 10...  done! (2333086 entries, eval = 0.80, PV = Qc8, Qxc8, Rxc8, Kf2, Nd6, Kf3, f5, exf5, Nxf5, Nd3)
+364.616s elapsed
+The overall best move was: Qc8 with score 0.80
+------------- PERF COUNTER DUMP --------------
+AB: 17138430
+AB_: 4659376
+AB_cut_beta: 2874985
+AB_cut_beta_move_000: 2036480
+AB_cut_beta_move_001: 381566
+AB_cut_beta_move_002: 141355
+AB_cut_beta_move_003: 128117
+AB_cut_beta_move_004: 60605
+AB_cut_beta_move_005: 19386
+AB_cut_beta_move_006: 11685
+AB_cut_beta_move_007: 8171
+AB_cut_beta_move_008: 6716
+AB_cut_beta_move_009: 5667
+AB_cut_beta_move_010: 4325
+AB_cut_beta_move_011: 3435
+AB_cut_beta_move_012: 2829
+AB_cut_beta_move_013: 2430
+AB_cut_beta_move_014: 2022
+AB_cut_beta_move_015: 2016
+AB_cut_beta_move_016: 2228
+AB_cut_beta_move_017: 1963
+AB_cut_beta_move_018: 1859
+AB_cut_beta_move_019: 1850
+AB_cut_beta_move_020: 1611
+AB_cut_beta_move_021: 1317
+AB_cut_beta_move_022: 1181
+AB_cut_beta_move_023: 1133
+AB_cut_beta_move_024: 1022
+AB_cut_beta_move_025: 1375
+AB_cut_beta_move_026: 1553
+AB_cut_beta_move_027: 1476
+AB_cut_beta_move_028: 1417
+AB_cut_beta_move_029: 1405
+AB_cut_beta_move_030: 1652
+AB_cut_beta_move_031: 2024
+AB_cut_beta_move_032: 2727
+AB_cut_beta_move_033: 2770
+AB_cut_beta_move_034: 2962
+AB_cut_beta_move_035: 3177
+AB_cut_beta_move_036: 2847
+AB_cut_beta_move_037: 2586
+AB_cut_beta_move_038: 2705
+AB_cut_beta_move_039: 2677
+AB_cut_beta_move_040: 2425
+AB_cut_beta_move_041: 2276
+AB_cut_beta_move_042: 1897
+AB_cut_beta_move_043: 1327
+AB_cut_beta_move_044: 1043
+AB_cut_beta_move_045: 720
+AB_cut_beta_move_046: 487
+AB_cut_beta_move_047: 251
+AB_cut_beta_move_048: 130
+AB_cut_beta_move_049: 59
+AB_cut_beta_move_050: 31
+AB_cut_beta_move_051: 10
+AB_cut_beta_move_052: 6
+AB_cut_beta_move_053: 1
+AB_cut_none_improved: 17218
+AB_cut_none_not_improved: 584218
+AB_lookup_exact: 1244
+AB_lookup_lower: 1181711
+AB_mate_pruned: 719
+SE: 79907903
+TT_insert: 2892203
+TT_insert_depth_improved: 2832355
+TT_insert_lower_to_lower: 59710
+TT_insert_new_exact: 138
+TT_insert_replace: 2832524
+TT_query: 51369367
+evaluate_move: 219979665
+get_sorted_legal_moves: 3476421
+order_moves: 43817712
+----------------------------------------------
+fail_high_rate: 0.708345
+EV: 0.80
+PV: Qc8, Qxc8, Rxc8, Kf2, Nd6, Kf3, f5, exf5, Nxf5, Nd3
+Correctly found the best move: Qc8
+
+   +---+---+---+---+---+---+---+---+
+ 8 | r |   |   | q |   | r |   | k |
+   +---+---+---+---+---+---+---+---+
+ 7 |   | b |   | n | N |   |   | p |
+   +---+---+---+---+---+---+---+---+
+ 6 | p | p |   |   |   | p | p |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 | Q |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 | P | P |   |   |   |   |   | P |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | B | P |   |   | R | P | N |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   | K |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : 72c9576debc5cb06
+FEN     : r2q1r1k/1b1nN2p/pp3pp1/8/Q7/PP5P/1BP2RPN/7K w - - 0 1
+
+Best move: Qxd7
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -1.75, PV = Nc6)
+0.00151392s elapsed
+Searching to depth  2...  done! (     40 entries, eval = -1.85, PV = Nc6, Qc7)
+0.00612917s elapsed
+Searching to depth  3...  done! (     72 entries, eval = -1.75, PV = Nc6, Qc7, Nd4)
+0.0167615s elapsed
+Searching to depth  4...  done! (    668 entries, eval = -1.80, PV = Rd2, b5, Qg4, Qxe7)
+0.070122s elapsed
+Searching to depth  5...  done! (   4251 entries, eval = -1.80, PV = Nc6, Qc7, Nd4, Nc5, Qc4)
+0.939514s elapsed
+Searching to depth  6...  done! (  13242 entries, eval = -1.95, PV = Nc6, Qc7, Nd4, b5, Qb4, Ne5)
+1.49747s elapsed
+Searching to depth  7...  done! (  17532 entries, eval = -1.85, PV = Nc6, Qc7, Nd4, Nc5, Qc4, b5, Qc3)
+2.27723s elapsed
+Searching to depth  8...  done! ( 144985 entries, eval = 1.80, PV = Qxd7, Qxd7, Rxf6, Kg7, Rd6, Kf7, Rxd7, Be4)
+11.5969s elapsed
+Searching to depth  9...  done! ( 150060 entries, eval = 2.00, PV = Qxd7, Qxd7, Rxf6, Kg7, Rd6, Kf7, Rxd7, Be4, Nd5)
+16.9082s elapsed
+Searching to depth 10...  done! ( 980447 entries, eval = 2.30, PV = Qxd7, Qxd7, Rxf6, Kg7, Rd6, Kh6, Rxd7, Be4, Ng4, Kg5)
+40.5754s elapsed
+Searching to depth 11...  done! (1015207 entries, eval = 2.40, PV = Qxd7, Qxd7, Rxf6, Kg7, Rd6, Kf7, Rxd7, Rfd8, Rxb7, Rd1, Nf1)
+85.5199s elapsed
+The overall best move was: Qxd7 with score 2.40
+------------- PERF COUNTER DUMP --------------
+AB: 14706018
+AB_: 3832193
+AB_cut_beta: 2094863
+AB_cut_beta_move_000: 1986146
+AB_cut_beta_move_001: 71198
+AB_cut_beta_move_002: 19415
+AB_cut_beta_move_003: 6635
+AB_cut_beta_move_004: 3553
+AB_cut_beta_move_005: 2026
+AB_cut_beta_move_006: 1406
+AB_cut_beta_move_007: 654
+AB_cut_beta_move_008: 369
+AB_cut_beta_move_009: 256
+AB_cut_beta_move_010: 188
+AB_cut_beta_move_011: 172
+AB_cut_beta_move_012: 94
+AB_cut_beta_move_013: 82
+AB_cut_beta_move_014: 88
+AB_cut_beta_move_015: 83
+AB_cut_beta_move_016: 56
+AB_cut_beta_move_017: 95
+AB_cut_beta_move_018: 75
+AB_cut_beta_move_019: 182
+AB_cut_beta_move_020: 127
+AB_cut_beta_move_021: 90
+AB_cut_beta_move_022: 70
+AB_cut_beta_move_023: 66
+AB_cut_beta_move_024: 66
+AB_cut_beta_move_025: 49
+AB_cut_beta_move_026: 58
+AB_cut_beta_move_027: 100
+AB_cut_beta_move_028: 144
+AB_cut_beta_move_029: 118
+AB_cut_beta_move_030: 97
+AB_cut_beta_move_031: 127
+AB_cut_beta_move_032: 101
+AB_cut_beta_move_033: 81
+AB_cut_beta_move_034: 50
+AB_cut_beta_move_035: 53
+AB_cut_beta_move_036: 85
+AB_cut_beta_move_037: 68
+AB_cut_beta_move_038: 70
+AB_cut_beta_move_039: 112
+AB_cut_beta_move_040: 92
+AB_cut_beta_move_041: 90
+AB_cut_beta_move_042: 55
+AB_cut_beta_move_043: 49
+AB_cut_beta_move_044: 29
+AB_cut_beta_move_045: 19
+AB_cut_beta_move_046: 8
+AB_cut_beta_move_047: 11
+AB_cut_beta_move_048: 3
+AB_cut_beta_move_049: 2
+AB_cut_none_improved: 3932
+AB_cut_none_not_improved: 1085118
+AB_lookup_exact: 199
+AB_lookup_lower: 648081
+AB_mate_pruned: 9690
+SE: 15615700
+TT_insert: 2098795
+TT_insert_depth_improved: 2082980
+TT_insert_lower_to_lower: 15783
+TT_insert_new_exact: 30
+TT_insert_no_replacing_exact: 2
+TT_insert_replace: 2083039
+TT_query: 11810947
+evaluate_move: 93471638
+get_sorted_legal_moves: 3183913
+order_moves: 5879870
+----------------------------------------------
+fail_high_rate: 0.948103
+EV: 2.40
+PV: Qxd7, Qxd7, Rxf6, Kg7, Rd6, Kf7, Rxd7, Rfd8, Rxb7, Rd1, Nf1
+Correctly found the best move: Qxd7
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   | p |   |   |
+   +---+---+---+---+---+---+---+---+
+ 6 | p | k |   |   | p |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   | P |   |   | p |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   | b |   | p | P |   | P |
+   +---+---+---+---+---+---+---+---+
+ 3 | P |   |   |   | P |   |   | B |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   | K |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : 1120d9d86e87aee4
+FEN     : 8/5p2/pk2p3/4P2p/2b1pP1P/P3P2B/8/7K w - - 0 1
+
+Best move: Bg4
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -0.45, PV = Kh2)
+6.4042e-05s elapsed
+Searching to depth  2...  done! (     11 entries, eval = -0.55, PV = Bg2, Bd5)
+0.000251083s elapsed
+Searching to depth  3...  done! (     28 entries, eval = -0.35, PV = Bg2, Bd5, Kh2)
+0.000599042s elapsed
+Searching to depth  4...  done! (    120 entries, eval = -0.65, PV = Kg2, Kc5, Kf2, Kd5)
+0.00265279s elapsed
+Searching to depth  5...  done! (    457 entries, eval = -0.45, PV = Bg2, Bd3, Kg1, Kc5, Kf2)
+0.00758329s elapsed
+Searching to depth  6...  done! (    724 entries, eval = -0.55, PV = Bg2, Bd3, Kg1, Kc5, Kf2, Kd5)
+0.017746s elapsed
+Searching to depth  7...  done! (   2041 entries, eval = -0.55, PV = Bg2, Bd3, Kh2, Kc5, Kg3, Kd5, Kf2)
+0.0439191s elapsed
+Searching to depth  8...  done! (   5575 entries, eval = -0.55, PV = Kh2, Kc5, Kg3, Kd5, Bg2, Bb5, Kf2, Bc6)
+0.217009s elapsed
+Searching to depth  9...  done! (  14362 entries, eval = -0.50, PV = Kh2, Kc5, Kg1, Kd5, Bf1, Bd3, Bg2, Bc4, Kf2, Bd3, a4, Bc4)
+0.472883s elapsed
+Searching to depth 10...  done! (  33553 entries, eval = -0.55, PV = Kg1, Kc5, Bg2, Kd5, Kf2, Bd3, a4, Bc4, a5)
+1.94124s elapsed
+Searching to depth 11...  done! (  72769 entries, eval = -0.20, PV = Bg4, hxg4, Kg1, Bf1, h5, f6, Kxf1)
+2.91697s elapsed
+Searching to depth 12...  done! ( 228401 entries, eval = 0.35, PV = Bg4, hxg4, h5, g3, a4, f6, h6, fxe5, h7, exf4, h8=Q, fxe3)
+9.14732s elapsed
+Searching to depth 13...  done! ( 736819 entries, eval = 0.85, PV = Bg4, Bb5, Bxh5, Be8, Bg4, Kc6, h5, Kb6, Kh2, Bc6, Be2, Bb5, Bxb5)
+30.1609s elapsed
+Searching to depth 14...  done! (1026002 entries, eval = 0.50, PV = Bg4, Bb5, Bxh5, Be8, Bg4, Bd7, Kg2, Kc5, Kf2, Kd5, Be2, Bb5, Bxb5)
+48.4001s elapsed
+Searching to depth 15...  done! (2340211 entries, eval = 1.10, PV = Bg4, Kc5, Bxh5, Bd5, Bxf7)
+113.135s elapsed
+The overall best move was: Bg4 with score 1.10
+------------- PERF COUNTER DUMP --------------
+AB: 27557312
+AB_: 10771388
+AB_cut_beta: 4157039
+AB_cut_beta_move_000: 3560183
+AB_cut_beta_move_001: 244615
+AB_cut_beta_move_002: 112672
+AB_cut_beta_move_003: 50871
+AB_cut_beta_move_004: 23454
+AB_cut_beta_move_005: 23333
+AB_cut_beta_move_006: 13715
+AB_cut_beta_move_007: 10757
+AB_cut_beta_move_008: 9751
+AB_cut_beta_move_009: 12558
+AB_cut_beta_move_010: 15787
+AB_cut_beta_move_011: 20920
+AB_cut_beta_move_012: 19228
+AB_cut_beta_move_013: 16058
+AB_cut_beta_move_014: 10061
+AB_cut_beta_move_015: 6399
+AB_cut_beta_move_016: 3322
+AB_cut_beta_move_017: 1655
+AB_cut_beta_move_018: 773
+AB_cut_beta_move_019: 470
+AB_cut_beta_move_020: 122
+AB_cut_beta_move_021: 43
+AB_cut_beta_move_022: 67
+AB_cut_beta_move_023: 118
+AB_cut_beta_move_024: 91
+AB_cut_beta_move_025: 3
+AB_cut_beta_move_026: 12
+AB_cut_beta_move_028: 1
+AB_cut_none_improved: 68882
+AB_cut_none_not_improved: 2254716
+AB_lookup_exact: 65044
+AB_lookup_lower: 4225707
+SE: 20269575
+TT_insert: 4225921
+TT_insert_depth_improved: 3023876
+TT_insert_lower_to_lower: 1193928
+TT_insert_new_exact: 7981
+TT_insert_no_replacing_exact: 136
+TT_insert_replace: 3032757
+TT_query: 24550079
+evaluate_move: 86788185
+get_sorted_legal_moves: 6480637
+order_moves: 9552632
+----------------------------------------------
+fail_high_rate: 0.856423
+EV: 1.10
+PV: Bg4, Kc5, Bxh5, Bd5, Bxf7
+Correctly found the best move: Bg4
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   | k |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   | p |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   | n | b |   |   | p |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   | K |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   | B |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : 246c8f48c9dd5b57
+FEN     : 8/2k5/4p3/1nb2p2/2K5/8/6B1/8 w - - 0 1
+
+Best move: Kxb5
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -1.55, PV = Kxc5)
+4.4167e-05s elapsed
+Searching to depth  2...  done! (     14 entries, eval = -1.70, PV = Kxc5, Nd6)
+0.000241834s elapsed
+Searching to depth  3...  done! (     25 entries, eval = -1.60, PV = Kxc5, Nd6, Kd4)
+0.000693042s elapsed
+Searching to depth  4...  done! (    110 entries, eval = -1.70, PV = Kxc5, Nd6, Kd4, f4)
+0.00206637s elapsed
+Searching to depth  5...  done! (    221 entries, eval = -1.65, PV = Kxc5, Nd6, Kd4, f4, Bf3)
+0.00584992s elapsed
+Searching to depth  6...  done! (    710 entries, eval = -1.70, PV = Kxc5, Nd6, Kd4, Nf7, Bf3, Kd6)
+0.0163001s elapsed
+Searching to depth  7...  done! (   1570 entries, eval = -1.65, PV = Kxc5, Nd6, Kd4, Nf7, Kc5, Ne5, Kd4)
+0.0427172s elapsed
+Searching to depth  8...  done! (   3282 entries, eval = -1.90, PV = Kxc5, Nd6, Kd4, Nf7, Kc5, Ne5, Bh3, Kd7)
+0.095595s elapsed
+Searching to depth  9...  done! (   6510 entries, eval = -1.75, PV = Kxc5, Nd6, Kd4, Nf7, Kc5, Ne5, Bh3, Kd7, Bg2)
+0.205546s elapsed
+Searching to depth 10...  done! (  13869 entries, eval = -1.90, PV = Kxc5, Nd6, Bc6, e5, Kd5, f4)
+0.432353s elapsed
+Searching to depth 11...  done! (  37104 entries, eval = -1.80, PV = Kxc5, Nd6, Ba8, e5, Kd5, e4, Kd4, Nb5, Ke5, Nd6, Bd5)
+1.17971s elapsed
+Searching to depth 12...  done! (  93997 entries, eval = -1.85, PV = Kxc5, Nd6, Bc6, e5, Bg2, e4, Kd5, e3, Bf3, Kd7, Ke5, Ke7)
+3.38254s elapsed
+Searching to depth 13...  done! ( 137953 entries, eval = -1.85, PV = Kxc5, Nd6, Bc6, e5, Bg2, e4, Kd5, e3, Bf3, Kd7, Ke5, Ke7, Kd5)
+5.44022s elapsed
+Searching to depth 14...  done! ( 269199 entries, eval = -2.00, PV = Kxc5, Nd6, Bc6, Nf7, Bf3, Ne5, Bg2, f4, Bh3, Kd7, Bf1, Ke7, Bc4, Kf6)
+10.5797s elapsed
+Searching to depth 15...  done! ( 457981 entries, eval = -1.85, PV = Kxc5, Nd6, Ba8, Kd7, Bf3, e5, Kd5, e4, Bg2, e3, Bf3, f4)
+19.8936s elapsed
+Searching to depth 16...  done! ( 870262 entries, eval = -2.00, PV = Kxc5, Nd6, Kd4, Nf7, Kc5, Ne5, Bf1, f4, Bc4, Nxc4, Kxc4, Kd6, Kd4, e5, Ke4, Ke6, Kd3, Kd5, Kc3, f3)
+42.6795s elapsed
+Searching to depth 17...  done! (1217827 entries, eval = -1.90, PV = Kxc5, Nd6, Bf3, Ne8, Bc6, Nf6, Bf3, e5, Bc6, f4, Bg2, e4, Kd4, f3, Bh3, Kd6)
+68.5343s elapsed
+Searching to depth 18...  done! (2066752 entries, eval = -2.05, PV = Kxc5, Nd6, Bf3, Nf7, Be2, Ne5, Bd1, Nd7, Kc4, Kd6)
+1109.55s elapsed
+The overall best move was: Kxc5 with score -2.05
+------------- PERF COUNTER DUMP --------------
+AB: 260272139
+AB_: 62402230
+AB_cut_beta: 27241377
+AB_cut_beta_move_000: 25428844
+AB_cut_beta_move_001: 767747
+AB_cut_beta_move_002: 362531
+AB_cut_beta_move_003: 183611
+AB_cut_beta_move_004: 271834
+AB_cut_beta_move_005: 50824
+AB_cut_beta_move_006: 40023
+AB_cut_beta_move_007: 21460
+AB_cut_beta_move_008: 20120
+AB_cut_beta_move_009: 16549
+AB_cut_beta_move_010: 16429
+AB_cut_beta_move_011: 15902
+AB_cut_beta_move_012: 14106
+AB_cut_beta_move_013: 11263
+AB_cut_beta_move_014: 8790
+AB_cut_beta_move_015: 6616
+AB_cut_beta_move_016: 3265
+AB_cut_beta_move_017: 824
+AB_cut_beta_move_018: 266
+AB_cut_beta_move_019: 52
+AB_cut_beta_move_020: 9
+AB_cut_beta_move_021: 5
+AB_cut_beta_move_022: 24
+AB_cut_beta_move_023: 30
+AB_cut_beta_move_024: 53
+AB_cut_beta_move_025: 36
+AB_cut_beta_move_026: 52
+AB_cut_beta_move_027: 35
+AB_cut_beta_move_028: 31
+AB_cut_beta_move_029: 28
+AB_cut_beta_move_030: 9
+AB_cut_beta_move_031: 4
+AB_cut_beta_move_032: 2
+AB_cut_beta_move_034: 3
+AB_cut_none_improved: 101321
+AB_cut_none_not_improved: 24084925
+AB_lookup_exact: 2254686
+AB_lookup_lower: 8719921
+AB_mate_pruned: 1381
+SE: 201487541
+TT_insert: 27342698
+TT_insert_depth_improved: 3201356
+TT_insert_lower_to_lower: 24125631
+TT_insert_new_exact: 15338
+TT_insert_no_replacing_exact: 373
+TT_insert_replace: 3222743
+TT_query: 145180018
+evaluate_move: 600711179
+get_sorted_legal_moves: 51427623
+order_moves: 55434894
+----------------------------------------------
+fail_high_rate: 0.933464
+EV: -2.05
+PV: Kxc5, Nd6, Bf3, Nf7, Be2, Ne5, Bd1, Nd7, Kc4, Kd6
+Found an irrelevant possibility: Kxc5
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   | B |   | b |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   |   |   | K |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | p |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   | k |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : 46e8c8d70dcabb0e
+FEN     : 1B1b4/7K/1p6/1k6/8/8/8/8 w - - 0 1
+
+Best move: Ba7
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -0.95, PV = Kg6)
+2.4958e-05s elapsed
+Searching to depth  2...  done! (     13 entries, eval = -1.35, PV = Kg6, Kc5)
+0.000137333s elapsed
+Searching to depth  3...  done! (     25 entries, eval = -0.95, PV = Kg6, Kc5, Kf5)
+0.000527541s elapsed
+Searching to depth  4...  done! (    115 entries, eval = -1.05, PV = Kg6, Kc5, Kf5, Kd5)
+0.00179833s elapsed
+Searching to depth  5...  done! (    204 entries, eval = -0.85, PV = Kg6, Kc5, Kf5, Kd5, Be5)
+0.00528679s elapsed
+Searching to depth  6...  done! (    680 entries, eval = -1.00, PV = Kg6, Kc5, Kf5, b5, Be5, Bb6)
+0.0164194s elapsed
+Searching to depth  7...  done! (   1202 entries, eval = -0.95, PV = Kg6, Kc5, Kf5, Kd5, Be5, Be7, Kf4)
+0.0386476s elapsed
+Searching to depth  8...  done! (   2660 entries, eval = -1.05, PV = Kg6, Kc5, Kf5, Kd5, Bf4, Be7, Be5, Bc5)
+0.085405s elapsed
+Searching to depth  9...  done! (   6204 entries, eval = -1.05, PV = Kg6, Kc5, Kf5, Kd5, Bf4, Be7, Be5, Bc5, Kf4)
+0.195981s elapsed
+Searching to depth 10...  done! (   9895 entries, eval = -1.10, PV = Kg6, Kc5, Kf5, Kd5, Bf4, Be7, Be5, Bc5, Kf4, b5)
+0.347471s elapsed
+Searching to depth 11...  done! (  21720 entries, eval = -1.10, PV = Kg6, Kc5, Kf5, Kd5, Bf4, Be7, Be5, Bc5, Kf4, b5, Kf5)
+0.741214s elapsed
+Searching to depth 12...  done! (  29504 entries, eval = -1.15, PV = Kg6, Kc5, Kf5, Kd5, Bf4, Be7, Be5, Bc5, Kf4, b5, Kf5, b4)
+1.18385s elapsed
+Searching to depth 13...  done! (  46624 entries, eval = -1.05, PV = Kg6, Kc5, Bh2, Kd5, Kf5, Be7, Be5, Bc5, Kf4, b5, Kf5, b4, Kf4)
+2.17652s elapsed
+Searching to depth 14...  done! (  89985 entries, eval = -1.20, PV = Kg6, Kc5, Bh2, Kd5, Kf5, Be7, Be5, Bc5, Kf4, b5, Kf5, b4, Kf4, b3)
+5.58943s elapsed
+Searching to depth 15...  done! ( 136283 entries, eval = -1.05, PV = Kg6, Kc5, Kf5, Kd5, Bf4, Be7, Bd2, Bc5, Bf4, b5, Be5, b4, Kf4, b3, Kf5)
+9.56865s elapsed
+Searching to depth 16...  done! ( 202793 entries, eval = -1.20, PV = Kg6, Kc5, Kf5, Kd5, Bf4, Be7, Bd2, Bc5, Bf4, b5, Be5, b4, Kf4, b3, Kf5, Bb6, Kf4, Be3, Kf5, Bb6, ...)
+13.022s elapsed
+Searching to depth 17...  done! ( 254768 entries, eval = -1.10, PV = Kg6, Kc5, Kf5, Kd5, Bf4, Be7, Bd2, Bc5, Be1, b5, Bc3, b4)
+18.7197s elapsed
+Searching to depth 18...  done! ( 400159 entries, eval = -1.15, PV = Kg6, Kc5, Kf5, Kd5, Bg3, Be7, Bf4, Bc5, Be5, b5, Kf4, b4, Kf5, b3, Bb2, Bd6, Bc3, Bc5)
+39.0625s elapsed
+Searching to depth 19...  done! ( 621729 entries, eval = -1.10, PV = Kg6, Kc5, Kf5, Kd5, Be5, b5, Bf4, Bb6, Be5, b4, Kf4, b3, Kf5, Bc5, Bb2, Bd6, Bc3, Bc5, Kf4, Bd6)
+57.9671s elapsed
+Searching to depth 20...  done! (1158891 entries, eval = -1.20, PV = Kg6, Kc5, Kf5, Kd5, Be5, b5, Bf4, Bb6, Bd2, Bc5, Bh6, b4, Bf4, b3, Be5, Bb6, Kf4, Be3, Kf5, Bb6, ...)
+193.544s elapsed
+The overall best move was: Kg6 with score -1.20
+------------- PERF COUNTER DUMP --------------
+AB: 47024312
+AB_: 15231637
+AB_cut_beta: 5167075
+AB_cut_beta_move_000: 4435547
+AB_cut_beta_move_001: 359981
+AB_cut_beta_move_002: 175212
+AB_cut_beta_move_003: 48257
+AB_cut_beta_move_004: 42896
+AB_cut_beta_move_005: 23141
+AB_cut_beta_move_006: 22432
+AB_cut_beta_move_007: 5161
+AB_cut_beta_move_008: 4135
+AB_cut_beta_move_009: 4419
+AB_cut_beta_move_010: 5002
+AB_cut_beta_move_011: 6640
+AB_cut_beta_move_012: 8522
+AB_cut_beta_move_013: 7921
+AB_cut_beta_move_014: 6318
+AB_cut_beta_move_015: 3995
+AB_cut_beta_move_016: 3011
+AB_cut_beta_move_017: 1456
+AB_cut_beta_move_018: 816
+AB_cut_beta_move_019: 373
+AB_cut_beta_move_020: 39
+AB_cut_beta_move_021: 50
+AB_cut_beta_move_022: 49
+AB_cut_beta_move_023: 100
+AB_cut_beta_move_024: 122
+AB_cut_beta_move_025: 114
+AB_cut_beta_move_026: 194
+AB_cut_beta_move_027: 101
+AB_cut_beta_move_028: 129
+AB_cut_beta_move_029: 79
+AB_cut_beta_move_030: 124
+AB_cut_beta_move_031: 120
+AB_cut_beta_move_032: 166
+AB_cut_beta_move_033: 130
+AB_cut_beta_move_034: 111
+AB_cut_beta_move_035: 99
+AB_cut_beta_move_036: 51
+AB_cut_beta_move_037: 36
+AB_cut_beta_move_038: 18
+AB_cut_beta_move_039: 3
+AB_cut_beta_move_040: 4
+AB_cut_beta_move_043: 1
+AB_cut_none_improved: 55337
+AB_cut_none_not_improved: 3819024
+AB_lookup_exact: 448403
+AB_lookup_lower: 5741798
+AB_mate_pruned: 844
+SE: 32791961
+TT_insert: 5222412
+TT_insert_depth_improved: 1961783
+TT_insert_lower_to_lower: 3248431
+TT_insert_new_exact: 11883
+TT_insert_no_replacing_exact: 315
+TT_insert_replace: 1977761
+TT_query: 30567653
+evaluate_move: 122325550
+get_sorted_legal_moves: 9041436
+order_moves: 10113355
+----------------------------------------------
+fail_high_rate: 0.858425
+EV: -1.20
+PV: Kg6, Kc5, Kf5, Kd5, Be5, b5, Bf4, Bb6, Bd2, Bc5, Bh6, b4, Bf4, b3, Be5, Bb6, Kf4, Be3, Kf5, Bb6, ...
+Found an irrelevant possibility: Kg6
+
+   +---+---+---+---+---+---+---+---+
+ 8 | r | n |   | q |   | r | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   | b |   |   | b | p | p | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | p | n |   | p |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 | p |   |   | p | P |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   | P |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 | P |   |   | B | B | N |   | P |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | P |   | N |   | P | P |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | R |   |   | Q |   | R | K |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 1
+HASH    : 3a33a8035741ca32
+FEN     : rn1q1rk1/1b2bppp/1pn1p3/p2pP3/3P4/P2BBN1P/1P1N1PP1/R2Q1RK1 b - - 0 1
+
+Best move: Ba6
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -0.60, PV = Nd7)
+0.00015225s elapsed
+Searching to depth  2...  done! (     33 entries, eval = -0.70, PV = Nd7, Qb3)
+0.00813525s elapsed
+Searching to depth  3...  done! (     81 entries, eval = -0.70, PV = Nd7, Qc2, h6)
+0.0263513s elapsed
+Searching to depth  4...  done! (    771 entries, eval = -0.75, PV = Nd7, Qc2, h6, Rfe1)
+0.148353s elapsed
+Searching to depth  5...  done! (   2031 entries, eval = -0.65, PV = Nd7, Qc2, h6, Rfe1, Qc7)
+0.919189s elapsed
+Searching to depth  6...  done! (  14640 entries, eval = -0.80, PV = Nd7, Qc2, h6, Bh7, Kh8, Bd3)
+2.96643s elapsed
+Searching to depth  7...  done! (  58768 entries, eval = -0.70, PV = Nd7, Qc2, h6, Bh7, Kh8, Bd3, Kg8, ...)
+16.6293s elapsed
+Searching to depth  8...  done! ( 285688 entries, eval = -0.65, PV = Nd7, Qc2, Rc8, Qb1, h6, Bh7, Kh8, Bd3)
+52.0553s elapsed
+Searching to depth  9...  done! ( 905474 entries, eval = -0.60, PV = Nd7, Qc2, Rc8, Bxh7, Kh8, Qd3, g6, Bxg6, fxg6)
+215.019s elapsed
+The overall best move was: Nd7 with score -0.60
+------------- PERF COUNTER DUMP --------------
+AB: 9619993
+AB_: 1954757
+AB_cut_beta: 1175602
+AB_cut_beta_move_000: 989223
+AB_cut_beta_move_001: 66221
+AB_cut_beta_move_002: 28012
+AB_cut_beta_move_003: 11508
+AB_cut_beta_move_004: 9634
+AB_cut_beta_move_005: 5145
+AB_cut_beta_move_006: 18607
+AB_cut_beta_move_007: 24491
+AB_cut_beta_move_008: 5716
+AB_cut_beta_move_009: 3158
+AB_cut_beta_move_010: 641
+AB_cut_beta_move_011: 884
+AB_cut_beta_move_012: 868
+AB_cut_beta_move_013: 812
+AB_cut_beta_move_014: 506
+AB_cut_beta_move_015: 656
+AB_cut_beta_move_016: 377
+AB_cut_beta_move_017: 474
+AB_cut_beta_move_018: 1280
+AB_cut_beta_move_019: 1352
+AB_cut_beta_move_020: 255
+AB_cut_beta_move_021: 377
+AB_cut_beta_move_022: 218
+AB_cut_beta_move_023: 87
+AB_cut_beta_move_024: 131
+AB_cut_beta_move_025: 133
+AB_cut_beta_move_026: 158
+AB_cut_beta_move_027: 174
+AB_cut_beta_move_028: 192
+AB_cut_beta_move_029: 195
+AB_cut_beta_move_030: 211
+AB_cut_beta_move_031: 243
+AB_cut_beta_move_032: 314
+AB_cut_beta_move_033: 375
+AB_cut_beta_move_034: 360
+AB_cut_beta_move_035: 293
+AB_cut_beta_move_036: 422
+AB_cut_beta_move_037: 300
+AB_cut_beta_move_038: 332
+AB_cut_beta_move_039: 240
+AB_cut_beta_move_040: 200
+AB_cut_beta_move_041: 135
+AB_cut_beta_move_042: 176
+AB_cut_beta_move_043: 194
+AB_cut_beta_move_044: 117
+AB_cut_beta_move_045: 77
+AB_cut_beta_move_046: 39
+AB_cut_beta_move_047: 24
+AB_cut_beta_move_048: 37
+AB_cut_beta_move_049: 18
+AB_cut_beta_move_050: 2
+AB_cut_beta_move_051: 8
+AB_cut_none_improved: 3565
+AB_cut_none_not_improved: 286654
+AB_lookup_exact: 509
+AB_lookup_lower: 488427
+AB_mate_pruned: 950
+SE: 48256113
+TT_insert: 1179167
+TT_insert_depth_improved: 1151110
+TT_insert_lower_to_lower: 28014
+TT_insert_new_exact: 42
+TT_insert_no_replacing_exact: 1
+TT_insert_replace: 1151179
+TT_query: 27183499
+evaluate_move: 120459190
+get_sorted_legal_moves: 1465821
+order_moves: 24049512
+----------------------------------------------
+fail_high_rate: 0.841461
+EV: -0.60
+PV: Nd7, Qc2, Rc8, Bxh7, Kh8, Qd3, g6, Bxg6, fxg6
+Found an irrelevant possibility: Nd7
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 7 | p |   | p | p | k |   | p |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   | n |   |   | p |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   | B |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   | P |   | K | P | P |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | P |   |   |   |   |   | P |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : b702243cd3887e45
+FEN     : 8/p1ppk1p1/2n2p2/8/4B3/2P1KPP1/1P5P/8 w - - 0 1
+
+Best move: Bxc6
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = 0.45, PV = f4)
+4.9958e-05s elapsed
+Searching to depth  2...  done! (     21 entries, eval = 0.15, PV = f4, Ke6)
+0.000395792s elapsed
+Searching to depth  3...  done! (     40 entries, eval = 0.25, PV = f4, Ke6, f5)
+0.00159979s elapsed
+Searching to depth  4...  done! (    362 entries, eval = 0.15, PV = f4, Ke6, f5, Ke5)
+0.00728042s elapsed
+Searching to depth  5...  done! (    580 entries, eval = 0.25, PV = f4, Ke6, f5, Ke5, c4)
+0.0262372s elapsed
+Searching to depth  6...  done! (   3361 entries, eval = 0.15, PV = f4, Ke6, f5, Ke5, c4, Nd4)
+0.093177s elapsed
+Searching to depth  7...  done! (   8802 entries, eval = 0.20, PV = f4, Ke6, f5, Ke5, c4, Nd4, g4)
+0.378965s elapsed
+Searching to depth  8...  done! (  33422 entries, eval = 0.15, PV = f4, Ke6, c4, f5, Bd5, Kd6, Kd3, Kc5)
+1.07758s elapsed
+Searching to depth  9...  done! (  57510 entries, eval = 0.15, PV = f4, Ke6, c4, f5, Bd5, Kd6, Kd3, Kc5, Ke3)
+2.78813s elapsed
+Searching to depth 10...  done! ( 214762 entries, eval = 0.10, PV = f4, Kd6, g4, Kc5, Bxc6, Kxc6, Kd4, d5, c4, dxc4)
+8.05172s elapsed
+Searching to depth 11...  done! ( 390741 entries, eval = 0.15, PV = f4, Ke6, c4, f5, Bd5, Kd6, h3, Kc5, g4, fxg4)
+19.1223s elapsed
+Searching to depth 12...  done! (1402912 entries, eval = 0.10, PV = f4, Kd6, g4, Kc5, Bxc6, Kxc6, Kd4, d5, f5, Kd6, c4, c5)
+57.2567s elapsed
+Searching to depth 13...  done! (2534412 entries, eval = 0.20, PV = f4, Kd6, g4, Kc5, Bxc6, Kxc6, Ke4, Kc5, Kf5, Kc4, Kg6, Kb3, f5)
+128.513s elapsed
+The overall best move was: f4 with score 0.20
+------------- PERF COUNTER DUMP --------------
+AB: 27809557
+AB_: 8749727
+AB_cut_beta: 4304275
+AB_cut_beta_move_000: 3641215
+AB_cut_beta_move_001: 301365
+AB_cut_beta_move_002: 144060
+AB_cut_beta_move_003: 62941
+AB_cut_beta_move_004: 32883
+AB_cut_beta_move_005: 15432
+AB_cut_beta_move_006: 9960
+AB_cut_beta_move_007: 7902
+AB_cut_beta_move_008: 7444
+AB_cut_beta_move_009: 6924
+AB_cut_beta_move_010: 6324
+AB_cut_beta_move_011: 6273
+AB_cut_beta_move_012: 7124
+AB_cut_beta_move_013: 8192
+AB_cut_beta_move_014: 8844
+AB_cut_beta_move_015: 8937
+AB_cut_beta_move_016: 8697
+AB_cut_beta_move_017: 6892
+AB_cut_beta_move_018: 5645
+AB_cut_beta_move_019: 3447
+AB_cut_beta_move_020: 2004
+AB_cut_beta_move_021: 986
+AB_cut_beta_move_022: 588
+AB_cut_beta_move_023: 147
+AB_cut_beta_move_024: 39
+AB_cut_beta_move_025: 8
+AB_cut_beta_move_026: 2
+AB_cut_none_improved: 88342
+AB_cut_none_not_improved: 1771760
+AB_lookup_exact: 13295
+AB_lookup_lower: 2572055
+AB_mate_pruned: 12279
+SE: 24478031
+TT_insert: 4392617
+TT_insert_depth_improved: 3754928
+TT_insert_lower_to_lower: 635470
+TT_insert_new_exact: 2195
+TT_insert_no_replacing_exact: 24
+TT_insert_replace: 3758456
+TT_query: 23933523
+evaluate_move: 97071984
+get_sorted_legal_moves: 6164377
+order_moves: 10791062
+----------------------------------------------
+fail_high_rate: 0.845953
+EV: 0.20
+PV: f4, Kd6, g4, Kc5, Bxc6, Kxc6, Ke4, Kc5, Kf5, Kc4, Kg6, Kb3, f5
+Found an irrelevant possibility: f4
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   | n | k |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   | p | p |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   | B |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   | P | P | P |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   | K |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : 610697f211ac9752
+FEN     : 8/3nk3/3pp3/1B6/8/3PPP2/4K3/8 w - - 0 1
+
+Best move: Bxd7
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = 1.20, PV = e4)
+2.8541e-05s elapsed
+Searching to depth  2...  done! (     14 entries, eval = 1.00, PV = e4, e5)
+0.000257666s elapsed
+Searching to depth  3...  done! (     27 entries, eval = 1.30, PV = e4, e5, Ke3)
+0.000822166s elapsed
+Searching to depth  4...  done! (    179 entries, eval = 1.20, PV = d4, e5, Kd3, Ke6)
+0.00371612s elapsed
+Searching to depth  5...  done! (    274 entries, eval = 1.20, PV = d4, e5, Kd3, Ke6, Bxd7)
+0.00998188s elapsed
+Searching to depth  6...  done! (   1566 entries, eval = 1.20, PV = e4, e5, Ke3, Ke6, Bxd7, Kxd7)
+0.0354953s elapsed
+Searching to depth  7...  done! (   2296 entries, eval = 1.30, PV = e4, e5, Ke3, Nb6, d4, Ke6, f4)
+0.0890788s elapsed
+Searching to depth  8...  done! (   9372 entries, eval = 1.30, PV = d4, e5, Kd3, Nf6, e4, exd4, Bc4, d5)
+0.23343s elapsed
+Searching to depth  9...  done! (  12891 entries, eval = 1.35, PV = d4, e5, Kd3, Nf6, e4, exd4, Kxd4, Ke6, f4)
+0.572899s elapsed
+Searching to depth 10...  done! (  53222 entries, eval = 1.30, PV = d4, e5, d5, Nc5, Bc4, Kf7, e4, Ke7, Ke3, Kf6)
+1.56038s elapsed
+Searching to depth 11...  done! ( 123830 entries, eval = 1.30, PV = d4, Nf6, e4, e5, Ke3, Nh5, Bc4, Nf4, d5, Kf6, Bb3)
+7.14587s elapsed
+Searching to depth 12...  done! ( 385969 entries, eval = 1.30, PV = d4, Nf8, e4, Ng6, Ke3, e5, Bc4, exd4, Kxd4, Kf6, Kd5, Ne5)
+14.9635s elapsed
+Searching to depth 13...  done! ( 488607 entries, eval = 1.40, PV = d4, Nf8, e4, Ng6, Ke3, e5, d5, Kf6, Bc4, Nf4, Bb3, Ng6, Kd3, Nf4)
+27.7864s elapsed
+Searching to depth 14...  done! (1197556 entries, eval = 1.30, PV = d4, Nf8, e4, Ng6, Ke3, e5, d5, Kf6, Bc4, Nf4, Bb3, Ng6, Kd3, Nf4)
+50.7106s elapsed
+Searching to depth 15...  done! (2017238 entries, eval = 1.35, PV = d4, Nf8, Kd3, Ng6, Ba4, Kf6, f4, d5, Be8, Ne7, e4, dxe4, Kxe4, Nd5, Bc6)
+113.62s elapsed
+The overall best move was: d4 with score 1.35
+------------- PERF COUNTER DUMP --------------
+AB: 26668632
+AB_: 9677868
+AB_cut_beta: 4243273
+AB_cut_beta_move_000: 3812606
+AB_cut_beta_move_001: 218521
+AB_cut_beta_move_002: 87414
+AB_cut_beta_move_003: 32739
+AB_cut_beta_move_004: 21300
+AB_cut_beta_move_005: 16121
+AB_cut_beta_move_006: 12691
+AB_cut_beta_move_007: 7231
+AB_cut_beta_move_008: 4698
+AB_cut_beta_move_009: 4284
+AB_cut_beta_move_010: 4452
+AB_cut_beta_move_011: 5162
+AB_cut_beta_move_012: 5196
+AB_cut_beta_move_013: 4491
+AB_cut_beta_move_014: 2964
+AB_cut_beta_move_015: 1969
+AB_cut_beta_move_016: 892
+AB_cut_beta_move_017: 364
+AB_cut_beta_move_018: 112
+AB_cut_beta_move_019: 36
+AB_cut_beta_move_020: 18
+AB_cut_beta_move_021: 9
+AB_cut_beta_move_022: 3
+AB_cut_none_improved: 47037
+AB_cut_none_not_improved: 2126357
+AB_lookup_exact: 9786
+AB_lookup_lower: 3251415
+AB_mate_pruned: 1521
+SE: 20627280
+TT_insert: 4290310
+TT_insert_depth_improved: 3305607
+TT_insert_lower_to_lower: 982691
+TT_insert_new_exact: 1973
+TT_insert_no_replacing_exact: 39
+TT_insert_replace: 3309506
+TT_query: 23453322
+evaluate_move: 79207286
+get_sorted_legal_moves: 6416667
+order_moves: 9484992
+----------------------------------------------
+fail_high_rate: 0.898506
+EV: 1.35
+PV: d4, Nf8, Kd3, Ng6, Ba4, Kf6, f4, d5, Be8, Ne7, e4, dxe4, Kxe4, Nd5, Bc6
+Found an irrelevant possibility: d4
+Done testing!
+========================================================================

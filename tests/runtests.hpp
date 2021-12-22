@@ -4,6 +4,7 @@
 #include "test_board.hpp"
 #include "test_perft.hpp"
 #include "test_pieces.hpp"
+#include "test_search.hpp"
 #include "test_squares.hpp"
 
 int run_tests(const std::string &perft_file, const int perft_depth) {

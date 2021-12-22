@@ -10,6 +10,7 @@ TranspositionTable transposition_table;
 TranspositionTable quiescence_table;
 
 TableEntry TranspositionTable::query(const hash_t hash) const {
+  perf_counter.increment("TT_query");
   const auto it = m_table.find(hash);
   if (it == m_table.end())
     return TableEntry();
@@ -26,16 +27,33 @@ void TranspositionTable::insert(const Board &board, const move_t best_move,
   const TableEntry new_entry = {hash, best_move, depth, value, type, half_move};
 
   bool replace = false;
-  // For now, only insert entries which are refinements of previous ones
+
   if (previous_entry.depth > depth) {
+    // If the previous entry searched deeper, keep that one
     perf_counter.increment("TT_insert_depth_too_low");
     replace = false;
   } else if (previous_entry.depth < depth) {
+    // If the new entry searched deeper, keep it
     perf_counter.increment("TT_insert_depth_improved");
     replace = true;
-  } else if (previous_entry.value > value) {
-    perf_counter.increment("TT_insert_value_too_low");
+  } else if (previous_entry.type == Exact) {
+    // Now that the depths are the same, we must keep exact entries
+    perf_counter.increment("TT_insert_no_replacing_exact");
     replace = false;
+  } else if (type == Exact) {
+    perf_counter.increment("TT_insert_new_exact");
+    replace = true;
+  } else if (type == Lower) {
+    if (previous_entry.type == Lower) {
+      perf_counter.increment("TT_insert_lower_to_lower");
+      replace = previous_entry.value > value;
+    } else if (previous_entry.type == Upper) {
+      perf_counter.increment("TT_insert_lower_to_upper");
+      replace = true;
+    }
+  } else if (type == Upper) {
+    perf_counter.increment("TT_insert_upper_to_upper");
+    replace = previous_entry.type == Upper && previous_entry.value > value;
   }
 
   if (replace) {

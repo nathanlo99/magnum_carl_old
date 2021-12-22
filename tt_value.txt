@@ -1,0 +1,43 @@
+Initializing playchess...
+Loading book from 'references/book/opening_book.txt'...
+Catalogued 1887 positions into opening book
+Reading processed opening book took 0.023097 seconds
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   | r | b | q |   | r | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 | p |   | b |   | n | p | p | p |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | p |   |   | p |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | B |   | p | N |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 | P |   |   | B |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | P |   |   |   | P | P | P |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   | R | Q |   | R |   | K |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : WHITE
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 0
+HASH    : da2ba70e42d21be2
+FEN     : 1rbq1rk1/p1b1nppp/1p2p3/8/1B1pN3/P2B4/1P3PPP/2RQ1R1K w - - 0 1
+
+Best move: Nf6
+Avoid move: 
+Searching to depth  1...  done! (      1 entries, eval = -1.75, PV = Kg1)
+0.000414375s elapsed
+Searching to depth  2...  done! (     49 entries, eval = -1.85, PV = Qa4, Bf4)
+0.00607787s elapsed
+Searching to depth  3...  done! (    452 entries, eval = -1.75, PV = Qc2, Be5, Kg1)
+0.0851295s elapsed
+Searching to depth  4...  done! (  12290 entries, eval = -1.80, PV = Qa4, Bf4, Rce1, Rb7)
+2.84792s elapsed
+Searching to depth  5...

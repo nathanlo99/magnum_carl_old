@@ -2,7 +2,9 @@
 #pragma once
 
 #include "move.hpp"
+#include "test_util.hpp"
 #include "timeit.hpp"
+
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -26,18 +28,6 @@ struct perft_t {
     return res.str();
   }
 };
-
-static std::vector<std::string> split(std::string text,
-                                      const std::string &pattern) {
-  size_t pos = 0;
-  std::vector<std::string> result;
-  while ((pos = text.find(pattern)) != std::string::npos) {
-    result.push_back(text.substr(0, pos));
-    text.erase(0, pos + pattern.size());
-  }
-  result.push_back(text);
-  return result;
-}
 
 static std::vector<perft_t>
 load_perft(const std::string &file_name = "tests/perft.txt") {
