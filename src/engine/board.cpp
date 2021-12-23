@@ -303,6 +303,23 @@ hash_t Board::compute_hash() const noexcept {
   return res;
 }
 
+// int Board::compute_eval() const noexcept {
+//   validate_board();
+//   // Evaluate everything from white's perspective and take into account side
+//   // at the end
+//   int white_eval = 0;
+//   // Loop straight through the invalid pieces to avoid branching: there
+//   // should be 0 of them and their piece value is 0.
+//   for (piece_t piece = 0; piece < 16; ++piece) {
+//     const size_t num_pieces = board.m_num_pieces[piece];
+//     for (size_t piece_idx = 0; piece_idx < num_pieces; ++piece_idx) {
+//       const square_t piece_square = board.m_positions[piece][piece_idx];
+//       white_eval += evaluate_piece(board, piece, piece_square);
+//     }
+//   }
+//   return white_eval;
+// };
+
 std::string Board::to_string(const int side) const noexcept {
   validate_board();
   std::stringstream result;

@@ -3,6 +3,7 @@
 #include "board.hpp"
 #include "move.hpp"
 #include "perf_counter.hpp"
+#include "piece_values.hpp"
 #include "square.hpp"
 #include "transposition_table.hpp"
 
@@ -10,132 +11,6 @@
 #include <functional>
 #include <iomanip>
 #include <iostream>
-
-// Source: https://www.chessprogramming.org/Simplified_Evaluation_Function
-enum {
-  PAWN_VALUE = 100,
-  KNIGHT_VALUE = 320,
-  BISHOP_VALUE = 330,
-  ROOK_VALUE = 500,
-  QUEEN_VALUE = 900,
-  KING_VALUE = 20000,
-};
-
-static const int piece_values[16] = {
-    QUEEN_VALUE,   ROOK_VALUE,    PAWN_VALUE,  0,
-    BISHOP_VALUE,  KNIGHT_VALUE,  KING_VALUE,  0, // White pieces
-    -QUEEN_VALUE,  -ROOK_VALUE,   -PAWN_VALUE, 0,
-    -BISHOP_VALUE, -KNIGHT_VALUE, -KING_VALUE, 0, // Black pieces
-};
-
-static const int pawn_square_table[120] = {
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, 800, 800, 800, 800, 800, 800, 800, 800, 0, // Encourage promotion
-    0, 50,  50,  50,  50,  50,  50,  50,  50,  0, // 7
-    0, 10,  10,  20,  30,  30,  20,  10,  10,  0, // 6
-    0, 5,   5,   10,  25,  25,  10,  5,   5,   0, // 5
-    0, 0,   0,   0,   20,  20,  0,   0,   0,   0, // 4
-    0, 5,   -5,  -10, 0,   0,   -10, -5,  5,   0, // 3
-    0, 5,   10,  10,  -20, -20, 10,  10,  5,   0, // 2
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // 1
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-};
-
-static const int knight_square_table[120] = {
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, -50, -40, -30, -30, -30, -30, -40, -50, 0, // 8
-    0, -40, -20, 0,   0,   0,   0,   -20, -40, 0, // 7
-    0, -30, 0,   10,  15,  15,  10,  0,   -30, 0, // 6
-    0, -30, 5,   15,  20,  20,  15,  5,   -30, 0, // 5
-    0, -30, 0,   15,  20,  20,  15,  0,   -30, 0, // 4
-    0, -30, 5,   10,  15,  15,  10,  5,   -30, 0, // 3
-    0, -40, -20, 0,   5,   5,   0,   -20, -40, 0, // 2
-    0, -50, -40, -30, -30, -30, -30, -40, -50, 0, // 1
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-};
-
-static const int bishop_square_table[120] = {
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, -20, -10, -10, -10, -10, -10, -10, -20, 0, // 8
-    0, -10, 0,   0,   0,   0,   0,   0,   -10, 0, // 7
-    0, -10, 0,   5,   10,  10,  5,   0,   -10, 0, // 6
-    0, -10, 5,   5,   10,  10,  5,   5,   -10, 0, // 5
-    0, -10, 0,   10,  10,  10,  10,  0,   -10, 0, // 4
-    0, -10, 10,  10,  10,  10,  10,  10,  -10, 0, // 3
-    0, -10, 5,   0,   0,   0,   0,   5,   -10, 0, // 2
-    0, -20, -10, -10, -10, -10, -10, -10, -20, 0, // 1
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-};
-
-static const int rook_square_table[120] = {
-    0, 0,  0,  0,  0,  0,  0,  0,  0,  0, // Invalid row
-    0, 0,  0,  0,  0,  0,  0,  0,  0,  0, // Invalid row
-    0, 0,  0,  0,  0,  0,  0,  0,  0,  0, // 8
-    0, 5,  10, 10, 10, 10, 10, 10, 5,  0, // 7
-    0, -5, 0,  0,  0,  0,  0,  0,  -5, 0, // 6
-    0, -5, 0,  0,  0,  0,  0,  0,  -5, 0, // 5
-    0, -5, 0,  0,  0,  0,  0,  0,  -5, 0, // 4
-    0, -5, 0,  0,  0,  0,  0,  0,  -5, 0, // 3
-    0, -5, 0,  0,  0,  0,  0,  0,  -5, 0, // 2
-    0, 0,  0,  0,  5,  5,  0,  0,  0,  0, // 1
-    0, 0,  0,  0,  0,  0,  0,  0,  0,  0, // Invalid row
-    0, 0,  0,  0,  0,  0,  0,  0,  0,  0, // Invalid row
-};
-
-static const int queen_square_table[120] = {
-    0, 0,   0,   0,   0,  0,  0,   0,   0,   0, // Invalid row
-    0, 0,   0,   0,   0,  0,  0,   0,   0,   0, // Invalid row
-    0, -20, -10, -10, -5, -5, -10, -10, -20, 0, // 8
-    0, -10, 0,   0,   0,  0,  0,   0,   -10, 0, // 7
-    0, -10, 0,   5,   5,  5,  5,   0,   -10, 0, // 6
-    0, -5,  0,   5,   5,  5,  5,   0,   -5,  0, // 5
-    0, 0,   0,   5,   5,  5,  5,   0,   -5,  0, // 4
-    0, -10, 5,   5,   5,  5,  5,   0,   -10, 0, // 3
-    0, -10, 0,   5,   0,  0,  0,   0,   -10, 0, // 2
-    0, -20, -10, -10, -5, -5, -10, -10, -20, 0, // 1
-    0, 0,   0,   0,   0,  0,  0,   0,   0,   0, // Invalid row
-    0, 0,   0,   0,   0,  0,  0,   0,   0,   0, // Invalid row
-};
-
-static const int king_middlegame_square_table[120] = {
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, -30, -40, -40, -50, -50, -40, -40, -30, 0, // 8
-    0, -30, -40, -40, -50, -50, -40, -40, -30, 0, // 7
-    0, -30, -40, -40, -50, -50, -40, -40, -30, 0, // 6
-    0, -30, -40, -40, -50, -50, -40, -40, -30, 0, // 5
-    0, -20, -30, -30, -40, -40, -30, -30, -20, 0, // 4
-    0, -10, -20, -20, -20, -20, -20, -20, -10, 0, // 3
-    0, 20,  20,  0,   0,   0,   0,   20,  20,  0, // 2
-    0, 20,  30,  10,  0,   0,   10,  30,  20,  0, // 1
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-};
-
-static const int king_endgame_square_table[120] = {
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, -50, -40, -30, -20, -20, -30, -40, -50, 0, // 8
-    0, -30, -20, -10, 0,   0,   -10, -20, -30, 0, // 7
-    0, -30, -10, 20,  30,  30,  20,  -10, -30, 0, // 6
-    0, -30, -10, 30,  40,  40,  30,  -10, -30, 0, // 5
-    0, -30, -10, 30,  40,  40,  30,  -10, -30, 0, // 4
-    0, -30, -10, 20,  30,  30,  20,  -10, -30, 0, // 3
-    0, -30, -30, 0,   0,   0,   0,   -30, -30, 0, // 2
-    0, -50, -30, -30, -30, -30, -30, -30, -50, 0, // 1
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-    0, 0,   0,   0,   0,   0,   0,   0,   0,   0, // Invalid row
-};
-
-constexpr inline square_t flip_square(const square_t sq) {
-  return sq + 110 - 20 * (sq / 10);
-}
 
 static bool should_stop(const SearchInfo &info) {
   if (info.stopped || info.quit)
@@ -148,44 +23,15 @@ static bool should_stop(const SearchInfo &info) {
 // Returns the evaluation from the perspective of white. Thus white pieces
 // will generally have positive evaluations and black pieces will generally have
 // negative evaluations
-int evaluate_piece(const Board &board, piece_t piece, square_t square) {
-  if (!valid_piece(piece))
-    return 0;
-
-  int result = 0, side_multiplier = 1;
-  if (get_side(piece) == WHITE) {
-    square = flip_square(square);
-  } else {
-    piece ^= 8;
-    side_multiplier = -1;
-  }
-  switch (piece) {
-  case WHITE_PAWN: {
-    result = PAWN_VALUE + pawn_square_table[square];
-  } break;
-  case WHITE_KNIGHT: {
-    result = KNIGHT_VALUE + knight_square_table[square];
-  } break;
-  case WHITE_BISHOP: {
-    result = BISHOP_VALUE + bishop_square_table[square];
-  } break;
-  case WHITE_ROOK: {
-    result = ROOK_VALUE + rook_square_table[square];
-  } break;
-  case WHITE_QUEEN: {
-    result = QUEEN_VALUE + queen_square_table[square];
-  } break;
-  case WHITE_KING: {
-    if (board.is_endgame()) {
-      result = king_endgame_square_table[square];
-    } else {
-      result = king_middlegame_square_table[square];
+int evaluate_piece(const Board &board, piece_t piece, const square_t square) {
+  if (board.is_endgame()) {
+    if (piece == WHITE_KING) {
+      piece = WHITE_ENDGAME_KING;
+    } else if (piece == BLACK_KING) {
+      piece = BLACK_ENDGAME_KING;
     }
-  } break;
-  default:
-    return 0;
   }
-  return result * side_multiplier;
+  return piece_values[piece][square];
 }
 
 // Given a board and a (not necessarily legal) move, returns a heuristic
@@ -198,20 +44,12 @@ int evaluate_move(Board &board, const TableEntry entry, const move_t move) {
   int value = 0;
   const piece_t moved_piece = ::moved_piece(move);
   if (move_captured(move)) {
-    value += 10 * piece_values[to_white(captured_piece(move))] +
-             (1000 - piece_values[to_white(moved_piece)]);
+    value += 10 * base_piece_values[to_white(captured_piece(move))] +
+             (1000 - base_piece_values[to_white(moved_piece)]);
   }
   if (move_promoted(move)) {
-    value += 3 * piece_values[to_white(promoted_piece(move))];
+    value += 3 * base_piece_values[to_white(promoted_piece(move))];
   }
-  // const square_t from_square = move_from(move);
-  // const square_t to_square = move_to(move);
-  // const int side_multiplier = board.m_side_to_move == WHITE ? 1 : -1;
-  // const int from_eval =
-  //     side_multiplier * evaluate_piece(board, moved_piece, from_square);
-  // const int to_eval =
-  //     side_multiplier * evaluate_piece(board, moved_piece, to_square);
-  // value += to_eval - from_eval;
 
   // Checks get +10000
   board.make_move(move);
@@ -276,10 +114,12 @@ void print_piece_evaluations(const Board &board) {
 int static_evaluate_board(const Board &board, const int side) {
   perf_counter.increment("SE");
 
+  // print_piece_evaluations(board);
+
   // Evaluate everything from white's perspective and take into account side
   // at the end
   int white_eval = 0;
-  if (board.is_drawn()) {
+  if (board.is_repeated() || board.is_drawn()) {
     white_eval = 0;
   } else if (!board.has_legal_moves()) {
     white_eval = board.king_in_check() ? -MATE : 0;
@@ -323,7 +163,7 @@ int quiescence_search(SearchInfo &info, Board &board, const int ply,
 
   if (!board.has_legal_moves()) {
     return board.king_in_check() ? -MATE + ply * MATE_OFFSET : 0;
-  } else if (board.is_drawn()) {
+  } else if (board.is_drawn() || board.is_repeated()) {
     return 0;
   }
 
@@ -356,7 +196,7 @@ int quiescence_search(SearchInfo &info, Board &board, const int ply,
 int negamax(SearchInfo &info, Board &board, const int ply, const int depth) {
   if (!board.has_legal_moves()) {
     return board.king_in_check() ? -mate_in(ply) : 0;
-  } else if (board.is_drawn()) {
+  } else if (board.is_drawn() || board.is_repeated()) {
     return 0;
   } else if (depth <= 0) {
     return quiescence_search(info, board, ply);
@@ -413,7 +253,7 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
   // Get the move-ordered legal moves and check for game termination cases
   if (!board.has_legal_moves()) {
     return board.king_in_check() ? -mate_in(ply) : 0;
-  } else if (board.is_drawn()) {
+  } else if (board.is_drawn() || board.is_repeated()) {
     return 0;
   } else if (depth <= 0) {
     // If we've reached the search depth, perform quiescence_search instead

@@ -13,6 +13,7 @@
 #include "move.hpp"
 #include "opening_book.hpp"
 #include "perf_counter.hpp"
+#include "piece_values.hpp"
 #include "simulate.hpp"
 #include "transposition_table.hpp"
 
@@ -24,6 +25,8 @@ const std::string kqk_minus_4 = "7k/8/8/6Q1/8/2K5/8/8 b - - 8 5";
 const std::string kqk_minus_3 = "8/7k/8/6Q1/3K4/8/8/8 b - - 10 6";
 const std::string kqk_minus_2 = "7k/8/8/4K1Q1/8/8/8/8 b - - 12 7";
 const std::string kqk_minus_1 = "8/7k/5K2/6Q1/8/8/8/8 b - - 14 8";
+
+const std::string krk = "8/8/8/8/4k3/8/8/6RK w - - 0 1";
 
 const std::string explode =
     "q2k2q1/2nqn2b/1n1P1n1b/2rnr2Q/1NQ1QN1Q/3Q3B/2RQR2B/Q2K2Q1 w - - 0 1";
@@ -49,6 +52,8 @@ void test_position(const std::string &fen) {
 int main(int argc, char *argv[]) {
   std::cout << "Initializing playchess..." << std::endl;
   init_hash();
+  init_piece_values();
+
   const auto book_ns = timeit(
       [&] { opening_book.read_book("references/book/opening_book.txt"); });
   std::cout << "Reading processed opening book took " << (book_ns / 1e9)
@@ -62,18 +67,24 @@ int main(int argc, char *argv[]) {
          "====================================================================="
          "===\n");
 
-  test_position(kqk_minus_1);
-  test_position(kqk_minus_2);
-  test_position(kqk_minus_3);
-  test_position(kqk_minus_4);
-  test_position(kqk_minus_5);
-  test_position(kqk_minus_6);
-  test_position(kqk_minus_7);
-  test_position(kqk_minus_8);
-  return 0;
+  if (false) {
+    test_position(kqk_minus_1);
+    test_position(kqk_minus_2);
+    test_position(kqk_minus_3);
+    test_position(kqk_minus_4);
+    test_position(kqk_minus_5);
+    test_position(kqk_minus_6);
+    test_position(kqk_minus_7);
+    test_position(kqk_minus_8);
+  }
+
+  if (true) {
+    test_position(krk);
+  }
+
   // test_position("8/8/3n1k2/1p3r2/8/2KQ2b1/4q3/8 w - - 0 1");
-  test_position(mate_in_5);
-  test_position(mate_in_6);
+  // test_position(mate_in_5);
+  // test_position(mate_in_6);
   // test_position(behting);
   // test_search_set("tests/search_tests/kaufman.search");
 }

@@ -84,6 +84,9 @@ public:
   std::vector<move_t> pseudo_moves(const int spec = MOVEGEN_ALL) const noexcept;
   std::vector<move_t> legal_moves(const int spec = MOVEGEN_ALL) const noexcept;
   bool has_legal_moves() const noexcept;
+  constexpr inline bool is_repeated() const noexcept {
+    return m_position_freq.count(m_hash) > 0;
+  }
   constexpr inline bool is_three_fold() const noexcept {
     // Since the position frequency map is updated with a given position only
     // when that position is _played on_, if we reach a position with frequency
@@ -92,7 +95,7 @@ public:
     return m_position_freq.count(m_hash) >= 2;
   }
   constexpr inline bool is_drawn() const noexcept {
-    return m_half_move > 1000 || m_fifty_move >= 50 || is_three_fold();
+    return m_fifty_move >= 100 || is_three_fold();
   }
   bool is_endgame() const noexcept;
   inline void remove_piece(const square_t sq) noexcept;

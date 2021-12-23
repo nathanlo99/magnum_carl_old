@@ -13,16 +13,18 @@ enum Piece {
   WHITE_QUEEN = 0,
   WHITE_ROOK = 1,
   WHITE_PAWN = 2,
+  WHITE_ENDGAME_KING = 3, // Used exclusively for endgame valuation
   WHITE_BISHOP = 4,
   WHITE_KNIGHT = 5,
   WHITE_KING = 6,
   BLACK_QUEEN = 8,
   BLACK_ROOK = 9,
   BLACK_PAWN = 10,
+  BLACK_ENDGAME_KING = 11, // Used exclusively for endgame valuation
   BLACK_BISHOP = 12,
   BLACK_KNIGHT = 13,
   BLACK_KING = 14,
-  INVALID_PIECE = 15, // 3, 7, 11 unused
+  INVALID_PIECE = 15, // 7 unused
 };
 
 constexpr inline piece_t to_white(const piece_t piece) { return piece & 7; }
