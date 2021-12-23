@@ -27,7 +27,6 @@ void TranspositionTable::insert(const Board &board, const move_t best_move,
   const TableEntry new_entry = {hash, best_move, depth, value, type, half_move};
 
   bool replace = false;
-
   if (previous_entry.depth > depth) {
     // If the previous entry searched deeper, keep that one
     perf_counter.increment("TT_insert_depth_too_low");

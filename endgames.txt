@@ -1,0 +1,748 @@
+Initializing playchess...
+Loading book from 'references/book/opening_book.txt'...
+Catalogued 1887 positions into opening book
+Reading processed opening book took 0.0227519 seconds
+Done testing!
+========================================================================
+Starting search to depth 20 with 30 seconds...
+Searching to depth  1...
+Done! (      1 entries, eval = -9.70, PV = Kh8)
+1.9875e-05s elapsed
+Searching to depth  2...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+5.3834e-05s elapsed
+Searching to depth  3...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+7.6875e-05s elapsed
+Searching to depth  4...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+9.7834e-05s elapsed
+Searching to depth  5...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000118375s elapsed
+Searching to depth  6...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000138542s elapsed
+Searching to depth  7...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000160125s elapsed
+Searching to depth  8...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000179625s elapsed
+Searching to depth  9...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000201459s elapsed
+Searching to depth 10...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000221375s elapsed
+Searching to depth 11...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.00024375s elapsed
+Searching to depth 12...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000264084s elapsed
+Searching to depth 13...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000312417s elapsed
+Searching to depth 14...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000337459s elapsed
+Searching to depth 15...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000359959s elapsed
+Searching to depth 16...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000381459s elapsed
+Searching to depth 17...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000403167s elapsed
+Searching to depth 18...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000423584s elapsed
+Searching to depth 19...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.000443625s elapsed
+Searching to depth 20...
+Done! (      2 entries, eval = #-2, PV = Kh8, Qg7)
+0.00046525s elapsed
+Search stopped
+0.000466667s elapsed
+The overall best move was: Kh8 with score #-2
+fail_high_rate: nan
+EV: #-2
+PV: Kh8, Qg7
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   |   |   | k |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   | K |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   | Q |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 14
+MOVE#   : 7
+HALF#   : 15
+HASH    : b6057a12a8083d3e
+FEN     : 8/7k/5K2/6Q1/8/8/8/8 b - - 14 8
+
+Best move is Kh8
+Starting search to depth 20 with 30 seconds...
+Searching to depth  1...
+Done! (      1 entries, eval = -9.70, PV = Kh7)
+1.0542e-05s elapsed
+Searching to depth  2...
+Done! (      2 entries, eval = -9.75, PV = Kh7, Qf5)
+7.8334e-05s elapsed
+Searching to depth  3...
+Done! (     28 entries, eval = -9.90, PV = Kh7, Kd5, Kh8)
+0.000236209s elapsed
+Searching to depth  4...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.000993417s elapsed
+Searching to depth  5...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00143387s elapsed
+Searching to depth  6...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00191129s elapsed
+Searching to depth  7...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.0023715s elapsed
+Searching to depth  8...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00280512s elapsed
+Searching to depth  9...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00320175s elapsed
+Searching to depth 10...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00359063s elapsed
+Searching to depth 11...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00397713s elapsed
+Searching to depth 12...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00436117s elapsed
+Searching to depth 13...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00476029s elapsed
+Searching to depth 14...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00522542s elapsed
+Searching to depth 15...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00564258s elapsed
+Searching to depth 16...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00605738s elapsed
+Searching to depth 17...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00644554s elapsed
+Searching to depth 18...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00682783s elapsed
+Searching to depth 19...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00721479s elapsed
+Searching to depth 20...
+Done! (     30 entries, eval = #-4, PV = Kh7, Kf6, Kh8, Qg7)
+0.00764437s elapsed
+Search stopped
+0.00764637s elapsed
+The overall best move was: Kh7 with score #-4
+fail_high_rate: 0.991051
+EV: #-4
+PV: Kh7, Kf6, Kh8, Qg7
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   | k |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   | K |   | Q |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 12
+MOVE#   : 6
+HALF#   : 13
+HASH    : 8df643fe309fce58
+FEN     : 7k/8/8/4K1Q1/8/8/8/8 b - - 12 7
+
+Best move is Kh7
+Starting search to depth 20 with 30 seconds...
+Searching to depth  1...
+Done! (      1 entries, eval = -9.90, PV = Kh8)
+9.791e-06s elapsed
+Searching to depth  2...
+Done! (      2 entries, eval = -9.95, PV = Kh8, Qf6)
+7.1708e-05s elapsed
+Searching to depth  3...
+Done! (     32 entries, eval = -9.75, PV = Kh8, Qf6, Kg8)
+0.000210791s elapsed
+Searching to depth  4...
+Done! (     34 entries, eval = -9.75, PV = Kh8, Qf6, Kg8, Qe6)
+0.001796s elapsed
+Searching to depth  5...
+Done! (    501 entries, eval = -9.90, PV = Kh8, Ke5, Kh7, Kd5, Kh8)
+0.00510137s elapsed
+Searching to depth  6...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.0128278s elapsed
+Searching to depth  7...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.0200972s elapsed
+Searching to depth  8...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.0271832s elapsed
+Searching to depth  9...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.0342242s elapsed
+Searching to depth 10...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.0412826s elapsed
+Searching to depth 11...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.0483467s elapsed
+Searching to depth 12...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.0554274s elapsed
+Searching to depth 13...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.0625371s elapsed
+Searching to depth 14...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.0696887s elapsed
+Searching to depth 15...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.0769634s elapsed
+Searching to depth 16...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.0840378s elapsed
+Searching to depth 17...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.091059s elapsed
+Searching to depth 18...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.0980599s elapsed
+Searching to depth 19...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.105065s elapsed
+Searching to depth 20...
+Done! (    503 entries, eval = #-6, PV = Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.11208s elapsed
+Search stopped
+0.112081s elapsed
+The overall best move was: Kh8 with score #-6
+fail_high_rate: 0.987866
+EV: #-6
+PV: Kh8, Ke5, Kh7, Kf6, Kh8, Qg7
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   |   |   | k |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   | Q |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   | K |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 10
+MOVE#   : 5
+HALF#   : 11
+HASH    : f172816e3aab0d46
+FEN     : 8/7k/8/6Q1/3K4/8/8/8 b - - 10 6
+
+Best move is Kh8
+Starting search to depth 20 with 30 seconds...
+Searching to depth  1...
+Done! (      1 entries, eval = -9.50, PV = Kh7)
+9.541e-06s elapsed
+Searching to depth  2...
+Done! (      2 entries, eval = -9.70, PV = Kh7, Kd4)
+7.3416e-05s elapsed
+Searching to depth  3...
+Done! (     33 entries, eval = -9.90, PV = Kh7, Kd4, Kh8)
+0.000213875s elapsed
+Searching to depth  4...
+Done! (     34 entries, eval = -9.95, PV = Kh7, Kd4, Kh8, Qf6)
+0.00167229s elapsed
+Searching to depth  5...
+Done! (    445 entries, eval = -9.95, PV = Kh7, Kd4, Kh8, Kc3, Kh7, ...)
+0.00407292s elapsed
+Searching to depth  6...
+Done! (    445 entries, eval = -9.95, PV = Kh7, Kd4, Kh8, Kc3, Kh7, ...)
+0.02655s elapsed
+Searching to depth  7...
+Done! (   3190 entries, eval = -9.95, PV = Kh7, Kd4, Kh8, Kc3, Kh7, ...)
+0.0510942s elapsed
+Searching to depth  8...
+Done! (   3192 entries, eval = #-8, PV = Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.107974s elapsed
+Searching to depth  9...
+Done! (   3192 entries, eval = #-8, PV = Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.16075s elapsed
+Searching to depth 10...
+Done! (   3192 entries, eval = #-8, PV = Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.213363s elapsed
+Searching to depth 11...
+Done! (   3192 entries, eval = #-8, PV = Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.265896s elapsed
+Searching to depth 12...
+Done! (   3192 entries, eval = #-8, PV = Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.318876s elapsed
+Searching to depth 13...
+Done! (   3192 entries, eval = #-8, PV = Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.37158s elapsed
+Searching to depth 14...
+Done! (   3192 entries, eval = #-8, PV = Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.424621s elapsed
+Searching to depth 15...
+Done! (   3192 entries, eval = #-8, PV = Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.47813s elapsed
+Searching to depth 16...
+Done! (   3192 entries, eval = #-8, PV = Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.531642s elapsed
+Searching to depth 17...
+Done! (   3192 entries, eval = #-8, PV = Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.584809s elapsed
+Searching to depth 18...
+Done! (   3192 entries, eval = #-8, PV = Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.637471s elapsed
+Searching to depth 19...
+Done! (   3192 entries, eval = #-8, PV = Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.689952s elapsed
+Searching to depth 20...
+Done! (   3192 entries, eval = #-8, PV = Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.743128s elapsed
+Search stopped
+0.743131s elapsed
+The overall best move was: Kh7 with score #-8
+fail_high_rate: 1
+EV: #-8
+PV: Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   | k |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   | Q |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   | K |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 8
+MOVE#   : 4
+HALF#   : 9
+HASH    : 6769e624fa4738b1
+FEN     : 7k/8/8/6Q1/8/2K5/8/8 b - - 8 5
+
+Best move is Kh7
+Starting search to depth 20 with 30 seconds...
+Searching to depth  1...
+Done! (      1 entries, eval = -9.20, PV = Kh8)
+1.2084e-05s elapsed
+Searching to depth  2...
+Done! (      2 entries, eval = -9.70, PV = Kh8, Kc3)
+7.5792e-05s elapsed
+Searching to depth  3...
+Done! (     32 entries, eval = -9.50, PV = Kh8, Kc3, Kh7)
+0.000218125s elapsed
+Searching to depth  4...
+Done! (     33 entries, eval = -9.70, PV = Kh8, Kc3, Kh7, Kd4)
+0.00165279s elapsed
+Searching to depth  5...
+Done! (    479 entries, eval = -9.90, PV = Kh8, Kc3, Kh7, Kd4, Kh8)
+0.00434892s elapsed
+Searching to depth  6...
+Done! (    480 entries, eval = -9.95, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Qf6)
+0.028015s elapsed
+Searching to depth  7...
+Done! (   2781 entries, eval = -9.95, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Kc3, ...)
+0.051181s elapsed
+Searching to depth  8...
+Done! (   2781 entries, eval = -9.95, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Kc3, ...)
+0.197595s elapsed
+Searching to depth  9...
+Done! (   7431 entries, eval = -9.95, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Kc3, ...)
+0.305037s elapsed
+Searching to depth 10...
+Done! (   7433 entries, eval = #-10, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.462102s elapsed
+Searching to depth 11...
+Done! (   7433 entries, eval = #-10, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.615062s elapsed
+Searching to depth 12...
+Done! (   7433 entries, eval = #-10, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.766825s elapsed
+Searching to depth 13...
+Done! (   7433 entries, eval = #-10, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.920268s elapsed
+Searching to depth 14...
+Done! (   7433 entries, eval = #-10, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+1.0715s elapsed
+Searching to depth 15...
+Done! (   7433 entries, eval = #-10, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+1.22446s elapsed
+Searching to depth 16...
+Done! (   7433 entries, eval = #-10, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+1.37776s elapsed
+Searching to depth 17...
+Done! (   7433 entries, eval = #-10, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+1.53105s elapsed
+Searching to depth 18...
+Done! (   7433 entries, eval = #-10, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+1.68468s elapsed
+Searching to depth 19...
+Done! (   7433 entries, eval = #-10, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+1.83877s elapsed
+Searching to depth 20...
+Done! (   7433 entries, eval = #-10, PV = Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+1.9918s elapsed
+Search stopped
+1.99181s elapsed
+The overall best move was: Kh8 with score #-10
+fail_high_rate: 1
+EV: #-10
+PV: Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   |   |   | k |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   | Q |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | K |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 6
+MOVE#   : 3
+HALF#   : 7
+HASH    : a1fa19c29fa48522
+FEN     : 8/7k/8/6Q1/8/8/1K6/8 b - - 6 4
+
+Best move is Kh8
+Starting search to depth 20 with 30 seconds...
+Searching to depth  1...
+Done! (      1 entries, eval = -8.80, PV = Kh7)
+1.2042e-05s elapsed
+Searching to depth  2...
+Done! (      2 entries, eval = -9.00, PV = Kh7, Kb2)
+6.6625e-05s elapsed
+Searching to depth  3...
+Done! (     28 entries, eval = -9.20, PV = Kh7, Kb2, Kh8)
+0.000197083s elapsed
+Searching to depth  4...
+Done! (     29 entries, eval = -9.70, PV = Kh7, Kb2, Kh8, Kc3)
+0.00127213s elapsed
+Searching to depth  5...
+Done! (    277 entries, eval = -9.70, PV = Kh7, Kb2, Kh8, Ka1, Kh7, ...)
+0.00285117s elapsed
+Searching to depth  6...
+Done! (    277 entries, eval = -9.70, PV = Kh7, Kb2, Kh8, Ka1, Kh7, ...)
+0.0154645s elapsed
+Searching to depth  7...
+Done! (   1424 entries, eval = -9.90, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8)
+0.0276178s elapsed
+Searching to depth  8...
+Done! (   1425 entries, eval = -9.95, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Qf6)
+0.0986293s elapsed
+Searching to depth  9...
+Done! (   4454 entries, eval = -9.95, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Kc3, ...)
+0.154224s elapsed
+Searching to depth 10...
+Done! (   4454 entries, eval = -9.95, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Kc3, ...)
+0.388725s elapsed
+Searching to depth 11...
+Done! (  10342 entries, eval = -9.95, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Kc3, ...)
+0.563283s elapsed
+Searching to depth 12...
+Done! (  10344 entries, eval = #-12, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+0.794727s elapsed
+Searching to depth 13...
+Done! (  10344 entries, eval = #-12, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+1.02037s elapsed
+Searching to depth 14...
+Done! (  10344 entries, eval = #-12, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+1.24631s elapsed
+Searching to depth 15...
+Done! (  10344 entries, eval = #-12, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+1.47201s elapsed
+Searching to depth 16...
+Done! (  10344 entries, eval = #-12, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+1.69779s elapsed
+Searching to depth 17...
+Done! (  10344 entries, eval = #-12, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+1.92447s elapsed
+Searching to depth 18...
+Done! (  10344 entries, eval = #-12, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+2.15144s elapsed
+Searching to depth 19...
+Done! (  10344 entries, eval = #-12, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+2.37715s elapsed
+Searching to depth 20...
+Done! (  10344 entries, eval = #-12, PV = Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7)
+2.60285s elapsed
+Search stopped
+2.60285s elapsed
+The overall best move was: Kh7 with score #-12
+fail_high_rate: 0.999991
+EV: #-12
+PV: Kh7, Kb2, Kh8, Kc3, Kh7, Kd4, Kh8, Ke5, Kh7, Kf6, Kh8, Qg7
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   | k |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   | Q |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | K |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 4
+MOVE#   : 2
+HALF#   : 5
+HASH    : 7414e825bbbb7a53
+FEN     : 7k/8/8/6Q1/8/8/8/K7 b - - 4 3
+
+Best move is Kh7
+Starting search to depth 20 with 30 seconds...
+Searching to depth  1...
+Done! (      1 entries, eval = -8.85, PV = Kg8)
+2.2125e-05s elapsed
+Searching to depth  2...
+Done! (      4 entries, eval = -9.05, PV = Kg8, Kb2)
+0.000117833s elapsed
+Searching to depth  3...
+Done! (     39 entries, eval = -9.05, PV = Kg8, Kb2, Kg7)
+0.000309208s elapsed
+Searching to depth  4...
+Done! (     42 entries, eval = -9.55, PV = Kg8, Kb2, Kg7, Kc3)
+0.00160062s elapsed
+Searching to depth  5...
+Done! (    335 entries, eval = -9.55, PV = Kg8, Kb2, Kg7, Kc3, Kg8)
+0.00358533s elapsed
+Searching to depth  6...
+Done! (    341 entries, eval = -9.75, PV = Kg8, Kb2, Kg7, Kc3, Kg8, Kd4)
+0.0196331s elapsed
+Searching to depth  7...
+Done! (   1649 entries, eval = -9.75, PV = Kg8, Kb2, Kg7, Kc3, Kg8, Kd4, Kg7)
+0.0345085s elapsed
+Searching to depth  8...
+Done! (   2736 entries, eval = -9.90, PV = Kg8, Qf6, Kh7, Qg5, Kh8, Kb2, Kh7, Kc3, Kh8, Kd4)
+0.214249s elapsed
+Searching to depth  9...
+Done! (   5673 entries, eval = -9.90, PV = Kg8, Qf6, Kh7, Qg5, Kh8, Kb2, Kh7, Kc3, Kh8, Kd4)
+0.27482s elapsed
+Searching to depth 10...
+Done! (   5741 entries, eval = -9.90, PV = Kg8, Qf6, Kh7, Qg5, Kh8, Kb2, Kh7, Kc3, Kh8, Kd4)
+0.517654s elapsed
+Searching to depth 11...
+Done! (  11628 entries, eval = -9.95, PV = Kg8, Qf6, Kh7, Qg5, Kh8, Kb2, Kh7, Kb3, Kh8, Kc3, Kh7, Kd4, Kh8, Qf6)
+0.718486s elapsed
+Searching to depth 12...
+Done! (  11628 entries, eval = -9.95, PV = Kg8, Qf6, Kh7, Qg5, Kh8, Kb2, Kh7, Kb3, Kh8, Kc3, Kh7, Kd4, Kh8, Qf6)
+1.30183s elapsed
+Searching to depth 13...
+Done! (  22184 entries, eval = -9.95, PV = Kg8, Qf6, Kh7, Qg5, Kh8, Kb2, Kh7, Kb3, Kh8, Kc3, Kh7, Kd4, Kh8, Qf6, Kg8)
+1.75701s elapsed
+Searching to depth 14...
+Done! (  29255 entries, eval = #-14, PV = Kg8, Kb2, Kg7, Kc3, Kg8, Kd4, Kg7, Ke5, Kg8, Kf6, Kh8, Kg6, Kg8, Qc8)
+12.0112s elapsed
+Searching to depth 15...
+Done! (  29255 entries, eval = #-14, PV = Kg8, Kb2, Kg7, Kc3, Kg8, Kd4, Kg7, Ke5, Kg8, Kf6, Kh8, Kg6, Kg8, Qc8)
+12.6614s elapsed
+Searching to depth 16...
+Done! (  29255 entries, eval = #-14, PV = Kg8, Kb2, Kg7, Kc3, Kg8, Kd4, Kg7, Ke5, Kg8, Kf6, Kh8, Kg6, Kg8, Qc8)
+13.2946s elapsed
+Searching to depth 17...
+Done! (  29869 entries, eval = #-14, PV = Kg8, Kb2, Kg7, Kc3, Kg8, Kd4, Kg7, Ke5, Kg8, Kf6, Kh8, Kg6, Kg8, Qc8)
+14.0602s elapsed
+Searching to depth 18...
+Done! (  29869 entries, eval = #-14, PV = Kg8, Kb2, Kg7, Kc3, Kg8, Kd4, Kg7, Ke5, Kg8, Kf6, Kh8, Kg6, Kg8, Qc8)
+14.7381s elapsed
+Searching to depth 19...
+Done! (  29869 entries, eval = #-14, PV = Kg8, Kb2, Kg7, Kc3, Kg8, Kd4, Kg7, Ke5, Kg8, Kf6, Kh8, Kg6, Kg8, Qc8)
+15.424s elapsed
+Searching to depth 20...
+Done! (  29869 entries, eval = #-14, PV = Kg8, Kb2, Kg7, Kc3, Kg8, Kd4, Kg7, Ke5, Kg8, Kf6, Kh8, Kg6, Kg8, Qc8)
+16.1062s elapsed
+Search stopped
+16.1062s elapsed
+The overall best move was: Kg8 with score #-14
+fail_high_rate: 0.861377
+EV: #-14
+PV: Kg8, Kb2, Kg7, Kc3, Kg8, Kd4, Kg7, Ke5, Kg8, Kf6, Kh8, Kg6, Kg8, Qc8
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   |   | k |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   | Q |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | K |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 2
+MOVE#   : 1
+HALF#   : 3
+HASH    : 46afe62720040f22
+FEN     : 8/6k1/8/5Q2/8/8/8/K7 b - - 2 2
+
+Best move is Kg8
+Starting search to depth 20 with 30 seconds...
+Searching to depth  1...
+Done! (      1 entries, eval = -8.85, PV = Kh7)
+4.1583e-05s elapsed
+Searching to depth  2...
+Done! (      4 entries, eval = -9.05, PV = Kh7, Kb2)
+0.000133875s elapsed
+Searching to depth  3...
+Done! (     32 entries, eval = -8.85, PV = Kh7, Kb2, Kg6)
+0.00034175s elapsed
+Searching to depth  4...
+Done! (     47 entries, eval = -9.35, PV = Kh7, Kb2, Kg6, Kc3)
+0.00208829s elapsed
+Searching to depth  5...
+Done! (    382 entries, eval = -9.35, PV = Kh7, Kb2, Kg6, Kc3, Kg5)
+0.00435196s elapsed
+Searching to depth  6...
+Done! (    409 entries, eval = -9.55, PV = Kh7, Kb2, Kg6, Kc3, Kg5, Kd4)
+0.02298s elapsed
+Searching to depth  7...
+Done! (   1929 entries, eval = -9.55, PV = Kh7, Kb2, Kg6, Kc3, Kg5, Kd4, Kg6)
+0.0398698s elapsed
+Searching to depth  8...
+Done! (   3520 entries, eval = -9.75, PV = Kh7, Qf5, Kg8, Kb2, Kg7, Kc3, Kg8, Kd4)
+0.342266s elapsed
+Searching to depth  9...
+Done! (   8414 entries, eval = -9.75, PV = Kh7, Qf5, Kg8, Kb2, Kg7, Kc3, Kg8, Kd4, Kg7)
+0.480653s elapsed
+Searching to depth 10...
+Done! (   8915 entries, eval = -9.90, PV = Kh7, Qf6, Kg8, Kb2, Kh7, Kc3, Kg8, Qe7, Kh8, Kd4)
+0.957365s elapsed
+Searching to depth 11...
+Done! (  16469 entries, eval = -9.90, PV = Kh7, Qf6, Kg8, Kb2, Kh7, Kc3, Kg8, Qe7, Kh8, Kb2, Kg8, Kc3, ...)
+1.21308s elapsed
+Searching to depth 12...
+Search stopped
+30.0175s elapsed
+The overall best move was: Kh7 with score -9.90
+fail_high_rate: 0.872701
+EV: -9.90
+PV: Kh7, Qf6, Kg8, Kb2, Kh7, Kc3, Kg8, Kd4, Kh7, Qg5, Kh8, Qf6
+
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   | k |   |
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   | Q |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | K |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+TO MOVE : BLACK
+EN PASS : -
+FIFTY   : 0
+MOVE#   : 0
+HALF#   : 1
+HASH    : c54fc97dfdf4249d
+FEN     : 6k1/8/8/8/8/5Q2/8/K7 b - - 0 1
+
+Best move is Kh7

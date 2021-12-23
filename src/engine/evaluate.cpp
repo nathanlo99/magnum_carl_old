@@ -337,30 +337,18 @@ int quiescence_search(SearchInfo &info, Board &board, const int ply,
     return stand_pat_eval;
 
   alpha = std::max(alpha, stand_pat_eval);
-  const int start_alpha = alpha;
 
   order_moves(board, legal_captures);
-  int move_num = 0;
-  move_t best_move = 0;
   for (const move_t next_move : legal_captures) {
     board.make_move(next_move);
     const int value = -quiescence_search(info, board, ply + 1, -beta, -alpha);
     board.unmake_move();
-    if (info.stopped || info.quit) {
-      return 0;
-    }
 
-    if (value >= beta) {
+    if (info.stopped || info.quit)
+      return 0;
+    if (value >= beta)
       return value;
-    }
-    if (value > alpha) {
-      alpha = value;
-      best_move = next_move;
-    }
-    move_num++;
-  }
-  if (alpha > start_alpha) {
-    transposition_table.insert(board, best_move, 0, alpha, Lower);
+    alpha = std::max(alpha, value);
   }
   return alpha;
 }
@@ -481,9 +469,6 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
     ASSERT(best_move != 0);
     perf_counter.increment("AB_cut_none_improved");
     transposition_table.insert(board, best_move, depth, alpha, Exact);
-  } else {
-    perf_counter.increment("AB_cut_none_not_improved");
-    transposition_table.insert(board, 0, depth, alpha, Upper);
   }
   return alpha;
 }
