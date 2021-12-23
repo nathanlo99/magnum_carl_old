@@ -176,7 +176,7 @@ endif
 .PHONY: dirs
 dirs:
 	@echo "Creating directories"
-	@mkdir -p $(dirname -- "$(OBJECTS)") .
+	@mkdir -p build/debug/engine build/debug/strategies build/release/engine build/release/strategies $(dirname -- "$(OBJECTS)") .
 	@mkdir -p $(BIN_PATH)
 
 # Installs to the set path
