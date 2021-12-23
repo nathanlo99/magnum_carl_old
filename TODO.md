@@ -1,6 +1,7 @@
 
 Short term:
-- Prioritize checks, history heuristic, killer heuristic
+- Implement the history heuristic, killer heuristic
+- Add support for the UCI interface so we can start playing games on Lichess
 - Add null move pruning, and consider MTD-bi search
 
 

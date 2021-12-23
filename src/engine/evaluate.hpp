@@ -32,5 +32,17 @@ inline std::string eval_to_string(const int value) {
   return result.str();
 }
 
+inline std::string eval_to_uci_string(const int value) {
+  std::stringstream result;
+  if (value >= MATE_THRESHOLD) {
+    result << "mate " << (MATE - value) / MATE_OFFSET;
+  } else if (value <= -MATE_THRESHOLD) {
+    result << "mate -" << (MATE + value) / MATE_OFFSET;
+  } else {
+    result << "cp " << value;
+  }
+  return result.str();
+}
+
 int static_evaluate_board(const Board &board, const int side);
 move_t get_best_move(SearchInfo &info, const Board &board);

@@ -13,7 +13,7 @@
 #include <iostream>
 
 static bool should_stop(const SearchInfo &info) {
-  if (info.stopped || info.quit)
+  if (info.is_stopped || info.has_quit)
     return true;
   if (info.time_set && seconds_since(info.start_time) > info.seconds_to_search)
     return true;
@@ -155,7 +155,7 @@ int quiescence_search(SearchInfo &info, Board &board, const int ply,
   //           << std::setw(10) << std::setfill(' ') << beta << std::endl;
 
   if (info.nodes % SearchInfo::refresh_frequency == 0 && should_stop(info)) {
-    info.stopped = true;
+    info.is_stopped = true;
     return 0;
   }
 
@@ -184,7 +184,7 @@ int quiescence_search(SearchInfo &info, Board &board, const int ply,
     const int value = -quiescence_search(info, board, ply + 1, -beta, -alpha);
     board.unmake_move();
 
-    if (info.stopped || info.quit)
+    if (info.is_stopped || info.has_quit)
       return 0;
     if (value >= beta)
       return value;
@@ -219,7 +219,7 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
   ASSERT_MSG(alpha <= beta, "alpha_beta range (%d - %d) is empty", alpha, beta);
 
   if (info.nodes % SearchInfo::refresh_frequency == 0 && should_stop(info)) {
-    info.stopped = true;
+    info.is_stopped = true;
     return 0;
   }
   info.nodes++;
@@ -289,7 +289,7 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
         -alpha_beta(info, board, ply + 1, depth - 1, -beta, -alpha);
     board.unmake_move();
 
-    if (info.stopped || info.quit)
+    if (info.is_stopped || info.has_quit)
       return 0;
 
     if (value >= beta) {
@@ -320,10 +320,23 @@ void iterative_deepening(SearchInfo &info, Board &board) {
 
     alpha_beta(info, board, 0, depth, -SCORE_INFINITY, SCORE_INFINITY);
 
-    if (info.stopped || info.quit)
+    if (info.is_stopped || info.has_quit)
       break;
-    //
-    // const TableEntry entry = transposition_table.query(board.hash());
+
+    const TableEntry entry = transposition_table.query(board.hash());
+    std::cout << "info ";
+    std::cout << "score " << eval_to_uci_string(entry.value) << " ";
+    std::cout << "depth " << entry.depth << " ";
+    std::cout << "nodes " << info.nodes << " ";
+    std::cout << "time "
+              << static_cast<int>(1000 * seconds_since(info.start_time)) << " ";
+    std::cout << "pv ";
+    const std::vector<move_t> pv_moves = get_pv(board);
+    for (const move_t move : pv_moves) {
+      std::cout << simple_string_from_move(move) << " ";
+    }
+    std::cout << std::endl;
+
     // std::cout << "Done! (" << std::setw(7) << transposition_table.size()
     //           << " entries, eval = " << eval_to_string(entry.value)
     //           << ", PV = " << get_pv_string(board) << ")" << std::endl;

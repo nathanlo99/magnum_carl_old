@@ -16,6 +16,7 @@
 #include "piece_values.hpp"
 #include "simulate.hpp"
 #include "transposition_table.hpp"
+#include "uci_protocol.hpp"
 
 const std::string kqk_minus_8 = "6k1/8/8/8/8/5Q2/8/K7 b - - 0 1";
 const std::string kqk_minus_7 = "8/6k1/8/5Q2/8/8/8/K7 b - - 2 2";
@@ -67,6 +68,8 @@ int main(int argc, char *argv[]) {
          "====================================================================="
          "===\n");
 
+  UCIProtocol::start_loop();
+
   if (false) {
     test_position(kqk_minus_1);
     test_position(kqk_minus_2);
@@ -88,5 +91,5 @@ int main(int argc, char *argv[]) {
   // test_position(behting);
   // test_search_set("tests/search_tests/kaufman.search");
 
-  manual_play_white(50, 8.0);
+  // manual_play_white(50, 8.0);
 }

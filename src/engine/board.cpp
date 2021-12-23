@@ -135,7 +135,11 @@ Board::Board(const std::string &fen) noexcept {
     next_chr++;
   }
   m_half_move = 2 * (full_move - 1) + m_side_to_move;
-  ASSERT_MSG(next_chr == end_ptr, "FEN string too long");
+
+  // We don't check this anymore because sometimes we'll pass in strings which
+  // are too long, say from the UCI protocol
+  //
+  // ASSERT_MSG(next_chr == end_ptr, "FEN string too long");
 
   m_hash = compute_hash();
   validate_board();
@@ -451,7 +455,7 @@ bool Board::is_endgame() const noexcept {
   // Return true if neither side has a queen
   if (m_num_pieces[WHITE_QUEEN] == 0 && m_num_pieces[BLACK_QUEEN] == 0)
     return true;
-  // Otherwise, if every side which has a queen
+  // Otherwise, if each side which has a queen has at most one minor piece
   const bool white_has_no_queen_or_one_minor =
       m_num_pieces[WHITE_QUEEN] == 0 ||
       (m_num_pieces[WHITE_ROOK] == 0 &&

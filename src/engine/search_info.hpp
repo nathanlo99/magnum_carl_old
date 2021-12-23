@@ -23,8 +23,8 @@ struct SearchInfo {
 
   long nodes = 0; // Number of nodes searched so far
 
-  bool quit = false;    // Received a quit interrupt
-  bool stopped = false; // Stop for any reason
+  bool has_quit = false;   // Received a quit interrupt
+  bool is_stopped = false; // Stop for any reason
 
   SearchInfo() : start_time(now()) {}
 };
