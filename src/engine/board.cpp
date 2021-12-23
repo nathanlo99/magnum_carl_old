@@ -356,16 +356,16 @@ std::string Board::to_string(const int side) const noexcept {
   result << "TO MOVE : ";
   result << ((m_side_to_move == WHITE) ? "WHITE" : "BLACK") << "\n";
   result << "EN PASS : " << string_from_square(m_en_passant) << "\n";
-  result << "FIFTY   : " << m_fifty_move << "\n";
-  result << "MOVE#   : " << (m_half_move / 2) << "\n";
-  result << "HALF#   : " << m_half_move << "\n";
+  // result << "FIFTY   : " << m_fifty_move << "\n";
+  // result << "MOVE#   : " << (m_half_move / 2) << "\n";
+  // result << "HALF#   : " << m_half_move << "\n";
   result << "HASH    : ";
   result << std::setw(16) << std::setfill('0') << std::hex << hash() << std::dec
          << "\n";
   result << "FEN     : " << fen() << "\n";
-  if (opening_book.query_all(*this).size() > 0) {
-    result << "BOOK    : " << opening_book.book_moves_string(*this) << "\n";
-  }
+  // if (opening_book.query_all(*this).size() > 0) {
+  //   result << "BOOK    : " << opening_book.book_moves_string(*this) << "\n";
+  // }
   if (!m_history.empty()) {
     // Since the previous move was not played in the current position, we have
     // to revert to the last position before calling algebraic_notation, because

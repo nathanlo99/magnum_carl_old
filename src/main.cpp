@@ -42,7 +42,7 @@ void test_position(const std::string &fen) {
   Board board(fen);
   SearchInfo info;
   info.depth = 20;
-  info.seconds_to_search = 30.0;
+  info.seconds_to_search = 10.0;
   const move_t best_move = get_best_move(info, board);
   std::cout << board << std::endl;
   std::cout << "Best move is " << board.algebraic_notation(best_move)
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     test_position(kqk_minus_8);
   }
 
-  if (true) {
+  if (false) {
     test_position(krk);
   }
 
@@ -87,4 +87,6 @@ int main(int argc, char *argv[]) {
   // test_position(mate_in_6);
   // test_position(behting);
   // test_search_set("tests/search_tests/kaufman.search");
+
+  manual_play_white(50, 8.0);
 }
