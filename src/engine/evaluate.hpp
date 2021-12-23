@@ -6,6 +6,7 @@
 #include <string>
 
 #include "board.hpp"
+#include "search_info.hpp"
 
 enum {
   MATE = 90000,
@@ -32,9 +33,4 @@ inline std::string eval_to_string(const int value) {
 }
 
 int static_evaluate_board(const Board &board, const int side);
-int evaluate_board(const Board &board, const int depth);
-move_t get_best_move(const Board &board, const int depth, const float seconds);
-
-// For testing only
-int alpha_beta(Board &board, const int ply, int max_depth,
-               int alpha = -SCORE_INFINITY, int beta = SCORE_INFINITY);
+move_t get_best_move(SearchInfo &info, const Board &board);

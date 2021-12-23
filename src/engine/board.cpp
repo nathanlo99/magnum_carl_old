@@ -503,7 +503,8 @@ inline void Board::move_piece(const square_t from, const square_t to) noexcept {
 
 inline void Board::update_castling(const square_t from,
                                    const square_t to) noexcept {
-  INFO("Updating castling which affected %s", string_from_square(sq).c_str());
+  INFO("Updating castling which affected %s and %s",
+       string_from_square(from).c_str(), string_from_square(to).c_str());
   m_hash ^= castle_hash[m_castle_state];
   if (from == E1 || from == A1 || to == E1 || to == A1)
     m_castle_state &= ~WHITE_LONG;

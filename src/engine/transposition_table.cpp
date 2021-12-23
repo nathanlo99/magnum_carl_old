@@ -39,21 +39,26 @@ void TranspositionTable::insert(const Board &board, const move_t best_move,
   } else if (previous_entry.type == Exact) {
     // Now that the depths are the same, we must keep exact entries
     perf_counter.increment("TT_insert_no_replacing_exact");
+    ASSERT_IF_MSG(type == Exact, previous_entry.value == value,
+                  "Tried to replace exact value %d with different value %d",
+                  previous_entry.value, value);
     replace = false;
   } else if (type == Exact) {
     perf_counter.increment("TT_insert_new_exact");
     replace = true;
   } else if (type == Lower) {
     if (previous_entry.type == Lower) {
-      perf_counter.increment("TT_insert_lower_to_lower");
-      replace = previous_entry.value > value;
+      replace = previous_entry.value < value;
+      if (replace)
+        perf_counter.increment("TT_insert_lower_to_lower");
     } else if (previous_entry.type == Upper) {
       perf_counter.increment("TT_insert_lower_to_upper");
       replace = true;
     }
   } else if (type == Upper) {
-    perf_counter.increment("TT_insert_upper_to_upper");
     replace = previous_entry.type == Upper && previous_entry.value > value;
+    if (replace)
+      perf_counter.increment("TT_insert_upper_to_upper");
   }
 
   if (replace) {
@@ -91,6 +96,7 @@ std::string get_pv_string(const Board &board) {
     if (move == 0) {
       ASSERT(i + 1 == pv_moves.size());
       result << "...";
+      break;
     } else {
       result << tmp.algebraic_notation(move);
     }

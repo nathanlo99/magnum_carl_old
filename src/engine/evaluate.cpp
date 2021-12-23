@@ -137,6 +137,14 @@ constexpr inline square_t flip_square(const square_t sq) {
   return sq + 110 - 20 * (sq / 10);
 }
 
+static bool should_stop(const SearchInfo &info) {
+  if (info.stopped || info.quit)
+    return true;
+  if (info.time_set && seconds_since(info.start_time) > info.seconds_to_search)
+    return true;
+  return false;
+}
+
 // Returns the evaluation from the perspective of white. Thus white pieces
 // will generally have positive evaluations and black pieces will generally have
 // negative evaluations
@@ -186,26 +194,24 @@ int evaluate_piece(const Board &board, piece_t piece, square_t square) {
 // Captured and promoted pieces significantly boost this score.
 int evaluate_move(Board &board, const TableEntry entry, const move_t move) {
   perf_counter.increment("evaluate_move");
-  // if (entry.type != None)
-  //   return entry.value;
 
   int value = 0;
   const piece_t moved_piece = ::moved_piece(move);
   if (move_captured(move)) {
-    value += 2 * piece_values[to_white(captured_piece(move))] -
-             piece_values[to_white(moved_piece)];
+    value += 10 * piece_values[to_white(captured_piece(move))] +
+             (1000 - piece_values[to_white(moved_piece)]);
   }
   if (move_promoted(move)) {
     value += 3 * piece_values[to_white(promoted_piece(move))];
   }
-  const square_t from_square = move_from(move);
-  const square_t to_square = move_to(move);
-  const int side_multiplier = board.m_side_to_move == WHITE ? 1 : -1;
-  const int from_eval =
-      side_multiplier * evaluate_piece(board, moved_piece, from_square);
-  const int to_eval =
-      side_multiplier * evaluate_piece(board, moved_piece, to_square);
-  value += to_eval - from_eval;
+  // const square_t from_square = move_from(move);
+  // const square_t to_square = move_to(move);
+  // const int side_multiplier = board.m_side_to_move == WHITE ? 1 : -1;
+  // const int from_eval =
+  //     side_multiplier * evaluate_piece(board, moved_piece, from_square);
+  // const int to_eval =
+  //     side_multiplier * evaluate_piece(board, moved_piece, to_square);
+  // value += to_eval - from_eval;
 
   // Checks get +10000
   board.make_move(move);
@@ -215,7 +221,7 @@ int evaluate_move(Board &board, const TableEntry entry, const move_t move) {
     value += 10000;
 
   // PV move gets +20000
-  if (entry.type != None && move == entry.best_move)
+  if (move == entry.best_move)
     value += 20000;
 
   return value;
@@ -298,7 +304,8 @@ inline std::string to_string(const int num, const int num_digits) {
   return ss.str();
 }
 
-int quiescence_search(Board &board, const int ply, int alpha = -SCORE_INFINITY,
+int quiescence_search(SearchInfo &info, Board &board, const int ply,
+                      int alpha = -SCORE_INFINITY,
                       const int beta = SCORE_INFINITY) {
 
   // std::cout << "QS " << std::setw(16) << std::setfill('0') << std::hex
@@ -307,6 +314,13 @@ int quiescence_search(Board &board, const int ply, int alpha = -SCORE_INFINITY,
   // std::cout << std::setw(10) << std::setfill(' ') << alpha << ", "
   //           << std::setw(10) << std::setfill(' ') << beta << std::endl;
 
+  if (info.nodes % SearchInfo::refresh_frequency == 0 && should_stop(info)) {
+    info.stopped = true;
+    return 0;
+  }
+
+  info.nodes++;
+
   if (!board.has_legal_moves()) {
     return board.king_in_check() ? -MATE + ply * MATE_OFFSET : 0;
   } else if (board.is_drawn()) {
@@ -314,55 +328,73 @@ int quiescence_search(Board &board, const int ply, int alpha = -SCORE_INFINITY,
   }
 
   const int stand_pat_eval = static_evaluate_board(board, board.m_side_to_move);
-  auto legal_captures =
-      board.legal_moves(MOVEGEN_CAPTURES | MOVEGEN_PROMOTIONS);
-  if (legal_captures.empty()) {
-    return stand_pat_eval;
-  }
-
   if (stand_pat_eval >= beta)
     return stand_pat_eval;
+
+  auto legal_captures =
+      board.legal_moves(MOVEGEN_CAPTURES | MOVEGEN_PROMOTIONS);
+  if (legal_captures.empty())
+    return stand_pat_eval;
+
   alpha = std::max(alpha, stand_pat_eval);
+  const int start_alpha = alpha;
 
   order_moves(board, legal_captures);
   int move_num = 0;
+  move_t best_move = 0;
   for (const move_t next_move : legal_captures) {
     board.make_move(next_move);
-    const int value = -quiescence_search(board, ply + 1, -beta, -alpha);
+    const int value = -quiescence_search(info, board, ply + 1, -beta, -alpha);
     board.unmake_move();
+    if (info.stopped || info.quit) {
+      return 0;
+    }
+
     if (value >= beta) {
       return value;
     }
-    alpha = std::max(value, alpha);
+    if (value > alpha) {
+      alpha = value;
+      best_move = next_move;
+    }
     move_num++;
+  }
+  if (alpha > start_alpha) {
+    transposition_table.insert(board, best_move, 0, alpha, Lower);
   }
   return alpha;
 }
 
-int negamax(Board &board, const int ply, const int depth) {
+int negamax(SearchInfo &info, Board &board, const int ply, const int depth) {
   if (!board.has_legal_moves()) {
     return board.king_in_check() ? -mate_in(ply) : 0;
   } else if (board.is_drawn()) {
     return 0;
-  } else if (ply >= depth) {
-    return quiescence_search(board, ply);
+  } else if (depth <= 0) {
+    return quiescence_search(info, board, ply);
   }
 
   const auto legal_moves = get_sorted_legal_moves(board);
   int best_score = -SCORE_INFINITY;
   for (const move_t move : legal_moves) {
     board.make_move(move);
-    const int value = -negamax(board, ply + 1, depth);
+    const int value = -negamax(info, board, ply + 1, depth - 1);
     board.unmake_move();
     best_score = std::max(best_score, value);
   }
   return best_score;
 }
 
-int alpha_beta(Board &board, const int ply, int max_depth, int alpha,
-               int beta) {
+int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
+               int alpha, int beta) {
   perf_counter.increment("AB");
   ASSERT_MSG(alpha <= beta, "alpha_beta range (%d - %d) is empty", alpha, beta);
+
+  if (info.nodes % SearchInfo::refresh_frequency == 0 && should_stop(info)) {
+    info.stopped = true;
+    return 0;
+  }
+  info.nodes++;
 
   // Mate distance pruning
   const int mating_value = mate_in(ply);
@@ -395,21 +427,15 @@ int alpha_beta(Board &board, const int ply, int max_depth, int alpha,
     return board.king_in_check() ? -mate_in(ply) : 0;
   } else if (board.is_drawn()) {
     return 0;
-  } else if (ply >= max_depth) {
+  } else if (depth <= 0) {
     // If we've reached the search depth, perform quiescence_search instead
-    return quiescence_search(board, ply, alpha, beta);
+    return quiescence_search(info, board, ply, alpha, beta);
   }
-
-  perf_counter.increment("AB_");
 
   // Consult the transposition table: grab a cached evaluation and the best move
   const TableEntry entry = transposition_table.query(board.hash());
-  ASSERT_MSG(
-      entry.type == NodeType::None || entry.hash == board.hash(),
-      "Queried table entry's hash (%llu) did not match board hash (%llu)",
-      entry.hash, board.hash());
   // Switch on entry.type to get better bounds on alpha and beta
-  if (entry.type != None && entry.depth >= max_depth) {
+  if (entry.type != None && entry.depth >= depth) {
     if (entry.type == NodeType::Exact) {
       perf_counter.increment("AB_lookup_exact");
       return entry.value;
@@ -422,6 +448,8 @@ int alpha_beta(Board &board, const int ply, int max_depth, int alpha,
     }
   }
 
+  perf_counter.increment("AB_");
+
   const int start_alpha = alpha;
   move_t best_move = 0;
   const auto legal_moves = get_sorted_legal_moves(board);
@@ -429,13 +457,17 @@ int alpha_beta(Board &board, const int ply, int max_depth, int alpha,
   int move_num = 0;
   for (const move_t next_move : legal_moves) {
     board.make_move(next_move);
-    const int value = -alpha_beta(board, ply + 1, max_depth, -beta, -alpha);
+    const int value =
+        -alpha_beta(info, board, ply + 1, depth - 1, -beta, -alpha);
     board.unmake_move();
+
+    if (info.stopped || info.quit)
+      return 0;
 
     if (value >= beta) {
       perf_counter.increment("AB_cut_beta_move_" + to_string(move_num, 3));
       perf_counter.increment("AB_cut_beta");
-      transposition_table.insert(board, next_move, max_depth, value, Lower);
+      transposition_table.insert(board, next_move, depth, value, Lower);
       return value;
     }
     if (value > alpha) {
@@ -448,61 +480,49 @@ int alpha_beta(Board &board, const int ply, int max_depth, int alpha,
   if (alpha > start_alpha) {
     ASSERT(best_move != 0);
     perf_counter.increment("AB_cut_none_improved");
-    transposition_table.insert(board, best_move, max_depth, alpha, Exact);
+    transposition_table.insert(board, best_move, depth, alpha, Exact);
   } else {
     perf_counter.increment("AB_cut_none_not_improved");
+    transposition_table.insert(board, 0, depth, alpha, Upper);
   }
   return alpha;
 }
 
-inline float seconds_since(
-    const std::chrono::time_point<std::chrono::high_resolution_clock> &start) {
-  const auto finish = std::chrono::high_resolution_clock::now();
-  const auto ns =
-      std::chrono::duration_cast<std::chrono::nanoseconds>(finish - start)
-          .count();
-  return ns / 1e9;
-}
-
-int iterative_deepening(Board &board, const int max_depth,
-                        const float seconds_to_search) {
-
-  const auto start = std::chrono::high_resolution_clock::now();
-
-  int depth = 1;
-  while (depth <= max_depth && seconds_since(start) < seconds_to_search / 2.) {
+void iterative_deepening(SearchInfo &info, Board &board) {
+  for (int depth = 1; depth <= info.depth; ++depth) {
     std::cout << "Searching to depth " << std::setw(2) << depth << "..."
-              << std::flush;
-    alpha_beta(board, 0, depth);
+              << std::endl;
+
+    alpha_beta(info, board, 0, depth, -SCORE_INFINITY, SCORE_INFINITY);
+
+    if (info.stopped || info.quit)
+      break;
 
     const TableEntry entry = transposition_table.query(board.hash());
-    const float seconds_elapsed = seconds_since(start);
-    std::cout << "  done! (" << std::setw(7) << transposition_table.size()
+    std::cout << "Done! (" << std::setw(7) << transposition_table.size()
               << " entries, eval = " << eval_to_string(entry.value)
               << ", PV = " << get_pv_string(board) << ")" << std::endl;
+    const float seconds_elapsed = seconds_since(info.start_time);
     std::cout << seconds_elapsed << "s elapsed" << std::endl;
-    depth++;
   }
 
-  return depth;
+  std::cout << "Search stopped" << std::endl;
+  const float seconds_elapsed = seconds_since(info.start_time);
+  std::cout << seconds_elapsed << "s elapsed" << std::endl;
 }
 
-int evaluate_board(const Board &board, const int depth) {
-  Board tmp = board;
-  const int iterative_depth = iterative_deepening(tmp, depth, 5);
-  return alpha_beta(tmp, 0, iterative_depth);
-}
-
-move_t get_best_move(const Board &board, const int depth, const float seconds) {
+move_t get_best_move(SearchInfo &info, const Board &board) {
   perf_counter.clear();
   Board tmp(board);
-  iterative_deepening(tmp, depth, seconds);
+  std::cout << "Starting search to depth " << info.depth << " with "
+            << info.seconds_to_search << " seconds..." << std::endl;
+  iterative_deepening(info, tmp);
 
   const TableEntry entry = transposition_table.query(board.hash());
   std::cout << "The overall best move was: "
             << board.algebraic_notation(entry.best_move) << " with score "
             << eval_to_string(entry.value) << std::endl;
-  perf_counter.dump();
+  // perf_counter.dump();
   const float fail_high_rate =
       static_cast<float>(perf_counter.get_value("AB_cut_beta_move_000")) /
       static_cast<float>(perf_counter.get_value("AB_cut_beta"));

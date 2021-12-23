@@ -49,7 +49,10 @@ bool test_search_set(const std::string &file_name) {
     std::cout << "Best move: " << search_test.best_move << std::endl;
     std::cout << "Avoid move: " << search_test.avoid_move << std::endl;
 
-    const move_t best_move = get_best_move(board, 200, 150.0);
+    SearchInfo info;
+    info.depth = 200;
+    info.seconds_to_search = 150.0;
+    const move_t best_move = get_best_move(info, board);
     const std::string best_move_str = board.algebraic_notation(best_move);
     if (best_move_str == search_test.best_move) {
       std::cout << "Correctly found the best move: " << best_move_str

@@ -27,10 +27,13 @@ const std::string behting = "8/8/7p/3KNN1k/2p4p/8/3P2p1/8 w - - 0 1";
 
 void test_position(const std::string &fen) {
   transposition_table.clear();
-  Board test_board(fen);
-  const move_t best_move = get_best_move(test_board, 20, 60.0);
-  std::cout << test_board << std::endl;
-  std::cout << "Best move is " << test_board.algebraic_notation(best_move)
+  Board board(fen);
+  SearchInfo info;
+  info.depth = 20;
+  info.seconds_to_search = 10.0;
+  const move_t best_move = get_best_move(info, board);
+  std::cout << board << std::endl;
+  std::cout << "Best move is " << board.algebraic_notation(best_move)
             << std::endl;
 }
 
@@ -42,8 +45,6 @@ int main(int argc, char *argv[]) {
   std::cout << "Reading processed opening book took " << (book_ns / 1e9)
             << " seconds" << std::endl;
 
-  test_search_set("tests/search_tests/kaufman.search");
-
   std::string perft_file =
       (argc > 1) ? argv[1] : "tests/perft_files/skip.perft";
   const int test_error = run_tests(perft_file, 6);
@@ -52,10 +53,10 @@ int main(int argc, char *argv[]) {
          "====================================================================="
          "===\n");
 
-  // test_position("6k1/8/8/8/8/2Q2q2/8/K7 w - - 0 1");
-  // test_position("8/8/3n1k2/1p3r2/8/2KQ2b1/4q3/8 w - - 0 1");
-  // test_position(mate_in_5);
-  // test_position(mate_in_6);
-
-  // test_position(behting);
+  test_position("6k1/8/8/8/8/2Q2q2/8/K7 w - - 0 1");
+  test_position("8/8/3n1k2/1p3r2/8/2KQ2b1/4q3/8 w - - 0 1");
+  test_position(mate_in_5);
+  test_position(mate_in_6);
+  test_position(behting);
+  // test_search_set("tests/search_tests/kaufman.search");
 }

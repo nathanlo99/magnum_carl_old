@@ -24,6 +24,9 @@ public:
       if (book_move != 0)
         return book_move;
     }
-    return get_best_move(board, m_depth, m_seconds);
+    SearchInfo info;
+    info.depth = m_depth;
+    info.seconds_to_search = m_seconds;
+    return get_best_move(info, board);
   }
 };
