@@ -6,6 +6,7 @@
 #include "piece_values.hpp"
 #include "square.hpp"
 #include "transposition_table.hpp"
+#include "uci_protocol.hpp"
 
 #include <algorithm>
 #include <functional>
@@ -314,9 +315,17 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
 }
 
 void iterative_deepening(SearchInfo &info, Board &board) {
+  std::stringstream info_ss;
+
+  info_ss << "Searching to depth " << info.depth << " for "
+          << info.seconds_to_search << " seconds";
+  UCIProtocol::send_info(info_ss.str());
+  info_ss.str(std::string());
+
   for (int depth = 1; depth <= info.depth; ++depth) {
-    // std::cout << "Searching to depth " << std::setw(2) << depth << "..."
-    //           << std::endl;
+    info_ss << "Searching to depth " << std::setw(2) << depth << "...";
+    UCIProtocol::send_info(info_ss.str());
+    info_ss.str(std::string());
 
     alpha_beta(info, board, 0, depth, -SCORE_INFINITY, SCORE_INFINITY);
 
@@ -328,6 +337,9 @@ void iterative_deepening(SearchInfo &info, Board &board) {
     std::cout << "score " << eval_to_uci_string(entry.value) << " ";
     std::cout << "depth " << entry.depth << " ";
     std::cout << "nodes " << info.nodes << " ";
+    std::cout << "nps "
+              << static_cast<int>(info.nodes / seconds_since(info.start_time))
+              << " ";
     std::cout << "time "
               << static_cast<int>(1000 * seconds_since(info.start_time)) << " ";
     std::cout << "pv ";
@@ -367,6 +379,9 @@ move_t get_best_move(SearchInfo &info, const Board &board) {
   // std::cout << "fail_high_rate: " << fail_high_rate << std::endl;
   // std::cout << "EV: " << eval_to_string(entry.value) << std::endl;
   // std::cout << "PV: " << get_pv_string(board) << std::endl;
+
+  std::cout << "bestmove " << simple_string_from_move(entry.best_move)
+            << std::endl;
 
   return entry.best_move;
 }

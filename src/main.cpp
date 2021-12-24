@@ -51,22 +51,22 @@ void test_position(const std::string &fen) {
 }
 
 int main(int argc, char *argv[]) {
-  std::cout << "Initializing playchess..." << std::endl;
+  // std::cout << "Initializing playchess..." << std::endl;
   init_hash();
   init_piece_values();
 
   const auto book_ns = timeit(
       [&] { opening_book.read_book("references/book/opening_book.txt"); });
-  std::cout << "Reading processed opening book took " << (book_ns / 1e9)
-            << " seconds" << std::endl;
+  // std::cout << "Reading processed opening book took " << (book_ns / 1e9)
+  //           << " seconds" << std::endl;
 
   std::string perft_file =
       (argc > 1) ? argv[1] : "tests/perft_files/skip.perft";
   const int test_error = run_tests(perft_file, 6);
   ASSERT_MSG(!test_error, "Tests did not complete successfully");
-  printf("Done testing!\n"
-         "====================================================================="
-         "===\n");
+  // printf("Done testing!\n"
+  //        "====================================================================="
+  //        "===\n");
 
   UCIProtocol::start_loop();
 
