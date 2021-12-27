@@ -19,7 +19,7 @@ public:
     m_counters[counter_name] = 0;
   }
   void increment(const std::string &counter_name) noexcept {
-    m_counters[counter_name]++;
+    // m_counters[counter_name]++;
   }
   int get_value(const std::string &counter_name) noexcept {
     return m_counters[counter_name];

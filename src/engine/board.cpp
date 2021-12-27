@@ -451,6 +451,24 @@ bool Board::king_in_check() const noexcept {
   return square_attacked(m_positions[king_piece][0], !m_side_to_move);
 }
 
+constexpr bool Board::insufficient_material() const noexcept {
+  if (m_num_pieces[WHITE_QUEEN] > 0 || m_num_pieces[BLACK_QUEEN] > 0 ||
+      m_num_pieces[WHITE_ROOK] > 0 || m_num_pieces[BLACK_ROOK] > 0)
+    return false;
+  const square_t white_bishop_pos = m_positions[WHITE_BISHOP][0];
+  const square_t black_bishop_pos = m_positions[BLACK_BISHOP][0];
+  const int parity =
+      get_square_col(white_bishop_pos) + get_square_row(white_bishop_pos) +
+      get_square_col(black_bishop_pos) + get_square_row(black_bishop_pos);
+  const bool same_coloured_bishops = parity % 2 == 0;
+  const int lookup = 0x100010111 | (same_coloured_bishops << 0b0101);
+  const int key = ((m_num_pieces[WHITE_KNIGHT] > 0) << 3) |
+                  ((m_num_pieces[WHITE_BISHOP] > 0) << 2) |
+                  ((m_num_pieces[BLACK_KNIGHT] > 0) << 1) |
+                  ((m_num_pieces[BLACK_BISHOP] > 0) << 0);
+  return (lookup >> key) & 1;
+}
+
 bool Board::is_endgame() const noexcept {
   // Return true if neither side has a queen
   if (m_num_pieces[WHITE_QUEEN] == 0 && m_num_pieces[BLACK_QUEEN] == 0)

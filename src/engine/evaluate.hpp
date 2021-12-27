@@ -45,4 +45,4 @@ inline std::string eval_to_uci_string(const int value) {
 }
 
 int static_evaluate_board(const Board &board, const int side);
-move_t get_best_move(SearchInfo &info, const Board &board);
+move_t search(SearchInfo &info, const Board &board);

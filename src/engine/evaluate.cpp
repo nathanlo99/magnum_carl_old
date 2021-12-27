@@ -14,9 +14,9 @@
 #include <iostream>
 
 static bool should_stop(const SearchInfo &info) {
-  if (info.is_stopped || info.has_quit)
+  if (info.is_stopped || info.has_quit.load())
     return true;
-  if (info.time_set && seconds_since(info.start_time) > info.seconds_to_search)
+  if (!info.infinite && seconds_since(info.start_time) > info.seconds_to_search)
     return true;
   return false;
 }
@@ -316,7 +316,6 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
 
 void iterative_deepening(SearchInfo &info, Board &board) {
   std::stringstream info_ss;
-
   info_ss << "Searching to depth " << info.depth << " for "
           << info.seconds_to_search << " seconds";
   UCIProtocol::send_info(info_ss.str());
@@ -331,6 +330,10 @@ void iterative_deepening(SearchInfo &info, Board &board) {
 
     if (info.is_stopped || info.has_quit)
       break;
+
+    // The rest of the loop body is UCI stuff
+    if (!info.send_info)
+      continue;
 
     const TableEntry entry = transposition_table.query(board.hash());
     std::cout << "info ";
@@ -348,40 +351,18 @@ void iterative_deepening(SearchInfo &info, Board &board) {
       std::cout << simple_string_from_move(move) << " ";
     }
     std::cout << std::endl;
-
-    // std::cout << "Done! (" << std::setw(7) << transposition_table.size()
-    //           << " entries, eval = " << eval_to_string(entry.value)
-    //           << ", PV = " << get_pv_string(board) << ")" << std::endl;
-    // const float seconds_elapsed = seconds_since(info.start_time);
-    // std::cout << seconds_elapsed << "s elapsed" << std::endl;
   }
-  //
-  // std::cout << "Search stopped" << std::endl;
-  // const float seconds_elapsed = seconds_since(info.start_time);
-  // std::cout << seconds_elapsed << "s elapsed" << std::endl;
 }
 
-move_t get_best_move(SearchInfo &info, const Board &board) {
+move_t search(SearchInfo &info, const Board &board) {
   perf_counter.clear();
   Board tmp(board);
-  // std::cout << "Starting search to depth " << info.depth << " with "
-  //           << info.seconds_to_search << " seconds..." << std::endl;
   iterative_deepening(info, tmp);
-
   const TableEntry entry = transposition_table.query(board.hash());
-  // std::cout << "The overall best move was: "
-  //           << board.algebraic_notation(entry.best_move) << " with score "
-  //           << eval_to_string(entry.value) << std::endl;
-  // perf_counter.dump();
-  // const float fail_high_rate =
-  //     static_cast<float>(perf_counter.get_value("AB_cut_beta_move_000")) /
-  //     static_cast<float>(perf_counter.get_value("AB_cut_beta"));
-  // std::cout << "fail_high_rate: " << fail_high_rate << std::endl;
-  // std::cout << "EV: " << eval_to_string(entry.value) << std::endl;
-  // std::cout << "PV: " << get_pv_string(board) << std::endl;
 
-  std::cout << "bestmove " << simple_string_from_move(entry.best_move)
-            << std::endl;
-
+  if (info.send_info) {
+    std::cout << "bestmove " << simple_string_from_move(entry.best_move)
+              << std::endl;
+  }
   return entry.best_move;
 }

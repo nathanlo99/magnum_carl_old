@@ -41,10 +41,8 @@ const std::string behting = "8/8/7p/3KNN1k/2p4p/8/3P2p1/8 w - - 0 1";
 void test_position(const std::string &fen) {
   transposition_table.clear();
   Board board(fen);
-  SearchInfo info;
-  info.depth = 20;
-  info.seconds_to_search = 10.0;
-  const move_t best_move = get_best_move(info, board);
+  SearchInfo info(10.0, 20, false);
+  const move_t best_move = search(info, board);
   std::cout << board << std::endl;
   std::cout << "Best move is " << board.algebraic_notation(best_move)
             << std::endl;

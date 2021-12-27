@@ -84,6 +84,7 @@ public:
   std::vector<move_t> pseudo_moves(const int spec = MOVEGEN_ALL) const noexcept;
   std::vector<move_t> legal_moves(const int spec = MOVEGEN_ALL) const noexcept;
   bool has_legal_moves() const noexcept;
+  constexpr bool insufficient_material() const noexcept;
   constexpr inline bool is_repeated() const noexcept {
     return m_position_freq.count(m_hash) > 0;
   }

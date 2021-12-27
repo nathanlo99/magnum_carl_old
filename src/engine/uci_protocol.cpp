@@ -12,6 +12,36 @@
 #include <string>
 #include <thread>
 
+struct SearchThread {
+  Board m_board;
+  SearchInfo m_info;
+  std::thread m_thread;
+
+  SearchThread(const Board &board, const float seconds_to_search,
+               const int depth, const bool infinite, const bool send_info)
+      : m_board(board), m_info(seconds_to_search, depth, infinite, send_info) {
+    m_thread = std::thread(search, std::ref(m_info), m_board);
+  }
+
+  inline void stop() { m_info.has_quit.store(true); }
+  inline void join() {
+    stop();
+    m_thread.join();
+  }
+};
+
+std::vector<SearchThread> search_threads;
+
+void ponder(const Board &board) {
+  search_threads.emplace_back(board, 0, 100, true, false);
+}
+
+void stop_all() {
+  for (auto &thread : search_threads)
+    thread.join();
+  search_threads.clear();
+}
+
 namespace UCIProtocol {
 
 void send_info(const std::string &str) {
@@ -26,15 +56,15 @@ void send_identity() {
 
 // go depth 6 wtime 180000 time 180000 binc 1000 winc 1000 movetime 1000
 // movestogo 40
-SearchInfo process_go_command(const std::vector<std::string> &tokens,
-                              const Board &board) {
-  SearchInfo info;
-  int depth = 10000;
-  int moves_to_go = 30;
-  int move_time = -1;
+void process_go_command(const std::vector<std::string> &tokens,
+                        const Board &board) {
+  int depth = 100;
+  int moves_to_go =
+      board.is_endgame() ? 20 : std::max(30u, 80 - board.m_half_move);
   int remaining_time = -1;
   int increment = 0;
-  info.time_set = false;
+  bool infinite = true;
+  int move_time = -1;
   const int side = board.m_side_to_move;
 
   size_t token_idx = 1;
@@ -86,23 +116,15 @@ SearchInfo process_go_command(const std::vector<std::string> &tokens,
   send_info(ss.str());
 
   if (move_time != -1) {
-    remaining_time = move_time;
-    moves_to_go = 1;
-  }
-
-  info.depth = depth;
-
-  if (remaining_time != -1) {
-    info.time_set = true;
+    // If the go command provides a search time, just run with that
+    search_threads.emplace_back(board, move_time / 1000.0, depth, false, true);
+  } else if (remaining_time != -1) {
     const int move_time_in_ms = remaining_time / moves_to_go;
-    info.seconds_to_search = (move_time_in_ms + increment) / 1000.0;
+    const float seconds_to_search = (move_time_in_ms + increment) / 1000.0;
+    search_threads.emplace_back(board, seconds_to_search, depth, false, true);
+  } else {
+    search_threads.emplace_back(board, 0, depth, true, true);
   }
-
-  // std::cout << "time: " << info.seconds_to_search << ", depth: " <<
-  // info.depth << ", timeset: " << info.time_set << std::endl;
-
-  info.start_time = now();
-  return info;
 }
 
 // position fen
@@ -133,52 +155,41 @@ Board parse_position_command(const std::string &line) {
 }
 
 void start_loop() {
-
   std::cin.setf(std::ios::unitbuf);
   std::cout.setf(std::ios::unitbuf);
 
-  // send_identity();
-
   Board board;
-  SearchInfo info;
   transposition_table.clear();
-  std::vector<std::thread> search_threads;
+  bool quit = false;
 
   std::string line;
-  while (!info.has_quit) {
+  while (!quit) {
     if (!std::getline(std::cin, line) || line[0] == '\n')
       continue;
     send_info("Received command: [" + line + "]");
     const std::vector<std::string> tokens = split(line, " ");
     if (tokens[0] == "isready") {
       std::cout << "readyok" << std::endl;
+
     } else if (tokens[0] == "position") {
       board = parse_position_command(line);
+
     } else if (tokens[0] == "ucinewgame") {
       board = Board();
+
     } else if (tokens[0] == "go") {
-      send_info("Waiting for search threads to complete...");
-      for (auto &thread : search_threads)
-        thread.join();
-      search_threads.clear();
-      send_info("All search threads are complete");
-      info = process_go_command(tokens, board);
-      search_threads.push_back(
-          std::thread(get_best_move, std::ref(info), board));
+      stop_all();
+      process_go_command(tokens, board); // Spawns a search thread
       send_info("There are " + std::to_string(search_threads.size()) +
                 " search threads");
     } else if (tokens[0] == "quit") {
-      info.has_quit = true;
-      for (auto &thread : search_threads)
-        thread.join();
-      search_threads.clear();
+      stop_all();
+      break;
+
     } else if (tokens[0] == "uci") {
       send_identity();
     } else if (tokens[0] == "stop") {
-      info.is_stopped = true;
-      for (auto &thread : search_threads)
-        thread.join();
-      search_threads.clear();
+      stop_all();
     } else {
       // std::cout << "unrecognized command/option " << tokens[0] << " in line "
       //           << std::endl;
