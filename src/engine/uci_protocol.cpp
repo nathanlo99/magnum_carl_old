@@ -1,4 +1,5 @@
 
+#include "uci_protocol.hpp"
 #include "board.hpp"
 #include "evaluate.hpp"
 #include "move.hpp"
@@ -12,31 +13,16 @@
 #include <string>
 #include <thread>
 
-struct SearchThread {
-  Board m_board;
-  SearchInfo m_info;
-  std::thread m_thread;
-
-  SearchThread(const Board &board, const float seconds_to_search,
-               const int depth, const bool infinite, const bool send_info)
-      : m_board(board), m_info(seconds_to_search, depth, infinite, send_info) {
-    m_thread = std::thread(search, std::ref(m_info), m_board);
-  }
-
-  inline void stop() { m_info.has_quit.store(true); }
-  inline void join() {
-    stop();
-    m_thread.join();
-  }
-};
-
 std::vector<SearchThread> search_threads;
+std::mutex search_threads_mutex;
 
 void ponder(const Board &board) {
+  std::lock_guard<std::mutex> guard(search_threads_mutex);
   search_threads.emplace_back(board, 0, 100, true, false);
 }
 
 void stop_all() {
+  std::lock_guard<std::mutex> guard(search_threads_mutex);
   for (auto &thread : search_threads)
     thread.join();
   search_threads.clear();
@@ -115,6 +101,7 @@ void process_go_command(const std::vector<std::string> &tokens,
      << ", increment: " << increment << ", movestogo: " << moves_to_go << "]";
   send_info(ss.str());
 
+  std::lock_guard<std::mutex> guard(search_threads_mutex);
   if (move_time != -1) {
     // If the go command provides a search time, just run with that
     search_threads.emplace_back(board, move_time / 1000.0, depth, false, true);
@@ -180,6 +167,7 @@ void start_loop() {
     } else if (tokens[0] == "go") {
       stop_all();
       process_go_command(tokens, board); // Spawns a search thread
+      std::lock_guard<std::mutex> guard(search_threads_mutex);
       send_info("There are " + std::to_string(search_threads.size()) +
                 " search threads");
     } else if (tokens[0] == "quit") {
