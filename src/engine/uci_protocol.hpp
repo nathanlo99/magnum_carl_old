@@ -12,16 +12,16 @@
 
 struct SearchThread {
   Board m_board;
-  SearchInfo m_info;
+  std::unique_ptr<SearchInfo> m_info;
   std::thread m_thread;
 
   SearchThread(const Board &board, const float seconds_to_search,
-               const int depth, const bool infinite, const bool send_info)
-      : m_board(board), m_info(seconds_to_search, depth, infinite, send_info) {
-    m_thread = std::thread(search, std::ref(m_info), m_board);
-  }
+               const int depth, const bool infinite, const bool send_info);
 
-  inline void stop() { m_info.has_quit.store(true); }
+  inline void stop() {
+    if (m_info)
+      m_info->has_quit.store(true);
+  }
   inline void join() {
     stop();
     m_thread.join();
@@ -30,6 +30,8 @@ struct SearchThread {
 
 extern std::vector<SearchThread> search_threads;
 extern std::mutex search_threads_mutex;
+
+void remove_thread(const std::thread::id id);
 
 namespace UCIProtocol {
 

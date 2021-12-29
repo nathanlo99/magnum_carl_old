@@ -7,6 +7,7 @@
 #include "transposition_table.hpp"
 #include "util.hpp"
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -15,6 +16,28 @@
 
 std::vector<SearchThread> search_threads;
 std::mutex search_threads_mutex;
+
+SearchThread::SearchThread(const Board &board, const float seconds_to_search,
+                           const int depth, const bool infinite,
+                           const bool send_info)
+    : m_board(board), m_info(std::make_unique<SearchInfo>(
+                          seconds_to_search, depth, infinite, send_info)) {
+  m_thread = std::thread([&]() {
+    search(*m_info, m_board);
+    std::thread(remove_thread, m_thread.get_id()).detach();
+  });
+}
+
+void remove_thread(const std::thread::id id) {
+  std::lock_guard<std::mutex> guard(search_threads_mutex);
+  const auto it =
+      std::find_if(search_threads.begin(), search_threads.end(),
+                   [=](SearchThread &t) { return t.m_thread.get_id() == id; });
+  if (it != search_threads.end()) {
+    it->m_thread.detach();
+    search_threads.erase(it);
+  }
+}
 
 void ponder(const Board &board) {
   std::lock_guard<std::mutex> guard(search_threads_mutex);
