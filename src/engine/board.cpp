@@ -724,6 +724,56 @@ void Board::unmake_move() noexcept {
        "==============");
 }
 
+void Board::make_null_move() noexcept {
+  validate_board();
+  ASSERT(!king_in_check());
+
+  INFO("======================================================================="
+       "==============");
+  INFO("Making null move");
+
+  // Bookkeeping
+  history_t entry;
+  entry.move = NULL_MOVE;
+  entry.castle_state = m_castle_state;
+  entry.en_passant = m_en_passant;
+  entry.fifty_move = m_fifty_move;
+  entry.hash = m_hash;
+  m_history.push_back(entry);
+  m_position_freq.insert(entry.hash);
+
+  set_en_passant(INVALID_SQUARE);
+  m_half_move++;
+  m_fifty_move++;
+
+  switch_colours();
+
+  validate_board();
+}
+
+void Board::unmake_null_move() noexcept {
+  validate_board();
+
+  m_half_move--;
+  m_fifty_move--;
+
+  const history_t entry = m_history.back();
+  m_history.pop_back();
+  const move_t move = entry.move;
+  ASSERT_MSG(move == NULL_MOVE,
+             "Unmaking null move when previous move was not null");
+  const hash_t last_hash = entry.hash;
+  set_en_passant(entry.en_passant);
+  // We have to beat around the bush a little to avoid removing _all_ instances
+  // of the position and to instead only remove one of them.
+  m_position_freq.erase(m_position_freq.find(entry.hash));
+  switch_colours();
+
+  ASSERT_MSG(m_hash == last_hash, "Hash did not match history entry's hash");
+
+  validate_board();
+}
+
 // Algebraic notation for a move
 std::string Board::algebraic_notation(const move_t move) const {
   if (move_flag(move) == SHORT_CASTLE_MOVE)

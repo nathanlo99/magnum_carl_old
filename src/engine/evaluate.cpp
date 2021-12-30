@@ -13,6 +13,8 @@
 #include <iomanip>
 #include <iostream>
 
+#define NULL_MOVE_R 3
+
 static bool should_stop(const SearchInfo &info) {
   if (info.is_stopped || info.has_quit.load())
     return true;
@@ -135,8 +137,7 @@ int static_evaluate_board(const Board &board, const int side) {
       }
     }
   }
-  const int final_result = (side == WHITE) ? white_eval : -white_eval;
-  return final_result;
+  return (side == WHITE) ? white_eval : -white_eval;
 }
 
 inline std::string to_string(const int num, const int num_digits) {
@@ -214,8 +215,8 @@ int negamax(SearchInfo &info, Board &board, const int ply, const int depth) {
   return best_score;
 }
 
-int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
-               int alpha, int beta) {
+int alpha_beta(SearchInfo &info, Board &board, const int ply, int depth,
+               int alpha, int beta, bool do_null_move) {
   perf_counter.increment("AB");
   ASSERT_MSG(alpha <= beta, "alpha_beta range (%d - %d) is empty", alpha, beta);
 
@@ -243,6 +244,25 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
     }
   }
 
+  if (board.king_in_check()) {
+    depth++;
+  } else {
+    if (do_null_move && ply > 0 && depth >= 1 + NULL_MOVE_R &&
+        board.has_major_pieces(board.m_side_to_move)) {
+      // Do null move pruning
+      board.make_null_move();
+      const int value =
+          -alpha_beta(info, board, ply + 1, depth - 1 - NULL_MOVE_R, -beta,
+                      -beta + 1, false);
+      board.unmake_null_move();
+
+      if (info.is_stopped || info.has_quit.load())
+        return 0;
+      if (value >= beta)
+        return beta;
+    }
+  }
+
   // if (ply > 1) {
   //   std::cout << "AB " << std::setw(16) << std::setfill('0') << std::hex
   //             << board.hash() << std::dec << "\t\t";
@@ -254,7 +274,7 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
   // Get the move-ordered legal moves and check for game termination cases
   if (!board.has_legal_moves()) {
     return board.king_in_check() ? -mate_in(ply) : 0;
-  } else if (board.is_drawn() || board.is_repeated()) {
+  } else if (ply > 0 && (board.is_drawn() || board.is_repeated())) {
     return 0;
   } else if (depth <= 0) {
     // If we've reached the search depth, perform quiescence_search instead
@@ -287,7 +307,7 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
   for (const move_t next_move : legal_moves) {
     board.make_move(next_move);
     const int value =
-        -alpha_beta(info, board, ply + 1, depth - 1, -beta, -alpha);
+        -alpha_beta(info, board, ply + 1, depth - 1, -beta, -alpha, true);
     board.unmake_move();
 
     if (info.is_stopped || info.has_quit)
@@ -322,8 +342,7 @@ void iterative_deepening(SearchInfo &info, Board &board) {
   info_ss.str(std::string());
 
   for (int depth = 1; depth <= info.depth; ++depth) {
-
-    alpha_beta(info, board, 0, depth, -SCORE_INFINITY, SCORE_INFINITY);
+    alpha_beta(info, board, 0, depth, -SCORE_INFINITY, SCORE_INFINITY, true);
 
     if (info.is_stopped || info.has_quit)
       break;
