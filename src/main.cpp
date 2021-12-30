@@ -41,32 +41,30 @@ const std::string behting = "8/8/7p/3KNN1k/2p4p/8/3P2p1/8 w - - 0 1";
 void test_position(const std::string &fen) {
   transposition_table.clear();
   Board board(fen);
-  SearchInfo info;
-  info.depth = 20;
-  info.seconds_to_search = 10.0;
-  const move_t best_move = get_best_move(info, board);
+  SearchInfo info(10.0, 20, false);
+  const move_t best_move = search(info, board);
   std::cout << board << std::endl;
   std::cout << "Best move is " << board.algebraic_notation(best_move)
             << std::endl;
 }
 
 int main(int argc, char *argv[]) {
-  std::cout << "Initializing playchess..." << std::endl;
+  // std::cout << "Initializing playchess..." << std::endl;
   init_hash();
   init_piece_values();
 
   const auto book_ns = timeit(
       [&] { opening_book.read_book("references/book/opening_book.txt"); });
-  std::cout << "Reading processed opening book took " << (book_ns / 1e9)
-            << " seconds" << std::endl;
+  // std::cout << "Reading processed opening book took " << (book_ns / 1e9)
+  //           << " seconds" << std::endl;
 
   std::string perft_file =
       (argc > 1) ? argv[1] : "tests/perft_files/skip.perft";
   const int test_error = run_tests(perft_file, 6);
   ASSERT_MSG(!test_error, "Tests did not complete successfully");
-  printf("Done testing!\n"
-         "====================================================================="
-         "===\n");
+  // printf("Done testing!\n"
+  //        "====================================================================="
+  //        "===\n");
 
   UCIProtocol::start_loop();
 

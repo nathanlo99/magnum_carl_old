@@ -6,16 +6,19 @@
 #include "piece_values.hpp"
 #include "square.hpp"
 #include "transposition_table.hpp"
+#include "uci_protocol.hpp"
 
 #include <algorithm>
 #include <functional>
 #include <iomanip>
 #include <iostream>
 
+#define NULL_MOVE_R 3
+
 static bool should_stop(const SearchInfo &info) {
-  if (info.is_stopped || info.has_quit)
+  if (info.is_stopped || info.has_quit.load())
     return true;
-  if (info.time_set && seconds_since(info.start_time) > info.seconds_to_search)
+  if (!info.infinite && seconds_since(info.start_time) > info.seconds_to_search)
     return true;
   return false;
 }
@@ -134,8 +137,7 @@ int static_evaluate_board(const Board &board, const int side) {
       }
     }
   }
-  const int final_result = (side == WHITE) ? white_eval : -white_eval;
-  return final_result;
+  return (side == WHITE) ? white_eval : -white_eval;
 }
 
 inline std::string to_string(const int num, const int num_digits) {
@@ -213,8 +215,8 @@ int negamax(SearchInfo &info, Board &board, const int ply, const int depth) {
   return best_score;
 }
 
-int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
-               int alpha, int beta) {
+int alpha_beta(SearchInfo &info, Board &board, const int ply, int depth,
+               int alpha, int beta, bool do_null_move) {
   perf_counter.increment("AB");
   ASSERT_MSG(alpha <= beta, "alpha_beta range (%d - %d) is empty", alpha, beta);
 
@@ -242,6 +244,25 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
     }
   }
 
+  if (board.king_in_check()) {
+    depth++;
+  } else {
+    if (do_null_move && ply > 0 && depth >= 1 + NULL_MOVE_R &&
+        board.has_major_pieces(board.m_side_to_move)) {
+      // Do null move pruning
+      board.make_null_move();
+      const int value =
+          -alpha_beta(info, board, ply + 1, depth - 1 - NULL_MOVE_R, -beta,
+                      -beta + 1, false);
+      board.unmake_null_move();
+
+      if (info.is_stopped || info.has_quit.load())
+        return 0;
+      if (value >= beta)
+        return beta;
+    }
+  }
+
   // if (ply > 1) {
   //   std::cout << "AB " << std::setw(16) << std::setfill('0') << std::hex
   //             << board.hash() << std::dec << "\t\t";
@@ -253,7 +274,7 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
   // Get the move-ordered legal moves and check for game termination cases
   if (!board.has_legal_moves()) {
     return board.king_in_check() ? -mate_in(ply) : 0;
-  } else if (board.is_drawn() || board.is_repeated()) {
+  } else if (ply > 0 && (board.is_drawn() || board.is_repeated())) {
     return 0;
   } else if (depth <= 0) {
     // If we've reached the search depth, perform quiescence_search instead
@@ -286,7 +307,7 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
   for (const move_t next_move : legal_moves) {
     board.make_move(next_move);
     const int value =
-        -alpha_beta(info, board, ply + 1, depth - 1, -beta, -alpha);
+        -alpha_beta(info, board, ply + 1, depth - 1, -beta, -alpha, true);
     board.unmake_move();
 
     if (info.is_stopped || info.has_quit)
@@ -314,20 +335,30 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, const int depth,
 }
 
 void iterative_deepening(SearchInfo &info, Board &board) {
-  for (int depth = 1; depth <= info.depth; ++depth) {
-    // std::cout << "Searching to depth " << std::setw(2) << depth << "..."
-    //           << std::endl;
+  std::stringstream info_ss;
+  info_ss << "Searching to depth " << info.depth << " for "
+          << info.seconds_to_search << " seconds";
+  UCIProtocol::send_info(info_ss.str());
+  info_ss.str(std::string());
 
-    alpha_beta(info, board, 0, depth, -SCORE_INFINITY, SCORE_INFINITY);
+  for (int depth = 1; depth <= info.depth; ++depth) {
+    alpha_beta(info, board, 0, depth, -SCORE_INFINITY, SCORE_INFINITY, true);
 
     if (info.is_stopped || info.has_quit)
       break;
+
+    // The rest of the loop body is UCI stuff
+    if (!info.send_info)
+      continue;
 
     const TableEntry entry = transposition_table.query(board.hash());
     std::cout << "info ";
     std::cout << "score " << eval_to_uci_string(entry.value) << " ";
     std::cout << "depth " << entry.depth << " ";
     std::cout << "nodes " << info.nodes << " ";
+    std::cout << "nps "
+              << static_cast<int>(info.nodes / seconds_since(info.start_time))
+              << " ";
     std::cout << "time "
               << static_cast<int>(1000 * seconds_since(info.start_time)) << " ";
     std::cout << "pv ";
@@ -336,37 +367,19 @@ void iterative_deepening(SearchInfo &info, Board &board) {
       std::cout << simple_string_from_move(move) << " ";
     }
     std::cout << std::endl;
-
-    // std::cout << "Done! (" << std::setw(7) << transposition_table.size()
-    //           << " entries, eval = " << eval_to_string(entry.value)
-    //           << ", PV = " << get_pv_string(board) << ")" << std::endl;
-    // const float seconds_elapsed = seconds_since(info.start_time);
-    // std::cout << seconds_elapsed << "s elapsed" << std::endl;
   }
-  //
-  // std::cout << "Search stopped" << std::endl;
-  // const float seconds_elapsed = seconds_since(info.start_time);
-  // std::cout << seconds_elapsed << "s elapsed" << std::endl;
 }
 
-move_t get_best_move(SearchInfo &info, const Board &board) {
+move_t search(SearchInfo &info, const Board &board) {
   perf_counter.clear();
   Board tmp(board);
-  // std::cout << "Starting search to depth " << info.depth << " with "
-  //           << info.seconds_to_search << " seconds..." << std::endl;
   iterative_deepening(info, tmp);
-
   const TableEntry entry = transposition_table.query(board.hash());
-  // std::cout << "The overall best move was: "
-  //           << board.algebraic_notation(entry.best_move) << " with score "
-  //           << eval_to_string(entry.value) << std::endl;
-  // perf_counter.dump();
-  // const float fail_high_rate =
-  //     static_cast<float>(perf_counter.get_value("AB_cut_beta_move_000")) /
-  //     static_cast<float>(perf_counter.get_value("AB_cut_beta"));
-  // std::cout << "fail_high_rate: " << fail_high_rate << std::endl;
-  // std::cout << "EV: " << eval_to_string(entry.value) << std::endl;
-  // std::cout << "PV: " << get_pv_string(board) << std::endl;
 
+  if (info.send_info) {
+    const move_t best_move =
+        entry.best_move ? entry.best_move : get_sorted_legal_moves(board)[0];
+    std::cout << "bestmove " << simple_string_from_move(best_move) << std::endl;
+  }
   return entry.best_move;
 }

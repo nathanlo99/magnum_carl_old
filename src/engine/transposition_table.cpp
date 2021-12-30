@@ -77,10 +77,8 @@ std::vector<move_t> get_pv(const Board &board) {
     const move_t pv_move = entry.best_move;
     tmp.make_move(pv_move);
     result.push_back(pv_move);
-    if (seen.count(tmp.hash()) > 0) {
-      result.push_back(0);
+    if (seen.count(tmp.hash()) > 0)
       break;
-    }
     seen.insert(tmp.hash());
   }
   return result;
@@ -92,13 +90,7 @@ std::string get_pv_string(const Board &board) {
   std::stringstream result;
   for (size_t i = 0; i < pv_moves.size(); ++i) {
     const move_t move = pv_moves[i];
-    if (move == 0) {
-      ASSERT(i + 1 == pv_moves.size());
-      result << "...";
-      break;
-    } else {
-      result << tmp.algebraic_notation(move);
-    }
+    result << tmp.algebraic_notation(move);
     tmp.make_move(move);
     if (i + 1 < pv_moves.size())
       result << ", ";

@@ -10,7 +10,6 @@ OpeningBook opening_book;
 void OpeningBook::convert_game_list(const std::string &file_name,
                                     const std::string &out_file_name) {
 
-  std::cout << "Loading games from '" << file_name << "'..." << std::endl;
   std::ifstream in(file_name, std::ifstream::in);
   std::ofstream out(out_file_name, std::ofstream::out);
 
@@ -57,7 +56,7 @@ void OpeningBook::convert_game_list(const std::string &file_name,
 }
 
 void OpeningBook::read_book(const std::string &file_name) {
-  std::cout << "Loading book from '" << file_name << "'..." << std::endl;
+  // std::cout << "Loading book from '" << file_name << "'..." << std::endl;
   std::ifstream in_file(file_name, std::ifstream::in);
 
   std::string fen, moves;
@@ -74,8 +73,9 @@ void OpeningBook::read_book(const std::string &file_name) {
       m_book[hash].push_back(move);
     }
   }
-  std::cout << "Catalogued " << m_book.size() << " positions into opening book"
-            << std::endl;
+  // std::cout << "Catalogued " << m_book.size() << " positions into opening
+  // book"
+  //           << std::endl;
 }
 
 std::vector<move_t> OpeningBook::query_all(const Board &board) const {

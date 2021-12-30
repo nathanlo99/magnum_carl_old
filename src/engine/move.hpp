@@ -10,6 +10,8 @@
 #include "board.hpp"
 #include "types.hpp"
 
+#define NULL_MOVE 1
+
 /*
 MOVE:
 - from square - 8 bits

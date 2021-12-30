@@ -2,6 +2,7 @@
 #pragma once
 
 #include "timeit.hpp"
+#include <atomic>
 #include <chrono>
 
 struct SearchInfo {
@@ -14,17 +15,21 @@ struct SearchInfo {
   using time_t = std::chrono::time_point<std::chrono::high_resolution_clock>;
   time_t start_time;                   // The start time, as a time point
   float seconds_to_search = 1000000.0; // Number of seconds to search
-
-  int depth = 10000;   // Maximum depth to search
-  int time_set = true; // Whether a maximum time is set
-
-  int moves_to_go = 0;   // Moves to go until the next time control
-  bool infinite = false; // True if we are searching infinitely
+  int depth = 100;                     // Maximum depth to search
+  bool infinite = false;               // True if we are searching infinitely
+  bool send_info = false;
 
   long nodes = 0; // Number of nodes searched so far
 
-  bool has_quit = false;   // Received a quit interrupt
-  bool is_stopped = false; // Stop for any reason
+  std::atomic<bool> has_quit = false; // Received a quit interrupt from UCI
+  bool is_stopped = false;            // Stopped search for any reason
 
   SearchInfo() : start_time(now()) {}
+  SearchInfo(const float seconds_to_search, const int depth,
+             const bool infinite, const bool send_info = true)
+      : start_time(now()), seconds_to_search(seconds_to_search), depth(depth),
+        infinite(infinite), send_info(send_info), has_quit(false),
+        is_stopped(false) {}
+  SearchInfo(const SearchInfo &other)
+      : SearchInfo(other.seconds_to_search, other.depth, other.infinite) {}
 };

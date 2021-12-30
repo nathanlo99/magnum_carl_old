@@ -84,6 +84,14 @@ public:
   std::vector<move_t> pseudo_moves(const int spec = MOVEGEN_ALL) const noexcept;
   std::vector<move_t> legal_moves(const int spec = MOVEGEN_ALL) const noexcept;
   bool has_legal_moves() const noexcept;
+
+  constexpr bool has_major_pieces(const int side) const noexcept {
+    const piece_t rook = (side == WHITE) ? WHITE_ROOK : BLACK_ROOK;
+    const piece_t queen = (side == WHITE) ? WHITE_QUEEN : BLACK_QUEEN;
+    return m_num_pieces[rook] + m_num_pieces[queen] > 0;
+  }
+
+  constexpr bool insufficient_material() const noexcept;
   constexpr inline bool is_repeated() const noexcept {
     return m_position_freq.count(m_hash) > 0;
   }
@@ -107,6 +115,8 @@ public:
   inline void switch_colours() noexcept;
   bool make_move(const move_t move) noexcept;
   void unmake_move() noexcept;
+  void make_null_move() noexcept;
+  void unmake_null_move() noexcept;
 
   std::string algebraic_notation(const move_t move) const;
 };

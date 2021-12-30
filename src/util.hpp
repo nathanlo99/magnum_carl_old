@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-static std::vector<std::string> split(std::string text,
-                                      const std::string &pattern) {
+static inline std::vector<std::string> split(std::string text,
+                                             const std::string &pattern) {
   size_t pos = 0;
   std::vector<std::string> result;
   while ((pos = text.find(pattern)) != std::string::npos) {
