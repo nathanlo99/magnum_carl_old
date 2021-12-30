@@ -322,9 +322,6 @@ void iterative_deepening(SearchInfo &info, Board &board) {
   info_ss.str(std::string());
 
   for (int depth = 1; depth <= info.depth; ++depth) {
-    info_ss << "Searching to depth " << std::setw(2) << depth << "...";
-    UCIProtocol::send_info(info_ss.str());
-    info_ss.str(std::string());
 
     alpha_beta(info, board, 0, depth, -SCORE_INFINITY, SCORE_INFINITY);
 
@@ -361,8 +358,9 @@ move_t search(SearchInfo &info, const Board &board) {
   const TableEntry entry = transposition_table.query(board.hash());
 
   if (info.send_info) {
-    std::cout << "bestmove " << simple_string_from_move(entry.best_move)
-              << std::endl;
+    const move_t best_move =
+        entry.best_move ? entry.best_move : get_sorted_legal_moves(board)[0];
+    std::cout << "bestmove " << simple_string_from_move(best_move) << std::endl;
   }
   return entry.best_move;
 }

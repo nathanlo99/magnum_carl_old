@@ -68,8 +68,7 @@ void send_identity() {
 void process_go_command(const std::vector<std::string> &tokens,
                         const Board &board) {
   int depth = 100;
-  int moves_to_go =
-      board.is_endgame() ? 20 : std::max(30u, 80 - board.m_half_move);
+  int moves_to_go = 30;
   int remaining_time = -1;
   int increment = 0;
   bool infinite = true;
@@ -129,8 +128,9 @@ void process_go_command(const std::vector<std::string> &tokens,
     // If the go command provides a search time, just run with that
     search_threads.emplace_back(board, move_time / 1000.0, depth, false, true);
   } else if (remaining_time != -1) {
-    const int move_time_in_ms = remaining_time / moves_to_go;
-    const float seconds_to_search = (move_time_in_ms + increment) / 1000.0;
+    const int move_time_in_ms = (remaining_time - 5000) / moves_to_go;
+    float seconds_to_search = (move_time_in_ms + increment / 2) / 1000.0;
+    seconds_to_search = std::max(0.05f, seconds_to_search - 0.03f);
     search_threads.emplace_back(board, seconds_to_search, depth, false, true);
   } else {
     search_threads.emplace_back(board, 0, depth, true, true);
