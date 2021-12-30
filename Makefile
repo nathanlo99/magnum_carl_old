@@ -12,7 +12,7 @@ SRC_PATH = src
 # Space-separated pkg-config libraries used by this project
 LIBS =
 # General compiler flags
-COMPILE_FLAGS = -DLUT_PIECE -std=c++17 -Wall -Wextra -Werror -pedantic -Wno-type-limits -Wno-unused-variable -Wno-unused-parameter
+COMPILE_FLAGS = -DLUT_PIECE -std=c++20 -Wall -Wextra -Werror -pedantic -Wno-type-limits -Wno-unused-variable -Wno-unused-parameter
 # Additional release-specific flags
 RCOMPILE_FLAGS = -Ofast -ffast-math -fwrapv -funroll-loops -DINVISIBLE_ASSERTS -g
 # Additional debug-specific flags

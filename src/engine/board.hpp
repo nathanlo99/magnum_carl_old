@@ -51,7 +51,6 @@ struct Board {
   unsigned int m_half_move;
   hash_t m_hash;
   std::vector<history_t> m_history;
-  std::unordered_multiset<hash_t> m_position_freq;
 
   hash_t compute_hash() const noexcept;
   void validate_board() const noexcept;
@@ -92,15 +91,19 @@ public:
   }
 
   constexpr bool insufficient_material() const noexcept;
+  constexpr inline int count_repetitions() const noexcept {
+    int result = 0;
+    for (size_t idx = m_half_move - m_fifty_move; idx < m_half_move; ++idx) {
+      if (m_history[idx].hash == m_hash)
+        result++;
+    }
+    return result;
+  }
   constexpr inline bool is_repeated() const noexcept {
-    return m_position_freq.count(m_hash) > 0;
+    return count_repetitions() > 0;
   }
   constexpr inline bool is_three_fold() const noexcept {
-    // Since the position frequency map is updated with a given position only
-    // when that position is _played on_, if we reach a position with frequency
-    // two, it has appeared twice, not counting the current board state, which
-    // is a threefold repetition.
-    return m_position_freq.count(m_hash) >= 2;
+    return count_repetitions() >= 2;
   }
   constexpr inline bool is_drawn() const noexcept {
     return m_fifty_move >= 100 || is_three_fold();

@@ -16,7 +16,7 @@
 #define NULL_MOVE_R 3
 
 static bool should_stop(const SearchInfo &info) {
-  if (info.is_stopped || info.has_quit.load())
+  if (info.is_stopped || info.has_quit) [[unlikely]]
     return true;
   if (!info.infinite && seconds_since(info.start_time) > info.seconds_to_search)
     return true;
@@ -62,7 +62,7 @@ int evaluate_move(Board &board, const TableEntry entry, const move_t move) {
     value += 10000;
 
   // PV move gets +20000
-  if (move == entry.best_move)
+  if (move == entry.best_move) [[unlikely]]
     value += 20000;
 
   return value;
@@ -156,7 +156,8 @@ int quiescence_search(SearchInfo &info, Board &board, const int ply,
   // std::cout << std::setw(10) << std::setfill(' ') << alpha << ", "
   //           << std::setw(10) << std::setfill(' ') << beta << std::endl;
 
-  if (info.nodes % SearchInfo::refresh_frequency == 0 && should_stop(info)) {
+  if (info.nodes % SearchInfo::refresh_frequency == 0 && should_stop(info))
+      [[unlikely]] {
     info.is_stopped = true;
     return 0;
   }
@@ -164,7 +165,7 @@ int quiescence_search(SearchInfo &info, Board &board, const int ply,
   info.nodes++;
 
   if (!board.has_legal_moves()) {
-    return board.king_in_check() ? -MATE + ply * MATE_OFFSET : 0;
+    return board.king_in_check() ? -mate_in(ply) : 0;
   } else if (board.is_drawn() || board.is_repeated()) {
     return 0;
   }
@@ -172,13 +173,10 @@ int quiescence_search(SearchInfo &info, Board &board, const int ply,
   const int stand_pat_eval = static_evaluate_board(board, board.m_side_to_move);
   if (stand_pat_eval >= beta)
     return stand_pat_eval;
+  alpha = std::max(alpha, stand_pat_eval);
 
   auto legal_captures =
       board.legal_moves(MOVEGEN_CAPTURES | MOVEGEN_PROMOTIONS);
-  if (legal_captures.empty())
-    return stand_pat_eval;
-
-  alpha = std::max(alpha, stand_pat_eval);
 
   order_moves(board, legal_captures);
   for (const move_t next_move : legal_captures) {
@@ -186,7 +184,7 @@ int quiescence_search(SearchInfo &info, Board &board, const int ply,
     const int value = -quiescence_search(info, board, ply + 1, -beta, -alpha);
     board.unmake_move();
 
-    if (info.is_stopped || info.has_quit)
+    if (info.is_stopped) [[unlikely]]
       return 0;
     if (value >= beta)
       return value;
@@ -220,7 +218,8 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, int depth,
   perf_counter.increment("AB");
   ASSERT_MSG(alpha <= beta, "alpha_beta range (%d - %d) is empty", alpha, beta);
 
-  if (info.nodes % SearchInfo::refresh_frequency == 0 && should_stop(info)) {
+  if (info.nodes % SearchInfo::refresh_frequency == 0 && should_stop(info))
+      [[unlikely]] {
     info.is_stopped = true;
     return 0;
   }
@@ -256,7 +255,7 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, int depth,
                       -beta + 1, false);
       board.unmake_null_move();
 
-      if (info.is_stopped || info.has_quit.load())
+      if (info.is_stopped) [[unlikely]]
         return 0;
       if (value >= beta)
         return beta;
@@ -310,7 +309,7 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, int depth,
         -alpha_beta(info, board, ply + 1, depth - 1, -beta, -alpha, true);
     board.unmake_move();
 
-    if (info.is_stopped || info.has_quit)
+    if (info.is_stopped) [[unlikely]]
       return 0;
 
     if (value >= beta) {
@@ -344,7 +343,7 @@ void iterative_deepening(SearchInfo &info, Board &board) {
   for (int depth = 1; depth <= info.depth; ++depth) {
     alpha_beta(info, board, 0, depth, -SCORE_INFINITY, SCORE_INFINITY, true);
 
-    if (info.is_stopped || info.has_quit)
+    if (info.is_stopped) [[unlikely]]
       break;
 
     // The rest of the loop body is UCI stuff

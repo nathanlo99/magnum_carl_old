@@ -10,7 +10,7 @@ struct SearchInfo {
   // nodes in our search. This should be small enough so we don't waste time
   // finding the current time every node, but large enough that it does not lead
   // to a significant lag in responding to GUI commands
-  static const int refresh_frequency = 1 << 16;
+  static const int refresh_frequency = 1024;
 
   using time_t = std::chrono::time_point<std::chrono::high_resolution_clock>;
   time_t start_time;                   // The start time, as a time point

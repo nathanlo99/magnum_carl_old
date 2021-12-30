@@ -201,22 +201,6 @@ void Board::validate_board() const noexcept {
   ASSERT_MSG(!square_attacked(king_square, m_side_to_move),
              "Other king on (%s) did not avoid check",
              string_from_square(king_square).c_str());
-
-  // Assert that the total number of positions seen (including repetitions) is
-  // the number of half moves played
-  ASSERT_MSG(m_position_freq.size() == m_history.size(),
-             "The total number of positions seen (%lu) did not match the "
-             "number of half moves played (%lu)",
-             m_position_freq.size(), m_history.size());
-  std::unordered_multiset<hash_t> expected_position_freq;
-  for (const history_t &entry : m_history) {
-    expected_position_freq.insert(entry.hash);
-  }
-  ASSERT_MSG(expected_position_freq.size() == m_position_freq.size(),
-             "Size of frequency map (%lu) did not match expected size (%lu)",
-             m_position_freq.size(), expected_position_freq.size());
-  ASSERT_MSG(expected_position_freq == m_position_freq,
-             "Position frequency map did not match expected frequency map");
 #endif
 }
 
@@ -576,14 +560,9 @@ bool Board::make_move(const move_t move) noexcept {
              string_from_move(move).c_str(), to_string().c_str());
 
   // Bookkeeping
-  history_t entry;
-  entry.move = move;
-  entry.castle_state = m_castle_state;
-  entry.en_passant = m_en_passant;
-  entry.fifty_move = m_fifty_move;
-  entry.hash = m_hash;
+  const history_t entry = {move, m_castle_state, m_en_passant, m_fifty_move,
+                           m_hash};
   m_history.push_back(entry);
-  m_position_freq.insert(entry.hash);
   m_half_move++;
 
   update_castling(from, to);
@@ -672,9 +651,6 @@ void Board::unmake_move() noexcept {
   m_fifty_move = entry.fifty_move;
   ASSERT_MSG(m_half_move > 0, "Unmaking first move");
   m_half_move--;
-  // We have to beat around the bush a little to avoid removing _all_ instances
-  // of the position and to instead only remove one of them.
-  m_position_freq.erase(m_position_freq.find(entry.hash));
   switch_colours();
   const bool cur_side = m_side_to_move;
 
@@ -728,26 +704,15 @@ void Board::make_null_move() noexcept {
   validate_board();
   ASSERT(!king_in_check());
 
-  INFO("======================================================================="
-       "==============");
-  INFO("Making null move");
-
   // Bookkeeping
-  history_t entry;
-  entry.move = NULL_MOVE;
-  entry.castle_state = m_castle_state;
-  entry.en_passant = m_en_passant;
-  entry.fifty_move = m_fifty_move;
-  entry.hash = m_hash;
-  m_history.push_back(entry);
-  m_position_freq.insert(entry.hash);
+  m_history.push_back(
+      {NULL_MOVE, m_castle_state, m_en_passant, m_fifty_move, m_hash});
 
   set_en_passant(INVALID_SQUARE);
   m_half_move++;
   m_fifty_move++;
 
   switch_colours();
-
   validate_board();
 }
 
@@ -759,18 +724,12 @@ void Board::unmake_null_move() noexcept {
 
   const history_t entry = m_history.back();
   m_history.pop_back();
-  const move_t move = entry.move;
-  ASSERT_MSG(move == NULL_MOVE,
+  ASSERT_MSG(entry.move == NULL_MOVE,
              "Unmaking null move when previous move was not null");
-  const hash_t last_hash = entry.hash;
   set_en_passant(entry.en_passant);
-  // We have to beat around the bush a little to avoid removing _all_ instances
-  // of the position and to instead only remove one of them.
-  m_position_freq.erase(m_position_freq.find(entry.hash));
   switch_colours();
 
-  ASSERT_MSG(m_hash == last_hash, "Hash did not match history entry's hash");
-
+  ASSERT_MSG(m_hash == entry.hash, "Hash did not match history entry's hash");
   validate_board();
 }
 
