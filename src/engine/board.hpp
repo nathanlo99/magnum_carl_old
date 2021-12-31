@@ -25,13 +25,6 @@ enum { START_POSITION_MOVES = 64 };
 
 enum { WHITE = 0, BLACK = 1, INVALID_SIDE = -1 };
 
-enum {
-  MOVEGEN_NORMAL = 1,
-  MOVEGEN_CAPTURES = 2,
-  MOVEGEN_PROMOTIONS = 4,
-  MOVEGEN_ALL = MOVEGEN_NORMAL | MOVEGEN_CAPTURES | MOVEGEN_PROMOTIONS,
-};
-
 struct history_t {
   move_t move;
   castle_t castle_state;
@@ -80,8 +73,11 @@ public:
 
   bool square_attacked(const square_t sq, const bool side) const noexcept;
   bool king_in_check() const noexcept;
-  std::vector<move_t> pseudo_moves(const int spec = MOVEGEN_ALL) const noexcept;
-  std::vector<move_t> legal_moves(const int spec = MOVEGEN_ALL) const noexcept;
+
+  std::vector<move_t>
+  pseudo_moves(const bool generate_quiet_moves = true) const noexcept;
+  std::vector<move_t>
+  legal_moves(const bool generate_quiet_moves = true) const noexcept;
   bool has_legal_moves() const noexcept;
 
   constexpr bool has_major_pieces(const int side) const noexcept {

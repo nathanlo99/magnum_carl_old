@@ -26,12 +26,13 @@ static bool should_stop(const SearchInfo &info) {
 // Returns the evaluation from the perspective of white. Thus white pieces
 // will generally have positive evaluations and black pieces will generally have
 // negative evaluations
-int evaluate_piece(const Board &board, piece_t piece, const square_t square) {
+int evaluate_piece(const Board &board, const piece_t piece,
+                   const square_t square) {
   if (board.is_endgame()) {
     if (piece == WHITE_KING) {
-      piece = WHITE_ENDGAME_KING;
+      return piece_values[WHITE_ENDGAME_KING][square];
     } else if (piece == BLACK_KING) {
-      piece = BLACK_ENDGAME_KING;
+      return piece_values[BLACK_ENDGAME_KING][square];
     }
   }
   return piece_values[piece][square];
@@ -85,10 +86,11 @@ void order_moves(const Board &board, std::vector<move_t> &moves) {
   }
 }
 
-std::vector<move_t> get_sorted_legal_moves(const Board &board,
-                                           const int spec = MOVEGEN_ALL) {
+std::vector<move_t>
+get_sorted_legal_moves(const Board &board,
+                       const bool generate_quiet_moves = true) {
   perf_counter.increment("get_sorted_legal_moves");
-  auto legal_moves = board.legal_moves(spec);
+  auto legal_moves = board.legal_moves(generate_quiet_moves);
   order_moves(board, legal_moves);
   return legal_moves;
 }
@@ -175,10 +177,7 @@ int quiescence_search(SearchInfo &info, Board &board, const int ply,
     return stand_pat_eval;
   alpha = std::max(alpha, stand_pat_eval);
 
-  auto legal_captures =
-      board.legal_moves(MOVEGEN_CAPTURES | MOVEGEN_PROMOTIONS);
-
-  order_moves(board, legal_captures);
+  const auto legal_captures = get_sorted_legal_moves(board, false);
   for (const move_t next_move : legal_captures) {
     board.make_move(next_move);
     const int value = -quiescence_search(info, board, ply + 1, -beta, -alpha);
@@ -280,7 +279,8 @@ int alpha_beta(SearchInfo &info, Board &board, const int ply, int depth,
     return quiescence_search(info, board, ply, alpha, beta);
   }
 
-  // Consult the transposition table: grab a cached evaluation and the best move
+  // Consult the transposition table: grab a cached evaluation and the best
+  // move
   const TableEntry entry = transposition_table.query(board.hash());
   // Switch on entry.type to get better bounds on alpha and beta
   if (entry.type != None && entry.depth >= depth) {
@@ -366,6 +366,9 @@ void iterative_deepening(SearchInfo &info, Board &board) {
       std::cout << simple_string_from_move(move) << " ";
     }
     std::cout << std::endl;
+
+    std::cout << "info string entries " << transposition_table.size()
+              << std::endl;
   }
 }
 

@@ -10,7 +10,8 @@
 #include <string>
 #include <vector>
 
-std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
+std::vector<move_t>
+Board::pseudo_moves(const bool generate_quiet_moves) const noexcept {
 
   // In debug mode, check that invariants are maintained
   validate_board();
@@ -47,7 +48,7 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
              m_pieces[cur_square] == INVALID_PIECE) {
         INFO("Quiet move from %s to %s", string_from_square(start).c_str(),
              string_from_square(cur_square).c_str());
-        if (spec & MOVEGEN_NORMAL)
+        if (generate_quiet_moves)
           result.push_back(quiet_move(start, cur_square, queen_piece));
         cur_square += offset;
       }
@@ -56,9 +57,8 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
           !is_king(m_pieces[cur_square])) {
         INFO("Capture move from %s to %s", string_from_square(start).c_str(),
              string_from_square(cur_square).c_str());
-        if (spec & MOVEGEN_CAPTURES)
-          result.push_back(capture_move(start, cur_square, queen_piece,
-                                        m_pieces[cur_square]));
+        result.push_back(
+            capture_move(start, cur_square, queen_piece, m_pieces[cur_square]));
       }
     }
   }
@@ -74,7 +74,7 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
              m_pieces[cur_square] == INVALID_PIECE) {
         INFO("Quiet move from %s to %s", string_from_square(start).c_str(),
              string_from_square(cur_square).c_str());
-        if (spec & MOVEGEN_NORMAL)
+        if (generate_quiet_moves)
           result.push_back(quiet_move(start, cur_square, rook_piece));
         cur_square += offset;
       }
@@ -83,9 +83,8 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
           !is_king(m_pieces[cur_square])) {
         INFO("Capture move from %s to %s", string_from_square(start).c_str(),
              string_from_square(cur_square).c_str());
-        if (spec & MOVEGEN_CAPTURES)
-          result.push_back(capture_move(start, cur_square, rook_piece,
-                                        m_pieces[cur_square]));
+        result.push_back(
+            capture_move(start, cur_square, rook_piece, m_pieces[cur_square]));
       }
     }
   }
@@ -101,7 +100,7 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
              m_pieces[cur_square] == INVALID_PIECE) {
         INFO("Quiet move from %s to %s", string_from_square(start).c_str(),
              string_from_square(cur_square).c_str());
-        if (spec & MOVEGEN_NORMAL)
+        if (generate_quiet_moves)
           result.push_back(quiet_move(start, cur_square, bishop_piece));
         cur_square += offset;
       }
@@ -110,9 +109,8 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
           !is_king(m_pieces[cur_square])) {
         INFO("Capture move from %s to %s", string_from_square(start).c_str(),
              string_from_square(cur_square).c_str());
-        if (spec & MOVEGEN_CAPTURES)
-          result.push_back(capture_move(start, cur_square, bishop_piece,
-                                        m_pieces[cur_square]));
+        result.push_back(capture_move(start, cur_square, bishop_piece,
+                                      m_pieces[cur_square]));
       }
     }
   }
@@ -127,13 +125,12 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
       if (!valid_square(cur_square))
         continue;
       if (m_pieces[cur_square] == INVALID_PIECE) {
-        if (spec & MOVEGEN_NORMAL)
+        if (generate_quiet_moves)
           result.push_back(quiet_move(start, cur_square, knight_piece));
       } else if (opposite_colours(knight_piece, m_pieces[cur_square]) &&
                  !is_king(m_pieces[cur_square])) {
-        if (spec & MOVEGEN_CAPTURES)
-          result.push_back(capture_move(start, cur_square, knight_piece,
-                                        m_pieces[cur_square]));
+        result.push_back(capture_move(start, cur_square, knight_piece,
+                                      m_pieces[cur_square]));
       }
     }
   }
@@ -147,7 +144,7 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
     const square_t cur_square = start + offset;
 
     // Double pawn moves
-    if (spec & MOVEGEN_NORMAL) {
+    if (generate_quiet_moves) {
       if (side == WHITE && get_square_row(start) == RANK_2 &&
           m_pieces[start + 10] == INVALID_PIECE &&
           m_pieces[start + 20] == INVALID_PIECE) {
@@ -164,57 +161,51 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
     if (valid_square(cur_square) && m_pieces[cur_square] == INVALID_PIECE) {
       if (get_square_row(cur_square) == RANK_1 ||
           get_square_row(cur_square) == RANK_8) {
-        if (spec & MOVEGEN_CAPTURES) {
-          for (const piece_t promote_piece : promote_pieces) {
-            result.push_back(
-                promote_move(start, cur_square, pawn_piece, promote_piece));
-          }
+        for (const piece_t promote_piece : promote_pieces) {
+          result.push_back(
+              promote_move(start, cur_square, pawn_piece, promote_piece));
         }
       } else {
-        if (spec & MOVEGEN_NORMAL)
+        if (generate_quiet_moves)
           result.push_back(quiet_move(start, start + offset, pawn_piece));
       }
     }
 
-    if (spec & MOVEGEN_CAPTURES) {
-      // Normal capture moves
-      INFO("Generating pawn capture moves");
-      const square_t capture1 = cur_square - 1, capture2 = cur_square + 1;
-      if (valid_square(capture1) && m_pieces[capture1] != INVALID_PIECE &&
-          opposite_colours(pawn_piece, m_pieces[capture1]) &&
-          !is_king(m_pieces[capture1])) {
-        if (get_square_row(capture1) == RANK_1 ||
-            get_square_row(capture1) == RANK_8) {
-          for (const piece_t promote_piece : promote_pieces) {
-            result.push_back(promote_capture_move(start, capture1, pawn_piece,
-                                                  promote_piece,
-                                                  m_pieces[capture1]));
-          }
-        } else {
-          result.push_back(
-              capture_move(start, capture1, pawn_piece, m_pieces[capture1]));
+    // Normal capture moves
+    INFO("Generating pawn capture moves");
+    const square_t capture1 = cur_square - 1, capture2 = cur_square + 1;
+    if (valid_square(capture1) && m_pieces[capture1] != INVALID_PIECE &&
+        opposite_colours(pawn_piece, m_pieces[capture1]) &&
+        !is_king(m_pieces[capture1])) {
+      if (get_square_row(capture1) == RANK_1 ||
+          get_square_row(capture1) == RANK_8) {
+        for (const piece_t promote_piece : promote_pieces) {
+          result.push_back(promote_capture_move(
+              start, capture1, pawn_piece, promote_piece, m_pieces[capture1]));
         }
+      } else {
+        result.push_back(
+            capture_move(start, capture1, pawn_piece, m_pieces[capture1]));
       }
-      if (valid_square(capture2) && m_pieces[capture2] != INVALID_PIECE &&
-          opposite_colours(pawn_piece, m_pieces[capture2]) &&
-          !is_king(m_pieces[capture2])) {
-        if (get_square_row(capture2) == RANK_1 ||
-            get_square_row(capture2) == RANK_8) {
-          for (const piece_t promote_piece : promote_pieces) {
-            result.push_back(promote_capture_move(start, capture2, pawn_piece,
-                                                  promote_piece,
-                                                  m_pieces[capture2]));
-          }
-        } else {
-          result.push_back(
-              capture_move(start, capture2, pawn_piece, m_pieces[capture2]));
+    }
+    if (valid_square(capture2) && m_pieces[capture2] != INVALID_PIECE &&
+        opposite_colours(pawn_piece, m_pieces[capture2]) &&
+        !is_king(m_pieces[capture2])) {
+      if (get_square_row(capture2) == RANK_1 ||
+          get_square_row(capture2) == RANK_8) {
+        for (const piece_t promote_piece : promote_pieces) {
+          result.push_back(promote_capture_move(
+              start, capture2, pawn_piece, promote_piece, m_pieces[capture2]));
         }
+      } else {
+        result.push_back(
+            capture_move(start, capture2, pawn_piece, m_pieces[capture2]));
       }
     }
   }
 
   // En-passant capture
-  if (spec & MOVEGEN_CAPTURES && m_en_passant != INVALID_SQUARE) {
+  if (m_en_passant != INVALID_SQUARE) {
     const int offset = (side == WHITE) ? 10 : -10;
     const square_t start1 = m_en_passant + 1 - offset;
     const square_t start2 = m_en_passant - 1 - offset;
@@ -238,17 +229,16 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
     if (!valid_square(cur_square))
       continue;
     if (piece == INVALID_PIECE) {
-      if (spec & MOVEGEN_NORMAL)
+      if (generate_quiet_moves)
         result.push_back(quiet_move(start, cur_square, king_piece));
     } else if (opposite_colours(king_piece, piece) && !is_king(piece)) {
-      if (spec & MOVEGEN_CAPTURES)
-        result.push_back(capture_move(start, cur_square, king_piece, piece));
+      result.push_back(capture_move(start, cur_square, king_piece, piece));
     }
   }
 
   // Castling
   INFO("Generating castling moves");
-  if (spec & MOVEGEN_NORMAL) {
+  if (generate_quiet_moves) {
     if (side == WHITE && (m_castle_state & WHITE_CASTLE)) {
       if (!square_attacked(E1, BLACK)) {
         if (m_castle_state & WHITE_SHORT && m_pieces[F1] == INVALID_PIECE &&
@@ -293,10 +283,11 @@ bool Board::has_legal_moves() const noexcept {
   return false;
 }
 
-std::vector<move_t> Board::legal_moves(const int spec) const noexcept {
+std::vector<move_t>
+Board::legal_moves(const bool generate_quiet_moves) const noexcept {
   std::vector<move_t> result;
   Board tmp = *this;
-  const auto pseudo_moves = this->pseudo_moves(spec);
+  const auto pseudo_moves = this->pseudo_moves(generate_quiet_moves);
   for (const move_t move : pseudo_moves) {
     if (tmp.make_move(move))
       result.push_back(move);
