@@ -160,7 +160,7 @@ constexpr inline int get_side(const piece_t piece) {
 
 constexpr inline piece_t piece_from_char(const char chr) {
   const char *PIECE_CHAR = "QRP BNK qrp bnk ";
-  for (int i = 0; i < 16; ++i)
+  for (piece_t i = 0; i < 16; ++i)
     if (PIECE_CHAR[i] == chr)
       return i;
   return INVALID_PIECE;

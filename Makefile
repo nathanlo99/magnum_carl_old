@@ -14,9 +14,9 @@ LIBS =
 # General compiler flags
 COMPILE_FLAGS = -DLUT_PIECE -std=c++20 -Wall -Wextra -Werror -pedantic -Wno-type-limits -Wno-unused-variable -Wno-unused-parameter
 # Additional release-specific flags
-RCOMPILE_FLAGS = -Ofast -ffast-math -fwrapv -funroll-loops -DINVISIBLE_ASSERTS -g
+RCOMPILE_FLAGS = -Ofast -ffast-math -funroll-loops -DINVISIBLE_ASSERTS -g
 # Additional debug-specific flags
-DCOMPILE_FLAGS = -DDEBUG -fsanitize=undefined -O2 -g
+DCOMPILE_FLAGS = -DDEBUG -fsanitize=undefined -O3 -g
 # Add additional include paths
 INCLUDES = -I src/ -I src/strategies/ -I src/engine
 # General linker settings
@@ -30,7 +30,7 @@ DESTDIR = /
 # Install path (bin/ is appended automatically)
 INSTALL_PREFIX =
 # Default target to build, currently debug for development
-.DEFAULT_GOAL := debug
+.DEFAULT_GOAL := release
 #### END PROJECT SETTINGS ####
 
 # Optionally you may move the section above to a separate config.mk file, and

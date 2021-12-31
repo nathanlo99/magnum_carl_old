@@ -249,7 +249,7 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
   // Castling
   INFO("Generating castling moves");
   if (spec & MOVEGEN_NORMAL) {
-    if (side == WHITE) {
+    if (side == WHITE && (m_castle_state & WHITE_CASTLE)) {
       if (!square_attacked(E1, BLACK)) {
         if (m_castle_state & WHITE_SHORT && m_pieces[F1] == INVALID_PIECE &&
             m_pieces[G1] == INVALID_PIECE && m_pieces[H1] == WHITE_ROOK &&
@@ -262,7 +262,7 @@ std::vector<move_t> Board::pseudo_moves(const int spec) const noexcept {
           result.push_back(castle_move(E1, C1, WHITE_KING, LONG_CASTLE_MOVE));
         }
       }
-    } else if (side == BLACK) {
+    } else if (side == BLACK && (m_castle_state & BLACK_CASTLE)) {
       if (!square_attacked(E8, WHITE)) {
         if (m_castle_state & BLACK_SHORT && m_pieces[F8] == INVALID_PIECE &&
             m_pieces[G8] == INVALID_PIECE && m_pieces[H8] == BLACK_ROOK &&

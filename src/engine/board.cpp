@@ -209,14 +209,14 @@ std::string Board::fen() const noexcept {
   validate_board();
 
   // Part 1. The board state
-  unsigned square_idx = A8;
+  square_t square_idx = A8;
   unsigned blank_count = 0;
   while (square_idx != 29) {
     if (square_idx % 10 == 9) {
-      if (blank_count != 0) {
+      if (blank_count > 0) {
         ASSERT_MSG(blank_count <= 8, "Too many (%u) blank squares in a row",
                    blank_count);
-        result << (char)('0' + blank_count);
+        result << static_cast<char>('0' + blank_count);
         blank_count = 0;
       }
       result << '/';
@@ -227,16 +227,16 @@ std::string Board::fen() const noexcept {
       blank_count++;
     } else {
       // Piece will be valid as board was validated
-      if (blank_count != 0) {
-        result << (char)('0' + blank_count);
+      if (blank_count > 0) {
+        result << static_cast<char>('0' + blank_count);
         blank_count = 0;
       }
       result << char_from_piece(piece);
     }
     square_idx++;
   }
-  if (blank_count != 0) {
-    result << (char)('0' + blank_count);
+  if (blank_count > 0) {
+    result << static_cast<char>('0' + blank_count);
   }
   result << ' ';
 
@@ -273,7 +273,7 @@ std::string Board::fen() const noexcept {
 hash_t Board::compute_hash() const noexcept {
   validate_board();
   hash_t res = 0;
-  for (unsigned sq = 0; sq < 120; ++sq) {
+  for (square_t sq = 0; sq < 120; ++sq) {
     const piece_t piece = m_pieces[sq];
     ASSERT_MSG(0 <= piece && piece < 16, "Out of range piece (%u) in square",
                piece);
@@ -379,15 +379,8 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
                 pawn_piece = (side == WHITE) ? WHITE_PAWN : BLACK_PAWN;
   const square_t king_square = m_positions[king_piece][0];
 
-  if (valid_piece(m_pieces[sq]) && get_side(m_pieces[sq]) == side) {
-    // WASSERT_MSG(get_side(m_pieces[sq]) != side,
-    //             "Querying square attacked of own piece");
-    return false;
-  }
-
   // Diagonals
-  const auto &diagonal_offsets = {-11, -9, 9, 11};
-  for (const int offset : diagonal_offsets) {
+  for (const int offset : {-11, -9, 9, 11}) {
     square_t cur_square = sq + offset;
     if (king_square == cur_square)
       return true;
@@ -400,8 +393,7 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
   }
 
   // Orthogonals
-  const auto &orthogonal_offsets = {-10, -1, 1, 10};
-  for (const int offset : orthogonal_offsets) {
+  for (const int offset : {-10, -1, 1, 10}) {
     square_t cur_square = sq + offset;
     if (king_square == cur_square)
       return true;
@@ -414,8 +406,7 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
   }
 
   // Knights
-  const auto &knight_offsets = {-21, -19, -12, -8, 8, 12, 19, 21};
-  for (const int offset : knight_offsets)
+  for (const int offset : {-21, -19, -12, -8, 8, 12, 19, 21})
     if (m_pieces[sq + offset] == knight_piece)
       return true;
 
@@ -430,8 +421,7 @@ bool Board::square_attacked(const square_t sq, const bool side) const noexcept {
 }
 
 bool Board::king_in_check() const noexcept {
-  const piece_t king_piece =
-      (m_side_to_move == WHITE) ? WHITE_KING : BLACK_KING;
+  const piece_t king_piece = m_side_to_move << 3 | WHITE_KING;
   return square_attacked(m_positions[king_piece][0], !m_side_to_move);
 }
 
@@ -465,19 +455,25 @@ bool Board::is_endgame() const noexcept {
   return white_has_no_queen_or_one_minor && black_has_no_queen_or_one_minor;
 }
 
+bool Board::is_drawn() const noexcept {
+  return m_fifty_move >= 100 || is_three_fold() || insufficient_material();
+}
+
 inline void Board::remove_piece(const square_t sq) noexcept {
   INFO("Removing piece on square %s (%u)", string_from_square(sq).c_str(), sq);
   const piece_t piece = m_pieces[sq];
   ASSERT_MSG(valid_piece(piece), "Removing invalid piece (%u)!", piece);
   m_pieces[sq] = INVALID_PIECE;
-  auto &piece_list = m_positions[piece];
-  const auto &last_idx = piece_list.begin() + m_num_pieces[piece];
-  const auto &this_idx = std::find(piece_list.begin(), last_idx, sq);
-  ASSERT_MSG(this_idx != last_idx, "Removed piece (%d) not in piece_list",
-             piece);
-  m_num_pieces[piece]--;
-  std::swap(*this_idx, *(last_idx - 1));
   m_hash ^= piece_hash[sq][piece];
+  auto &piece_list = m_positions[piece];
+  const int num_pieces = m_num_pieces[piece];
+  m_num_pieces[piece]--;
+  for (int i = 0; i < num_pieces; ++i) {
+    if (piece_list[i] == sq) {
+      piece_list[i] = piece_list[num_pieces - 1];
+      return;
+    }
+  }
 }
 
 inline void Board::add_piece(const square_t sq, const piece_t piece) noexcept {
@@ -525,14 +521,7 @@ inline void Board::update_castling(const square_t from,
   INFO("Updating castling which affected %s and %s",
        string_from_square(from).c_str(), string_from_square(to).c_str());
   m_hash ^= castle_hash[m_castle_state];
-  if (from == E1 || from == A1 || to == E1 || to == A1)
-    m_castle_state &= ~WHITE_LONG;
-  if (from == E1 || from == H1 || to == E1 || to == H1)
-    m_castle_state &= ~WHITE_SHORT;
-  if (from == E8 || from == A8 || to == E8 || to == A8)
-    m_castle_state &= ~BLACK_LONG;
-  if (from == E8 || from == H8 || to == E8 || to == H8)
-    m_castle_state &= ~BLACK_SHORT;
+  m_castle_state &= castle_mask[from] & castle_mask[to];
   m_hash ^= castle_hash[m_castle_state];
 }
 

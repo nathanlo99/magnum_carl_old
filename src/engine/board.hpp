@@ -105,9 +105,7 @@ public:
   constexpr inline bool is_three_fold() const noexcept {
     return count_repetitions() >= 2;
   }
-  constexpr inline bool is_drawn() const noexcept {
-    return m_fifty_move >= 100 || is_three_fold();
-  }
+  bool is_drawn() const noexcept;
   bool is_endgame() const noexcept;
   inline void remove_piece(const square_t sq) noexcept;
   inline void add_piece(const square_t sq, const piece_t piece) noexcept;
