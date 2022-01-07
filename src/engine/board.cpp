@@ -103,13 +103,6 @@ Board::Board(const std::string &fen) noexcept {
     ASSERT_IF(m_side_to_move == WHITE, row == RANK_6);
     ASSERT_IF(m_side_to_move == BLACK, row == RANK_3);
     m_en_passant = get_square_120_rc(row, col);
-    // const piece_t my_pawn = (m_side_to_move == WHITE) ? WHITE_PAWN :
-    // BLACK_PAWN; const int row_offset = (m_side_to_move == WHITE) ? -10 : +10;
-    // if (m_pieces[m_en_passant + row_offset - 1] != my_pawn &&
-    //     m_pieces[m_en_passant + row_offset + 1] != my_pawn) {
-    //   WARN("Elided en passant square");
-    //   m_en_passant = INVALID_SQUARE;
-    // }
     next_chr += 2;
   }
   ASSERT(*next_chr == ' ');
@@ -128,7 +121,7 @@ Board::Board(const std::string &fen) noexcept {
   // Part 6: Full move counter
   size_t full_move = 0;
   next_chr++;
-  while (next_chr != end_ptr) {
+  while (next_chr != end_ptr && *next_chr != ' ') {
     ASSERT_MSG('0' <= *next_chr && *next_chr <= '9',
                "Invalid digit (%c) in full move counter", *next_chr);
     full_move = 10 * full_move + (*next_chr - '0');
@@ -351,6 +344,7 @@ std::string Board::to_string(const int side) const noexcept {
   result << std::setw(16) << std::setfill('0') << std::hex << hash() << std::dec
          << "\n";
   result << "FEN     : " << fen() << "\n";
+  result << "EPOCH   : " << fifty_move_monovariant() << "\n";
   // if (opening_book.query_all(*this).size() > 0) {
   //   result << "BOOK    : " << opening_book.book_moves_string(*this) << "\n";
   // }

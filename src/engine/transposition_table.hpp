@@ -29,7 +29,7 @@ struct TableEntry {
   int depth = 0;
   int value = -SCORE_INFINITY;
   NodeType type = None;
-  size_t half_move = 0;
+  int epoch = -1;
 
   std::string to_string() const {
     std::stringstream result;
@@ -58,6 +58,18 @@ public:
   TableEntry query(const hash_t hash) const;
   void insert(const Board &board, const move_t best_move, const int depth,
               const int value, const NodeType type);
+  void clear_for_search(const Board &board) {
+    const int epoch = board.fifty_move_monovariant();
+    std::cout << "info string clearing ttable for search..." << std::endl;
+    std::cout << "info string removing entries with epoch less than " << epoch
+              << std::endl;
+    const size_t removed_count =
+        std::erase_if(m_table, [epoch](const auto &item) {
+          return item.second.epoch < epoch;
+        });
+    std::cout << "info string removed " << removed_count << " expired entries"
+              << std::endl;
+  }
 };
 
 std::vector<move_t> get_pv(const Board &board);

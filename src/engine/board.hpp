@@ -86,6 +86,39 @@ public:
     return m_num_pieces[rook] + m_num_pieces[queen] > 0;
   }
 
+  constexpr int num_pieces() const noexcept {
+    int result = 0;
+    for (piece_t piece = 0; piece < 16; ++piece) {
+      result += m_num_pieces[piece];
+    }
+    return result;
+  }
+
+  // A value which can only increase over the course of a game
+  constexpr int fifty_move_monovariant() const noexcept {
+    // Pawns can only move forward, pieces can only be captured, and pawns may
+    // promote
+
+    // Assign 1 to every non-pawn piece, and 2 to a white pawn on the 7th rank,
+    // 3 to a white pawn on the 6th rank, etc. and 7 to a white pawn on the
+    // second rank. Similarly, assign 2 to a black pawn on the 2nd rank, etc.
+
+    int result = 0;
+    result += m_num_pieces[WHITE_KNIGHT] + m_num_pieces[WHITE_BISHOP] +
+              m_num_pieces[WHITE_ROOK] + m_num_pieces[WHITE_QUEEN];
+    result += m_num_pieces[BLACK_KNIGHT] + m_num_pieces[BLACK_BISHOP] +
+              m_num_pieces[BLACK_ROOK] + m_num_pieces[BLACK_QUEEN];
+    const size_t num_white_pawns = m_num_pieces[WHITE_PAWN];
+    const size_t num_black_pawns = m_num_pieces[BLACK_PAWN];
+    for (size_t idx = 0; idx < num_white_pawns; ++idx) {
+      result += 9 - get_square_row(m_positions[WHITE_PAWN][idx]);
+    }
+    for (size_t idx = 0; idx < num_black_pawns; ++idx) {
+      result += get_square_row(m_positions[BLACK_PAWN][idx]);
+    }
+    return 126 - result;
+  }
+
   constexpr bool insufficient_material() const noexcept;
   constexpr inline int count_repetitions() const noexcept {
     int result = 0;

@@ -374,6 +374,9 @@ void iterative_deepening(SearchInfo &info, Board &board) {
 
 move_t search(SearchInfo &info, const Board &board) {
   perf_counter.clear();
+  if (board.m_fifty_move == 0)
+    transposition_table.clear_for_search(board);
+
   Board tmp(board);
   iterative_deepening(info, tmp);
   const TableEntry entry = transposition_table.query(board.hash());

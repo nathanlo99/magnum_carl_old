@@ -22,9 +22,9 @@ void TranspositionTable::insert(const Board &board, const move_t best_move,
                                 const NodeType type) {
   perf_counter.increment("TT_insert");
   const hash_t hash = board.hash();
-  const size_t half_move = board.m_half_move;
+  const int epoch = board.fifty_move_monovariant();
   const TableEntry previous_entry = query(hash);
-  const TableEntry new_entry = {hash, best_move, depth, value, type, half_move};
+  const TableEntry new_entry = {hash, best_move, depth, value, type, epoch};
 
   bool replace = false;
   if (previous_entry.depth > depth) {
